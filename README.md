@@ -1,27 +1,36 @@
-# GUILGAL — homepage
+# GUILGAL — homepage: "From the canopy to the seam"
 
-Static HTML/CSS/JS built to the approved mockup — open `index.html` in a browser, no build step.
+Static HTML/CSS/JS, no build step — open `index.html` in a browser.
 
-Page flow (each band is cut on a diagonal with a gold edge, so scrolling reads as one continuous journey):
+The page is one descent. Photos are treated as prints laid over each other; every layer
+moves at its own speed, so they slide across one another as you scroll.
 
-1. **Hero** — full-bleed landscape, headline with gold bar, *Discover More*
-2. **Our Approach** — malachite photo left, cream paper panel right
-3. **Stats** — 10+ / 10+ / 100% over a landscape photo, gold corner
-4. **Our Services / Key Strengths** — mirrored: paper panel left, field photo right
-5. **Opportunities** — copper, lithium, tantalum, tin, niobium, wolframite over a photo
-6. **Contact** — call to action and John Paul Boardman on the landscape, form on a paper panel
+| # | Chapter | What you see |
+|---|---|---|
+| 00 | Above the canopy | Full-bleed sunrise; a print of the ore lies over its corner — the end of the story shown at the start |
+| 01 | The archive | Our Approach copy beside a desk of sepia prints (aerial survey, field book, map sheet) |
+| 02 | The field | Pinned: four prints land on top of each other as you scroll, the background turns from forest to earth, a depth counter runs 0 → 120 m, the four steps light in turn |
+| 03 | The seam | Ore photo full-bleed; the six commodities set as giant type across it |
+| 04 | The record | Wide landscape with the 10+ / 10+ / 100% block overlapping its edge, hand-sample print on top |
+| 05 | Back to the surface | Sunrise returns; call to action, John Paul Boardman's details, tilted paper form |
+
+A gold survey line on the left (desktop) fills as you descend, with a readout of where you are.
 
 ## Photo slots
-Drop files with these names into `assets/img/` — each replaces its labelled placeholder automatically.
+Every image is a `.ph` element with a `data-slot` label. Drop a file with that name into
+`assets/img/` and update the `src`. Current files are low-resolution crops of the mockup —
+replace them all for production.
 
-| File | Used for | Suggested size |
-|---|---|---|
-| `hero-landscape.jpg` | Hero + contact background (currently a low-res crop of the mockup) | 2400×1400 |
-| `malachite.jpg` | Our Approach (currently a low-res crop of the mockup) | 1800×1400 |
-| `landscape-hills.jpg` | Stats band | 2400×900 |
-| `field-team.jpg` | Our Services | 1800×1400 |
-| `core-samples.jpg` | Opportunities band | 2400×1000 |
+| Slot | Chapter |
+|---|---|
+| hero-landscape.jpg, ore-detail.jpg | 00 |
+| archive-aerial.jpg, archive-river.jpg, archive-map.jpg | 01 (shown sepia) |
+| field-canopy.jpg, field-sampling.jpg, field-drilling.jpg, field-core.jpg | 02 |
+| ore-wide.jpg | 03 |
+| record-landscape.jpg, record-sample.jpg | 04 |
+| sky-sun.jpg | 05 |
 
 ## Still to fill in
-- Telephone, e-mail and address in the contact block (shown as —)
+- Telephone, e-mail, address (shown as —)
 - Form handler (`TODO` in `js/main.js`)
+- Captions on the prints ("Aerial survey · 1978", "Day 19 · Hole GG-03"…) are placeholders to replace with real ones
