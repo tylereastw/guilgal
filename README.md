@@ -1,27 +1,27 @@
-# GUILGAL — website redesign
+# GUILGAL — homepage
 
-A single-page, scroll-driven "journey" for guilgal.org. Static HTML/CSS/JS, no build step — open `index.html` in a browser.
+Static HTML/CSS/JS built to the approved mockup — open `index.html` in a browser, no build step.
 
-## The story, chapter by chapter
-| | Chapter | What happens on scroll |
+Page flow (each band is cut on a diagonal with a gold edge, so scrolling reads as one continuous journey):
+
+1. **Hero** — full-bleed landscape, headline with gold bar, *Discover More*
+2. **Our Approach** — malachite photo left, cream paper panel right
+3. **Stats** — 10+ / 10+ / 100% over a landscape photo, gold corner
+4. **Our Services / Key Strengths** — mirrored: paper panel left, field photo right
+5. **Opportunities** — copper, lithium, tantalum, tin, niobium, wolframite over a photo
+6. **Contact** — call to action and John Paul Boardman on the landscape, form on a paper panel
+
+## Photo slots
+Drop files with these names into `assets/img/` — each replaces its labelled placeholder automatically.
+
+| File | Used for | Suggested size |
 |---|---|---|
-| — | **Arrival** (hero) | Sunrise over the Congo basin; the rainforest canopy parallaxes away as you scroll. |
-| — | **Prologue** | The sentence lights up word by word as you read. |
-| 01 | **The Archive** | A historic contour survey sheet draws itself, then sample targets ping. |
-| 02 | **The Field** | Pinned scene: a drill hole descends through topsoil → laterite → saprolite → copper oxide zone → primary ore, with a live depth counter, samples logged and the four steps (reconnaissance → sampling → drilling → evidence) advancing. |
-| 03 | **The Discovery** | Malachite close-up with the six commodities as element tiles. |
-| 04 | **The Record** | 10+ / 10+ / 100% count up; DRC → London / Australia route map. |
-| 05 | **Your Project** | Back to the sunrise — contact details and form. |
+| `hero-landscape.jpg` | Hero + contact background (currently a low-res crop of the mockup) | 2400×1400 |
+| `malachite.jpg` | Our Approach (currently a low-res crop of the mockup) | 1800×1400 |
+| `landscape-hills.jpg` | Stats band | 2400×900 |
+| `field-team.jpg` | Our Services | 1800×1400 |
+| `core-samples.jpg` | Opportunities band | 2400×1000 |
 
-A journey rail on the left (desktop) tracks progress and shows a position readout (altitude, then drill depth).
-
-## Files
-- `index.html` — markup and copy
-- `css/styles.css` — design tokens at the top (`--gold`, `--night`, `--paper`…)
-- `js/main.js` — scroll scenes, generated scenery (canopy, ridges, contours), counters, form validation
-- `assets/img/` — imagery cropped from the design mockup (replace with high-resolution originals for production)
-
-## Before going live
-- Fill in the real telephone, e-mail and address in the contact card (placeholders now).
-- Connect the form to a handler (see `TODO` in `js/main.js`).
-- Swap `assets/img/*.jpg` for full-resolution photography.
+## Still to fill in
+- Telephone, e-mail and address in the contact block (shown as —)
+- Form handler (`TODO` in `js/main.js`)
