@@ -576,3 +576,10 @@ p { margin: 0 0 1em; }
 }
 @media (min-width: 601px) and (max-width: 1060px) { .hero__text { padding-bottom: calc(12vw + 70px); } }
 @media (max-width: 380px) { .nav .logo__name { font-size: .74rem; letter-spacing: .12em; } .nav .logo .logo__mark { width: 34px; } }
+
+/* home: news sits close to the partner call to action below it */
+#news { padding-bottom: clamp(30px, 3vw, 50px); }
+.partner .partner__text { padding-top: 15vw; }
+.partner .approach__bg img { object-position: 50% 0%; }
+@media (max-width: 1060px) { .partner .partner__text { padding-top: 26vw; } }
+@media (max-width: 640px) { .partner .partner__text { padding-top: 58vw; } .partner .approach__bg img { object-position: 30% 0%; } }
