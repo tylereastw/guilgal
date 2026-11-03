@@ -245,7 +245,7 @@ def home():
     p = ""
     latest = [n for n in NEWS if n["kind"] == "news"][:3]
     body = f'''    <!-- ================= HERO ================= -->
-    <section class="hero">
+    <section class="hero hero--fade">
       <div class="hero__stage">
         <div class="hero__bg"><img src="public/images/guilgal_hero_background_1920x1080.png" alt="Sunset over mountains and misty forested hills in the Democratic Republic of the Congo"></div>
         <div class="hero__tint"></div>
@@ -261,8 +261,6 @@ def home():
         <path d="M60 220 C180 190 260 230 380 200 S540 170 600 190"/>
         <path d="M200 215 C300 195 380 225 480 205 S580 190 600 205"/>
       </svg>
-      <div class="hero__rockface" aria-hidden="true"><img src="public/images/news-1.jpg" alt=""></div>
-      {ridge_svg()}
     </section>
 
 
