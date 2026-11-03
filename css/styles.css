@@ -284,10 +284,12 @@ p { margin: 0 0 1em; }
   .hero__map { width: 56vw; right: 0; left: auto; top: calc(98px + 30vw); bottom: auto; }
 }
 @media (min-width: 601px) and (max-width: 1060px) {
-  .hero { min-height: calc(120px + 79vw); }
-  .hero__text { padding: calc(90px + 1vw) var(--gutter) 0; }
-  .hero__text h1 { font-size: min(7.4vw, 4.4rem); line-height: 1.08; margin-bottom: 2.4vw; }
-  .hero__sub { font-size: min(2.3vw, 1.25rem) !important; line-height: 1.55; max-width: 44vw !important; margin: 0 0 3.2vw; }
-  .hero__text .btn { font-size: min(1.9vw, 1.05rem); padding: 1.6vw 2.8vw; }
-  .hero__map { width: 52vw; max-width: none; right: 2vw; left: auto; top: calc(104px + 25vw); bottom: auto; }
+  /* tablets: the desktop composition — text on the left, map beside it on the right, level with the headline */
+  .hero { min-height: calc(150px + 50vw); }
+  .hero__text { max-width: 52vw; padding: calc(96px + 2vw) 0 0 var(--gutter); }
+  .hero__text h1 { font-size: min(7vw, 4.4rem); line-height: 1.08; margin-bottom: 2.4vw; }
+  .hero__sub { font-size: min(2.2vw, 1.2rem) !important; line-height: 1.55; max-width: 40vw !important; margin: 0 0 3.2vw; }
+  .hero__text .btn { font-size: min(1.9vw, 1.05rem); padding: 1.5vw 2.8vw; }
+  .hero__map { width: 46vw; max-width: none; right: 3vw; left: auto; top: calc(80px + 3vw); bottom: auto; }
+}
 }
