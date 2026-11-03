@@ -28,10 +28,12 @@ The supplied artwork lives in `public/images/`:
 | `news-1.jpg`, `news-2.jpg`, `news-3.jpg` | news card photos (crops of the supplied artwork; replace with each post's own image, e.g. the drilling rig for the third) |
 
 ## Fonts
-DM Serif Display (regular, italic) and DM Sans (variable 400–700, regular and italic) are
-self-hosted as WOFF2 in `assets/fonts/` and declared in `css/fonts.css`. There are no requests
-to Google Fonts or any other third party; the page makes no external requests at all.
-Both families are licensed under the SIL Open Font License.
+Specified pairing: **Canela** (headings; Regular and Italic) and **Neue Haas Grotesk Text**
+(body Regular; navigation, buttons and labels Medium). Both are commercial typefaces that need a
+web licence, so they are **not included yet**. `css/fonts.css` declares them, and they load
+automatically once the WOFF2 files are placed in `assets/fonts/licensed/` (file names listed in
+the README there). Until then the site falls back to the self-hosted DM Serif Display / DM Sans
+pair (SIL Open Font License). No fonts are loaded from third parties.
 
 ## Placeholders to replace
 - News cards: dates and titles are taken from the mock-up; link them to the real posts once the news pages exist.
