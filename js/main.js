@@ -21,20 +21,6 @@
     if (!e.isIntersecting) return;
     items.forEach(a => a.classList.toggle('is-active', a.getAttribute('href') === '#' + e.target.id));
   }), { rootMargin: '-40% 0px -55% 0px' });
-  items.forEach(a => { const t = $(a.getAttribute('href')); if (t) spy.observe(t); });
+  items.forEach(a => { const href = a.getAttribute('href'); if (href.length > 1) { const t = $(href); if (t) spy.observe(t); } });
 
-  // contact form validation
-  const form = $('#contact-form');
-  form.addEventListener('submit', e => {
-    e.preventDefault();
-    let ok = true;
-    $$('[required]', form).forEach(f => {
-      const valid = f.type === 'checkbox' ? f.checked : f.value.trim() !== '';
-      f.closest('label').classList.toggle('invalid', !valid);
-      ok = ok && valid;
-    });
-    $('.form__msg', form).hidden = ok;
-    if (ok) $('button', form).textContent = 'Thank you — message ready to send';
-    // TODO: connect to the site's form handler / e-mail service.
-  });
 })();
