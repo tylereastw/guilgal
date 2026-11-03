@@ -1,38 +1,70 @@
-# GUILGAL — website
+# Guilgal International website
 
-Premium corporate editorial homepage for GUILGAL, built to the design brief and the two
-supplied reference designs. Static HTML/CSS/JS — open `index.html`, no build step.
+Static, multi-page corporate site for Guilgal International Ltd (registered in England and Wales).
+No framework. Pages are generated from one script so the header, footer and design system stay
+consistent:
 
-## Structure
-Five sections:
+```bash
+python3 tools/build.py
+```
 
-| # | Section | Layout |
-|---|---|---|
-| 1 | Hero — *Resources for a Stronger DRC* | text left; gold-outlined DRC map filled with landscape; outcrop overlapping bottom-left; contour lines; curved gold-edged transition |
-| 2 | Our Focus — *Sustainable Development, Real Impact* | ivory; three overlapping angled photo panels; quote beneath |
-| 3 | Our Approach — *Identify. Evaluate. Partner. Develop.* | ivory; lead with gold rule; four numbered steps joined by gold arrows |
-| 4 | News & Milestones | ivory; three news cards (photo, date, title, arrow) and "View all updates" |
-| 5 | Our Approach — *From exploration to discovery* | panorama anchored at its top so the pale sky blends out of the ivory; text right over the hills |
+Edit content in the data blocks at the top of `tools/build.py` (projects, news, approach steps,
+navigation), run the script, and commit the generated `index.html` files. To preview locally,
+serve the folder (links use clean URLs such as `about/`):
 
-Navigation links other than "Our Approach" point to `#` until those pages exist.
+```bash
+python3 -m http.server 8000
+```
 
-## Photography
-The supplied artwork lives in `public/images/`:
-
-| File | Position |
+## Pages
+| URL | Page |
 |---|---|
-| `guilgal_hero_background_1920x1080.png` | hero background |
-| `guilgal_drc_map_layer.png` | DRC silhouette overlay in the hero (transparent PNG with gold outline) |
-| `guilgal_focus_triptych.png` | Our Focus angled triptych (transparent PNG) |
-| `guilgal_approach_natural_mirrored.png` | Our Approach panorama background |
-| `news-1.jpg`, `news-2.jpg`, `news-3.jpg` | news card photos (crops of the supplied artwork; replace with each post's own image, e.g. the drilling rig for the third) |
+| `/` | Home: hero with QR code, highlight strip, Advancing Africa's Mineral Opportunities, Our Projects, Our Approach, Latest News & Milestones, partner call to action |
+| `/about/` | About, including What We Do, Focus Minerals, geographic focus, Our Approach, Our Name, closing banner |
+| `/about/team/` | Meet the Team |
+| `/projects/` | Six public project cards (name, country, mineral only) with Partner Access |
+| `/investors/` | Why Partner with Guilgal International, enquiry form |
+| `/news/` | News & Milestones feed, filterable by type (News, Insights) and by project; subscribe box |
+| `/contact/` | Enquiry form and john@guilgal.org |
+| `/members/` | Partner sign-in (placeholder) |
+| `/members/projects/<slug>/` | Private project page template, one per project |
+| `/privacy/`, `/cookies/`, `/terms/` | Legal pages (text to be supplied) |
+
+## Before launch
+- **Members area needs real access control.** The private project pages carry
+  `noindex, nofollow`, are excluded from `sitemap.xml` and disallowed in `robots.txt`, so search
+  engines will not list them. That is not security: anyone with the URL can open them. Put
+  `/members/` behind the hosting platform's login (for example Wix Members or Netlify Identity)
+  before adding any project detail.
+- **Forms are not connected.** All forms validate in the browser. Add each form's handler URL as
+  `data-endpoint="..."` on the `<form>` (in `tools/build.py`); until then they ask visitors to email
+  john@guilgal.org.
+- **John Boardman's photo** goes at `public/images/team/john-boardman.jpg` (portrait, 4:5). His
+  biography, and Gedeon's and Didier's titles and biographies, are placeholders.
+- **News:** the three news posts are the sample posts from the approved mock-up and need
+  confirming or replacing; summaries and the Insights guide are placeholders.
+- **Project pages:** overview, licence and location, geology, work completed and next steps are
+  placeholders. The Download Project Brief button is disabled until a brief exists. The hydropower
+  page states that Guilgal International's role is commercial facilitation and introductions only.
+- **Legal pages:** Privacy, Cookies and Terms text to be supplied by the company's advisers.
+- **Photography:** project card photos and inner-page heroes reuse the supplied artwork; replace
+  with project and field photography when available (`public/images/project-*.jpg`).
+- **QR code:** `public/images/qr-projects.svg` points to https://www.guilgal.org/projects/.
+
+## Writing rules
+British English, no em dashes, always "Guilgal International". Guilgal International is a
+facilitator and consultant, not an operator, broker, fund, adviser or lender. No invented phone
+numbers, addresses, credentials, timelines, figures, tonnages, grades or ownership splits. The
+build script refuses to write a page containing an em dash.
+
+## Design
+Forest green `#10291F` / `#13251D`, muted gold `#D7B46E`, cream `#F6F3EB`, white. Sections meet
+along an open-pit rock cut. Gold is used for decoration and on dark backgrounds; text on cream
+uses dark green for contrast.
 
 ## Fonts
-DM Serif Display (regular, italic) and DM Sans (variable 400–700, regular and italic) are
-self-hosted as WOFF2 in `assets/fonts/` and declared in `css/fonts.css`. There are no requests
-to Google Fonts or any other third party; the page makes no external requests at all.
-Both families are licensed under the SIL Open Font License.
-
-## Placeholders to replace
-- News cards: dates and titles are taken from the mock-up; link them to the real posts once the news pages exist.
-- Navigation links (About, Expertise, Minerals, Investors, Contact, Discuss an Opportunity) — point to their pages once built.
+Specified pairing: **Canela** (headings) and **Neue Haas Grotesk Text** (body, navigation, UI).
+Both are commercial typefaces that need a web licence and are not included. `css/fonts.css`
+declares them; they load once the WOFF2 files are placed in `assets/fonts/licensed/` (names in
+the README there). Until then the site uses the self-hosted DM Serif Display / DM Sans pair. No
+fonts are loaded from third parties.
