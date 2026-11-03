@@ -67,6 +67,10 @@ p { margin: 0 0 1em; }
 .edge--charcoal .edge__fill { fill: var(--charcoal); }
 .edge__line { fill: none; stroke: var(--gold-soft); stroke-width: 1.1; opacity: .85; vector-effect: non-scaling-stroke; }
 .edge__glow { fill: none; stroke: var(--gold); stroke-width: 10; opacity: .28; filter: url(#glow); vector-effect: non-scaling-stroke; }
+.ridge { position: absolute; bottom: -1px; left: 0; width: 100%; height: clamp(70px, 10vw, 170px); z-index: 5; pointer-events: none; }
+.ridge__fill { fill: var(--ivory); }
+.ridge__line { fill: none; stroke: var(--gold-soft); stroke-width: 1; opacity: .55; vector-effect: non-scaling-stroke; stroke-linejoin: round; }
+.ridge__glow { fill: none; stroke: var(--gold); stroke-width: 8; opacity: .14; filter: url(#glow); vector-effect: non-scaling-stroke; stroke-linejoin: round; }
 .contours { position: absolute; pointer-events: none; z-index: 2; }
 .contours path { fill: none; stroke: var(--gold); stroke-width: 1; opacity: .35; }
 
@@ -82,7 +86,7 @@ p { margin: 0 0 1em; }
 .edge--soft { height: clamp(40px, 6vw, 90px); }
 .panel img { width: 100%; height: 100%; object-fit: cover; }
 
-.hero__tint { position: absolute; inset: 0; z-index: 1; pointer-events: none; background: linear-gradient(90deg, rgba(15,42,46,.82) 0%, rgba(15,42,46,.5) 38%, rgba(15,42,46,.05) 68%), linear-gradient(180deg, rgba(15,42,46,.55), transparent 28%, transparent 78%, rgba(15,42,46,.35)); }
+.hero__tint { position: absolute; inset: 0; z-index: 1; pointer-events: none; background: linear-gradient(90deg, rgba(15,42,46,.82) 0%, rgba(15,42,46,.5) 38%, rgba(15,42,46,.05) 68%), linear-gradient(180deg, rgba(15,42,46,.55), transparent 28%, transparent 88%, rgba(15,42,46,.18)); }
 .hero__text { position: relative; z-index: 4; padding: 150px var(--gutter) 200px; max-width: calc(560px + var(--gutter)); }
 .hero__text .eyebrow { color: rgba(248,246,241,.85); }
 .hero__sub { font-size: 1.05rem; max-width: 26em; margin: 1.4rem 0 2rem; opacity: .92; }
@@ -98,7 +102,7 @@ p { margin: 0 0 1em; }
 .ivory h2 { color: var(--ink); }
 
 /* ---------- 2 · our focus ---------- */
-.focus { position: relative; padding: clamp(120px, 14vw, 200px) 0 clamp(90px, 10vw, 150px); }
+.focus { position: relative; padding: clamp(70px, 8vw, 120px) 0 clamp(90px, 10vw, 150px); }
 .focus__grid { display: grid; grid-template-columns: .55fr 2.6fr; gap: 30px clamp(30px, 5vw, 80px); align-items: center; }
 .focus__text { padding-top: 10px; }
 .focus__panels { margin: 0; width: 114%; }
@@ -206,7 +210,7 @@ p { margin: 0 0 1em; }
   .hero { min-height: 0; align-items: flex-start; }
   .hero__stage { left: 0; top: 0; transform: none; width: 100%; height: 100%; aspect-ratio: auto; }
   .hero__bg img { object-position: 58% 38%; }
-  .hero__tint { background: linear-gradient(90deg, rgba(15,42,46,.86) 0%, rgba(15,42,46,.6) 42%, rgba(15,42,46,.08) 75%), linear-gradient(180deg, rgba(15,42,46,.55), transparent 22%, transparent 70%, rgba(15,42,46,.45)); }
+  .hero__tint { background: linear-gradient(90deg, rgba(15,42,46,.86) 0%, rgba(15,42,46,.6) 42%, rgba(15,42,46,.08) 75%), linear-gradient(180deg, rgba(15,42,46,.55), transparent 22%, transparent 85%, rgba(15,42,46,.2)); }
   .hero__text { position: relative; z-index: 4; max-width: 100%; padding: calc(84px + 2vw) var(--gutter) 30vw; }
   .hero__sub { max-width: 52% !important; }
   .hero__text h1 { font-size: clamp(1.95rem, 8.2vw, 3.6rem); margin-bottom: .9rem; }
@@ -250,7 +254,7 @@ p { margin: 0 0 1em; }
    tablets): headline across the top, map on the right starting under it, description in the
    column the map leaves free, and the hero tall enough to hold the whole map. */
 @media (max-width: 600px) {
-  .hero { min-height: calc(100px + 90vw); }
+  .hero { min-height: calc(160px + 90vw); }
   .hero__text { padding: calc(84px + 2vw) var(--gutter) 0; }
   .hero__text h1 { font-size: 9vw; line-height: 1.08; margin-bottom: 3.6vw; }
   .hero__sub { font-size: 4vw !important; line-height: 1.5; max-width: 42vw !important; margin: 0 0 5vw; }
@@ -259,7 +263,7 @@ p { margin: 0 0 1em; }
 }
 @media (min-width: 601px) and (max-width: 1060px) {
   /* tablets: the desktop composition — text on the left, map beside it on the right, level with the headline */
-  .hero { min-height: calc(150px + 50vw); }
+  .hero { min-height: calc(200px + 50vw); }
   .hero__text { max-width: 52vw; padding: calc(96px + 2vw) 0 0 var(--gutter); }
   .hero__text h1 { font-size: min(7vw, 4.4rem); line-height: 1.08; margin-bottom: 2.4vw; }
   .hero__sub { font-size: min(2.2vw, 1.2rem) !important; line-height: 1.55; max-width: 40vw !important; margin: 0 0 3.2vw; }
