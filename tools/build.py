@@ -220,19 +220,15 @@ def news_card(p, n):
 
 def approach_section(p):
     steps = "".join(
-        f'<li><span class="path__num">{i:02d}</span><h3>{t}</h3><p>{d}</p></li>'
+        f'<li><span class="method__num">{i:02d}</span><h3>{t}</h3><p>{d}</p></li>'
         for i, (t, d) in enumerate(APPROACH, 1))
-    return f'''    <section class="path" id="approach">
-      {ridge_svg("ridge ridge--top")}
-      <div class="wrap">
-        <div class="path__head">
-          <h2>Our <em>Approach</em></h2>
-          <p>Identify · Evaluate · Partner · Develop</p>
+    return f'''    <section class="method" id="approach">
+      <div class="wrap method__grid">
+        <div class="method__head">
+          <h2><em>Identify.<br class="br-wide"> Evaluate.<br>Partner.<br class="br-wide"> Develop.</em></h2>
         </div>
-        <ol class="path__steps">{steps}</ol>
-        <a class="link path__link" href="{p}about/#approach">How we work <i class="arr"></i></a>
+        <ol class="method__steps">{steps}</ol>
       </div>
-      {ridge_svg("ridge ridge--bottom")}
     </section>
 '''
 
@@ -249,42 +245,24 @@ def home():
     p = ""
     latest = [n for n in NEWS if n["kind"] == "news"][:3]
     body = f'''    <!-- ================= HERO ================= -->
-    <section class="hero">
+    <section class="hero hero--fade">
       <div class="hero__stage">
-        <div class="hero__bg"><img src="public/images/guilgal_hero_background_1920x1080.png" alt="Sunset over mountains and misty forested hills in Central Africa"></div>
+        <div class="hero__bg"><img src="public/images/guilgal_hero_background_1920x1080.png" alt="Sunset over mountains and misty forested hills in the Democratic Republic of the Congo"></div>
         <div class="hero__tint"></div>
         <div class="hero__map" aria-hidden="true"><img src="public/images/guilgal_drc_map_layer_mining_2x.png" alt=""></div>
       </div>
       <div class="hero__text">
-        <p class="eyebrow">Mineral Exploration &amp; Strategic Development</p>
-        <h1>Unlocking<br>Africa's Mineral<br><em>Potential</em></h1>
+        <h1>Unlocking<br>Africa's Mining<br><em>Potential</em></h1>
         <p class="hero__sub">Connecting high-potential mineral projects with technical expertise, development partners and international partnerships.</p>
-        <div class="hero__actions">
-          <a class="btn btn--gold" href="projects/">Explore Our Projects <i class="arr"></i></a>
-          <a class="btn btn--outline" href="investors/#enquiry">Investor Enquiries</a>
-        </div>
-        <figure class="qr">
-          <img src="public/images/qr-projects.svg" alt="QR code linking to the Guilgal International projects page" width="72" height="72">
-          <figcaption>Scan to explore our projects</figcaption>
-        </figure>
+        <a class="btn btn--gold" href="#approach">Our Approach <i class="arr"></i></a>
       </div>
       <svg class="contours contours--hero" viewBox="0 0 600 220" preserveAspectRatio="none" aria-hidden="true">
         <path d="M0 200 C120 170 220 210 340 180 S520 150 600 170"/>
         <path d="M60 220 C180 190 260 230 380 200 S540 170 600 190"/>
         <path d="M200 215 C300 195 380 225 480 205 S580 190 600 205"/>
       </svg>
-      <div class="hero__rockface" aria-hidden="true"><img src="public/images/news-1.jpg" alt=""></div>
-      {ridge_svg()}
     </section>
 
-    <!-- ================= HIGHLIGHT STRIP ================= -->
-    <section class="strip ivory" aria-label="Focus areas">
-      <ul class="wrap strip__list">
-        <li><strong>Copper &amp; Gold</strong><span>Exploration opportunities</span></li>
-        <li><strong>Critical Minerals</strong><span>Strategic resources</span></li>
-        <li><strong>Strategic Partnerships</strong><span>Lasting value</span></li>
-      </ul>
-    </section>
 
     <!-- ================= ADVANCING AFRICA'S MINERAL OPPORTUNITIES ================= -->
     <section class="focus ivory" id="who-we-are">
@@ -301,17 +279,6 @@ def home():
       </div>
     </section>
 
-    <!-- ================= OUR PROJECTS ================= -->
-    <section class="projects ivory" id="projects">
-      <div class="wrap">
-        <div class="section-head">
-          <h2><em>Our Projects</em></h2>
-          <p>Six projects across the Democratic Republic of the Congo and Ghana. Full project information is available to invited partners.</p>
-        </div>
-        {project_cards(p)}
-        <p class="projects__more"><a class="link link--dark" href="projects/">Explore Our Projects <i class="arr"></i></a></p>
-      </div>
-    </section>
 
 {approach_section(p)}
     <!-- ================= LATEST NEWS & MILESTONES ================= -->
