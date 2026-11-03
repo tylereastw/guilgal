@@ -597,3 +597,36 @@ p { margin: 0 0 1em; }
 .partner .approach__bg::after { background: linear-gradient(180deg, var(--ivory) 0%, rgba(246,243,235,.55) 8%, rgba(246,243,235,0) 26%), linear-gradient(180deg, rgba(19,37,29,0) 45%, rgba(19,37,29,.7) 78%, var(--teal-2) 100%); }
 .partner .partner__text { padding-top: clamp(10px, 2vw, 30px) !important; padding-bottom: clamp(60px, 7vw, 100px); margin-top: -2vw; }
 @media (max-width: 640px) { .partner .approach__bg { height: 62vw; } .partner .approach__bg img { object-position: 40% 0%; } }
+
+/* ---------- hero map locked to the photo on every screen ----------
+   On wide screens the 16:9 stage covers the hero and the map sits at the artwork's own coordinates.
+   On phones, tablets and tall windows the photo is scaled so the map is a sensible size and placed
+   where it should be (--mw width, --ml left, --mt top); the map stays inside the stage, so the mine
+   road always meets the same mountain. The stage's top and bottom edges fade into the green. */
+@media (max-width: 1060px), (max-aspect-ratio: 3/2) {
+  .hero { background: var(--teal); min-height: calc(var(--mt) + var(--mw) * 1.25 + var(--hero-pad)); }
+  .hero__stage { left: calc(var(--ml) - var(--mw) * 1.3391); top: calc(var(--mt) - var(--mw) * 0.1420); right: auto; bottom: auto;
+    width: calc(var(--mw) / 0.404); height: auto; aspect-ratio: 16 / 9; transform: none;
+    -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 16%, #000 84%, transparent 100%); mask-image: linear-gradient(180deg, transparent 0, #000 16%, #000 84%, transparent 100%); }
+  .hero__bg img { object-position: 50% 50%; }
+  .hero__map { left: 54.1%; top: 10.2%; width: 40.4%; right: auto; bottom: auto; max-width: none; }
+}
+@media (min-width: 1061px) and (max-aspect-ratio: 3/2) { .hero { --mw: 40vw; --ml: 55vw; --mt: calc(110px + 2vw); --hero-pad: 160px; } }
+@media (min-width: 601px) and (max-width: 1060px) { .hero { --mw: 46vw; --ml: 51vw; --mt: calc(80px + 3vw); --hero-pad: 130px; } }
+@media (max-width: 600px) { .hero { --mw: 52vw; --ml: 50vw; --mt: calc(88px + 20.5vw); --hero-pad: 170px; } }
+
+/* the full menu needs about 1180px; below that use the menu button */
+@media (min-width: 1061px) and (max-width: 1180px) {
+  .nav__links:not(.is-open) { display: none; }
+  .burger { display: grid; gap: 5px; width: 46px; height: 46px; padding: 12px; place-content: center; background: none; border: 1px solid var(--gold); border-radius: 4px; cursor: pointer; z-index: 2; }
+  .burger span { width: 20px; height: 1.5px; background: var(--gold); transition: .3s; }
+  .burger[aria-expanded="true"] span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+  .burger[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+  .burger[aria-expanded="true"] span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+  .nav__links.is-open { display: flex; position: fixed; inset: 0; flex-direction: column; justify-content: center; align-items: center; gap: 26px; background: rgba(16,41,31,.98); padding: 90px 20px 40px; }
+  .nav__links.is-open .nav__list { flex-direction: column; gap: 14px; }
+  .nav__links.is-open .nav__item { flex-direction: column; }
+  .nav__links.is-open .nav__list > li > a { font: 400 1.7rem var(--serif); }
+  .nav__links.is-open .nav__subtoggle { display: none; }
+  .nav__links.is-open .nav__sub { position: static; opacity: 1; visibility: visible; transform: none; background: none; border: 0; box-shadow: none; padding: 4px 0 0; min-width: 0; text-align: center; }
+}
