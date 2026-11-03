@@ -218,3 +218,55 @@ p { margin: 0 0 1em; }
   .hero__text { padding-bottom: 380px; }
   .hero__map { bottom: 120px; }
 }
+
+
+/* =========================================================
+   Phones & tablets — keep the desktop composition, scaled
+   (text left, map right in the hero; tighter type and rhythm)
+   ========================================================= */
+@media (max-width: 1060px) {
+  .hero { min-height: 0; align-items: flex-start; }
+  .hero__stage { left: 0; top: 0; transform: none; width: 100%; height: 100%; aspect-ratio: auto; }
+  .hero__bg img { object-position: 58% 38%; }
+  .hero__tint { background: linear-gradient(90deg, rgba(15,42,46,.86) 0%, rgba(15,42,46,.6) 42%, rgba(15,42,46,.08) 75%), linear-gradient(180deg, rgba(15,42,46,.55), transparent 22%, transparent 70%, rgba(15,42,46,.45)); }
+  .hero__text { position: relative; z-index: 4; max-width: 100%; padding: calc(84px + 2vw) var(--gutter) 30vw; }
+  .hero__sub { max-width: 52% !important; }
+  .hero__text h1 { font-size: clamp(1.95rem, 8.2vw, 3.6rem); margin-bottom: .9rem; }
+  .hero__text .eyebrow { font-size: clamp(.6rem, 2.3vw, .74rem); margin-bottom: .9rem; }
+  .hero__sub { font-size: clamp(.84rem, 3.5vw, 1.05rem); line-height: 1.5; margin: 0 0 1.3rem; max-width: 30em; }
+  .hero__text .btn { padding: 11px 18px; font-size: clamp(.82rem, 3.4vw, .95rem); }
+  /* the map starts under the three-line headline and rests to its right */
+  .hero__map { left: auto; right: -2vw; top: calc(104px + 27vw); bottom: auto; width: 60vw; max-width: 620px; z-index: 2; }
+  .contours--hero { width: 70vw; bottom: 40px; }
+
+  .focus { padding: clamp(80px, 16vw, 130px) 0 clamp(60px, 12vw, 100px); }
+  .focus h2 { font-size: clamp(1.9rem, 7.8vw, 3rem); }
+  .focus__panels { margin-top: 6px; }
+  .focus__quote { font-size: clamp(.9rem, 3.6vw, 1.05rem); margin: 10px 0 0 6%; }
+
+  .method { padding-top: clamp(50px, 10vw, 80px); }
+  .method__head h2 { font-size: clamp(2rem, 8vw, 3.2rem); }
+  .method__steps { padding-top: 6px; grid-template-columns: 1fr 1fr; gap: 30px clamp(18px, 5vw, 40px); }
+  .method__num { font-size: clamp(1.6rem, 6.4vw, 2.4rem); }
+  .method__steps h3 { font-size: clamp(1.15rem, 4.8vw, 1.7rem); margin-bottom: .8rem; padding-bottom: .7rem; }
+  .method__steps h3::after { width: 30px; }
+  .method__steps p { font-size: clamp(.84rem, 3.5vw, 1rem); line-height: 1.5; }
+
+  .news { padding: clamp(40px, 8vw, 70px) 0 clamp(50px, 10vw, 80px); }
+  .news__head h2 { font-size: clamp(1.9rem, 7.6vw, 2.8rem); }
+  .news__body h3 { font-size: clamp(1.02rem, 4.2vw, 1.3rem); }
+  .news__card--lead .news__body h3 { font-size: clamp(1.2rem, 5vw, 1.6rem); }
+}
+@media (max-width: 600px) {
+  body { font-size: 15px; }
+  .hero__text { max-width: 100%; padding-bottom: 26vw; }
+  .hero__sub { max-width: 56% !important; }
+  .hero__text h1 { font-size: clamp(1.8rem, 8.4vw, 2.4rem); }
+  .hero__sub { font-size: clamp(.8rem, 3.5vw, .92rem); }
+  .hero__map { width: 62vw; top: calc(100px + 28vw); right: -3vw; }
+  .method__head h2 { font-size: clamp(1.8rem, 8.2vw, 2.3rem); }
+  .method__head h2 .br-wide { display: none; }
+  .method__steps { grid-template-columns: 1fr 1fr; row-gap: 26px; }
+  .method__steps p { max-width: none; }
+  .news__body { padding: 16px 18px; }
+}
