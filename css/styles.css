@@ -279,9 +279,9 @@ p { margin: 0 0 1em; }
   .hero { min-height: calc(100px + 90vw); }
   .hero__text { padding: calc(84px + 2vw) var(--gutter) 0; }
   .hero__text h1 { font-size: 9vw; line-height: 1.08; margin-bottom: 3.6vw; }
-  .hero__sub { font-size: 4vw !important; line-height: 1.5; max-width: 45vw !important; margin: 0 0 5vw; }
+  .hero__sub { font-size: 4vw !important; line-height: 1.5; max-width: 42vw !important; margin: 0 0 5vw; }
   .hero__text .btn { font-size: 3.9vw; padding: 3vw 5vw; gap: 2.6vw; }
-  .hero__map { width: 56vw; right: 0; left: auto; top: calc(98px + 30vw); bottom: auto; }
+  .hero__map { width: 52vw; right: -2vw; left: auto; top: calc(88px + 20.5vw); bottom: auto; } /* starts beside the last headline line */
 }
 @media (min-width: 601px) and (max-width: 1060px) {
   /* tablets: the desktop composition — text on the left, map beside it on the right, level with the headline */
