@@ -1,36 +1,47 @@
-# GUILGAL — homepage: "From the canopy to the seam"
+# GUILGAL — website
 
-Static HTML/CSS/JS, no build step — open `index.html` in a browser.
+Premium corporate editorial homepage for GUILGAL, built to the design brief and the two
+supplied reference designs. Static HTML/CSS/JS — open `index.html`, no build step.
 
-The page is one descent. Photos are treated as prints laid over each other; every layer
-moves at its own speed, so they slide across one another as you scroll.
+## Structure
+| # | Section | Surface | Layout |
+|---|---|---|---|
+| 1 | Hero — *Resources for a Stronger DRC* | dark teal photo | text left, gold-outlined DRC map filled with landscape, outcrop overlapping bottom-left, contour lines, curved gold-edged transition |
+| 2 | Our Focus — *Sustainable Development, Real Impact* | ivory | three overlapping angled photo panels, quote beneath |
+| 3 | Our Approach — *From exploration to discovery* | dark panoramic photo | text right, contour lines flowing out |
+| 4 | Geological Expertise | ivory, text-led | two-column editorial with four-line programme list |
+| 5 | Mineral Portfolio | charcoal | mineral photo fading in from the left, six commodities |
+| 6 | Exploration & Development process | ivory, minimal | four numbered steps |
+| 7 | The DRC's potential | full-width photo | light-to-dark gradient entry, facts row |
+| 8 | Responsible Development | ivory | text + arched photo |
+| 9 | Investors | charcoal | text + fact list, gold CTA |
+| 10 | The Company | ivory | two-column copy |
+| 11 | Contact | dark photo | details + underlined form |
 
-| # | Chapter | What you see |
-|---|---|---|
-| 00 | Above the canopy | Full-bleed sunrise; a print of the ore lies over its corner — the end of the story shown at the start |
-| 01 | The archive | Our Approach copy beside a desk of sepia prints (aerial survey, field book, map sheet) |
-| 02 | The field | Pinned: four prints land on top of each other as you scroll, the background turns from forest to earth, a depth counter runs 0 → 120 m, the four steps light in turn |
-| 03 | The seam | Ore photo full-bleed; the six commodities set as giant type across it |
-| 04 | The record | Wide landscape with the 10+ / 10+ / 100% block overlapping its edge, hand-sample print on top |
-| 05 | Back to the surface | Sunrise returns; call to action, John Paul Boardman's details, tilted paper form |
+Each section edge is a different curve; no two transitions repeat.
 
-A gold survey line on the left (desktop) fills as you descend, with a readout of where you are.
+## Adding the photography
+Every image slot shows a dashed label until its file exists. Put the file in `assets/img/`
+with the exact name below and it appears — no code changes needed.
 
-## Photo slots
-Every image is a `.ph` element with a `data-slot` label. Drop a file with that name into
-`assets/img/` and update the `src`. Current files are low-resolution crops of the mockup —
-replace them all for production.
+| File | Position | Size (px) | Subject |
+|---|---|---|---|
+| `hero.jpg` | 1 · hero background | 2400 × 1400 | DRC landscape at sunset, dark teal tones, river valley |
+| `map-fill.jpg` | 1 · inside the DRC outline | 1200 × 1200 | river valley, forest and sunset (square crop, centre of interest in the middle) |
+| `outcrop.jpg` | 1 · bottom-left overlap | 1200 × 600 | rocky outcrop, lit from the right; edges are faded in CSS |
+| `focus-mine.jpg` | 2 · first panel | 900 × 1200 | open-pit mine / haul road |
+| `focus-forest.jpg` | 2 · second panel, and 8 · arched photo | 900 × 1200 | lush green DRC countryside |
+| `focus-mountain.jpg` | 2 · third panel | 900 × 1200 | mountainous landscape |
+| `approach-hills.jpg` | 3 · background, and 11 · contact background | 2400 × 1100 | misty panoramic hills, dark green |
+| `minerals.jpg` | 5 · left half | 1400 × 1600 | mineral / ore close-up |
+| `drc-panorama.jpg` | 7 · background | 2400 × 1000 | wide DRC terrain |
 
-| Slot | Chapter |
-|---|---|
-| hero-landscape.jpg, ore-detail.jpg | 00 |
-| archive-aerial.jpg, archive-river.jpg, archive-map.jpg | 01 (shown sepia) |
-| field-canopy.jpg, field-sampling.jpg, field-drilling.jpg, field-core.jpg | 02 |
-| ore-wide.jpg | 03 |
-| record-landscape.jpg, record-sample.jpg | 04 |
-| sky-sun.jpg | 05 |
+For a different phone crop of the hero, add `hero-mobile.jpg` (1200 × 1800) and switch the
+`<img>` in the hero to a `<picture>` with a `(max-width: 760px)` source.
 
-## Still to fill in
-- Telephone, e-mail, address (shown as —)
-- Form handler (`TODO` in `js/main.js`)
-- Captions on the prints ("Aerial survey · 1978", "Day 19 · Hole GG-03"…) are placeholders to replace with real ones
+## Placeholders to replace
+- Contact telephone, e-mail and address (shown as —).
+- `[Verified figure]` / `[Verified information]` in sections 7 and 9 — no statistics or licence
+  claims have been invented.
+- Form submission handler (`TODO` in `js/main.js`).
+- The DRC outline is traced from approximate border coordinates; swap in an official vector if required.

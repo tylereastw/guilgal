@@ -3,232 +3,283 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>GUILGAL — Mining Expertise in the DRC</title>
-  <meta name="description" content="GUILGAL uncovers and develops mineral projects in the Democratic Republic of Congo using expert geological analysis and field support.">
+  <title>GUILGAL — Mineral Exploration in the DRC</title>
+  <meta name="description" content="GUILGAL is a mineral exploration company focused on discovering and advancing critical minerals across the Democratic Republic of Congo.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;600;700;800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Mulish:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-  <a class="skip" href="#main">Skip to Main Content</a>
-  <a class="skip" href="#footer">Skip to Footer</a>
-  <a class="skip" href="#page-root">Skip to Navigation</a>
+  <a class="skip" href="#main">Skip to main content</a>
 
-  <!--
-    PHOTOS: every image is a .ph (print) with a data-slot label. Drop a file with
-    that name into assets/img/ and it fills the print; until then a labelled
-    placeholder shows. Several prints currently reuse low-res crops of the mockup.
-  -->
-
-  <header class="site-header" id="page-root">
-    <a class="brand" href="#top" aria-label="GUILGAL home">
-      <svg class="brand__mark" viewBox="0 0 80 24" aria-hidden="true"><path d="M2 22 L26 6 L34 12 L48 2 L78 22" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/></svg>
-      <span class="brand__word">GUILGAL</span>
+  <!-- ================= NAVIGATION ================= -->
+  <header class="nav" id="top">
+    <a class="logo" href="#top" aria-label="GUILGAL home">
+      <svg viewBox="0 0 80 24" aria-hidden="true"><path d="M2 22 L26 6 L34 12 L48 2 L78 22" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/></svg>
+      <span>GUILGAL</span>
     </a>
-    <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav"><span></span><span></span><span></span><b class="sr">Menu</b></button>
-    <nav class="site-nav" id="site-nav" aria-label="Main">
-      <a href="#top" class="is-active">Home</a>
-      <a href="#archive">About</a>
-      <a href="#field">Our Services</a>
+    <nav class="nav__links" id="menu" aria-label="Main">
+      <a href="#about">About</a>
+      <a href="#expertise">Expertise</a>
+      <a href="#minerals">Minerals</a>
+      <a href="#approach">Our Approach</a>
+      <a href="#investors">Investors</a>
       <a href="#contact">Contact</a>
+      <a class="btn btn--outline" href="#contact">Discuss an Opportunity <i class="arr"></i></a>
     </nav>
+    <button class="burger" aria-expanded="false" aria-controls="menu" aria-label="Menu"><span></span><span></span><span></span></button>
   </header>
-
-  <!-- the survey line: one gold thread that runs down the whole page -->
-  <aside class="survey" aria-hidden="true">
-    <div class="survey__line"><i></i></div>
-    <div class="survey__readout"><small>Position</small><b data-readout>Above the canopy</b></div>
-  </aside>
 
   <main id="main">
 
-    <!-- ===================== 00 · ABOVE THE CANOPY ===================== -->
-    <section class="ch ch--sky" id="top">
-      <div class="ph ph--bleed" data-speed="-.18" data-slot="hero-landscape.jpg">
-        <img src="assets/img/hero-landscape.jpg" alt="Sunrise over rainforest and a winding river in the DRC" onerror="this.remove()">
-      </div>
-      <div class="sky__shade"></div>
+    <!-- ================= 1 · HERO ================= -->
+    <section class="hero">
+      <div class="hero__bg slot" data-slot="hero.jpg · 2400×1400 · DRC landscape at sunset, dark teal tones"><img src="assets/img/hero.jpg" alt="Sunset over forested hills and river valleys in the Democratic Republic of Congo" onerror="this.remove()"></div>
+      <div class="hero__tint"></div>
 
-      <div class="sky__copy">
-        <p class="kicker">Democratic Republic of Congo</p>
-        <h1>Mining Expertise<br>in the DRC</h1>
-        <p class="lead">Your trusted partner for mining opportunities in the DRC.</p>
-        <p class="sub">We uncover and develop mineral projects using expert geological analysis and field support.</p>
-        <a class="btn" href="#contact">Discover More <i class="arrow"></i></a>
+      <!-- gold-outlined DRC, filled with a river-valley sunset -->
+      <div class="hero__map slot" data-slot="map-fill.jpg · 1200×1200 · river valley &amp; sunset, fills the DRC outline" aria-hidden="true">
+        <svg viewBox="0 0 100 100">
+          <defs>
+            <clipPath id="drc"><path d="M1.0 59.4 L5.1 58.9 L12.3 54.2 L23.1 45.3 L28.2 33.9 L30.8 18.2 L33.8 10.4 L38.5 2.6 L51.3 3.1 L66.7 1.0 L79.0 1.6 L89.7 4.7 L96.4 10.4 L91.8 20.8 L90.3 35.9 L88.2 43.2 L88.7 52.1 L89.2 59.9 L91.8 71.9 L84.1 77.1 L85.1 84.4 L84.1 93.2 L91.3 92.2 L91.3 98.7 L85.1 98.4 L79.5 92.7 L68.2 87.0 L61.5 85.9 L52.3 86.5 L53.3 69.8 L50.3 66.7 L44.1 65.1 L38.5 69.8 L30.8 70.3 L28.2 70.8 L23.6 59.9 L20.5 59.4 L5.6 59.4 Z"/></clipPath>
+          </defs>
+          <image class="hero__map-img" href="assets/img/map-fill.jpg" onerror="this.remove()" width="100" height="100" preserveAspectRatio="xMidYMid slice" clip-path="url(#drc)"/>
+          <path class="hero__map-line" d="M1.0 59.4 L5.1 58.9 L12.3 54.2 L23.1 45.3 L28.2 33.9 L30.8 18.2 L33.8 10.4 L38.5 2.6 L51.3 3.1 L66.7 1.0 L79.0 1.6 L89.7 4.7 L96.4 10.4 L91.8 20.8 L90.3 35.9 L88.2 43.2 L88.7 52.1 L89.2 59.9 L91.8 71.9 L84.1 77.1 L85.1 84.4 L84.1 93.2 L91.3 92.2 L91.3 98.7 L85.1 98.4 L79.5 92.7 L68.2 87.0 L61.5 85.9 L52.3 86.5 L53.3 69.8 L50.3 66.7 L44.1 65.1 L38.5 69.8 L30.8 70.3 L28.2 70.8 L23.6 59.9 L20.5 59.4 L5.6 59.4 Z"/>
+        </svg>
       </div>
 
-      <!-- a print of the ore lies over the corner of the landscape: the end of the story, shown at the start -->
-      <figure class="ph ph--print sky__ore" data-rot="4" data-speed=".22" data-slot="ore-detail.jpg">
-        <img src="assets/img/ore-detail.jpg" alt="Close-up of copper ore with malachite" onerror="this.remove()">
-        <figcaption>What lies beneath · Katanga copper belt</figcaption>
-      </figure>
-      <a class="cue" href="#archive"><span>Begin</span><i></i></a>
+      <div class="hero__text">
+        <p class="eyebrow">Exploration in the DRC</p>
+        <h1>Resources<br>for a Stronger<br><em>DRC</em></h1>
+        <p class="hero__sub">A mineral exploration company focused on discovering and advancing critical minerals across the Democratic Republic of Congo.</p>
+        <a class="btn btn--gold" href="#approach">Our Approach <i class="arr"></i></a>
+      </div>
+
+      <!-- rocky outcrop overlapping the bottom-left, and contour lines bottom-right -->
+      <div class="slot hero__rock" data-slot="outcrop.jpg · 1200×600 · rocky outcrop, soft edges"><img src="assets/img/outcrop.jpg" alt="" onerror="this.remove()"></div>
+      <svg class="contours contours--hero" viewBox="0 0 600 220" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0 200 C120 170 220 210 340 180 S520 150 600 170"/>
+        <path d="M60 220 C180 190 260 230 380 200 S540 170 600 190"/>
+        <path d="M200 215 C300 195 380 225 480 205 S580 190 600 205"/>
+      </svg>
+      <!-- curved transition into the ivory section -->
+      <svg class="edge edge--hero" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true">
+        <path class="edge__fill" d="M0 70 C240 20 420 110 700 60 S1100 10 1440 60 L1440 120 L0 120 Z"/>
+        <path class="edge__line" d="M0 70 C240 20 420 110 700 60 S1100 10 1440 60"/>
+      </svg>
     </section>
 
-    <!-- ===================== 01 · THE ARCHIVE ===================== -->
-    <section class="ch ch--archive" id="archive">
-      <span class="numeral" aria-hidden="true">01</span>
-      <div class="wrap">
-        <div class="archive__copy">
-          <p class="kicker kicker--dark">01 · The archive</p>
-          <h2>Combining Data and Fieldwork with Expert Insight</h2>
-          <p>By merging extensive historic geological records with targeted field reconnaissance, sampling, and small-scale drilling, GUILGAL develops tangible evidence to unlock the full potential of DRC mineral projects.</p>
-          <p>We have a network of engineers, geologists and field-working DRC staff.</p>
-          <div class="fact">
-            <svg class="icon" viewBox="0 0 32 32" aria-hidden="true"><path d="M6 4h14l6 6v18H6z M20 4v6h6 M10 15h12 M10 19h12 M10 23h8"/></svg>
-            <div><h3>Extensive Geological Data Analysis</h3><p>Detailed review of existing geological records to guide exploration.</p></div>
-          </div>
-          <a class="link" href="#field">Learn More <i class="arrow"></i></a>
+    <!-- ================= 2 · OUR FOCUS ================= -->
+    <section class="focus ivory" id="about">
+      <div class="wrap focus__grid">
+        <div class="focus__text">
+          <p class="eyebrow eyebrow--dark">Our Focus</p>
+          <h2>Sustainable<br>Development,<br>Real Impact</h2>
+          <span class="rule"></span>
         </div>
-
-        <!-- the desk: historic prints, sepia, laid over each other -->
-        <div class="desk">
-          <figure class="ph ph--print desk__a" data-rot="-3" data-speed="-.08" data-slot="archive-aerial.jpg — old aerial / survey photo">
-            <img src="assets/img/canopy.jpg" alt="" onerror="this.remove()">
-            <figcaption>Aerial survey · 1978</figcaption>
-          </figure>
-          <figure class="ph ph--print desk__b" data-rot="2.5" data-speed=".1" data-slot="archive-river.jpg — historic field photo">
-            <img src="assets/img/river.jpg" alt="" onerror="this.remove()">
-            <figcaption>Field book · Lualaba</figcaption>
-          </figure>
-          <figure class="ph ph--print ph--frame desk__c" data-rot="-1" data-speed=".2" data-slot="archive-map.jpg — scan of a geological map">
-            <img src="assets/img/hills-dusk.jpg" alt="" onerror="this.remove()">
-            <figcaption>Sheet 27 · 1:200 000</figcaption>
-          </figure>
-          <span class="desk__note">decades of records, read before a single boot touches the ground</span>
+        <div class="focus__panels">
+          <figure class="slot panel panel--1" data-slot="focus-mine.jpg · 900×1200 · open-pit mine / haul road"><img src="assets/img/focus-mine.jpg" alt="Haul road winding through an open-pit mine" onerror="this.remove()"></figure>
+          <figure class="slot panel panel--2" data-slot="focus-forest.jpg · 900×1200 · lush green DRC countryside"><img src="assets/img/focus-forest.jpg" alt="Lush green hills of the DRC countryside" onerror="this.remove()"></figure>
+          <figure class="slot panel panel--3" data-slot="focus-mountain.jpg · 900×1200 · mountain landscape"><img src="assets/img/focus-mountain.jpg" alt="Cloud-capped mountain above tropical forest" onerror="this.remove()"></figure>
         </div>
+        <p class="focus__quote">From responsible exploration to production, we develop mineral assets that support economic growth and lasting opportunity in the DRC.</p>
       </div>
     </section>
 
-    <!-- ===================== 02 · THE FIELD (pinned descent) ===================== -->
-    <section class="ch ch--field" id="field">
-      <div class="field__pin">
-        <div class="field__earth"></div>
-        <span class="numeral numeral--light" aria-hidden="true">02</span>
-
-        <div class="field__copy">
-          <p class="kicker">02 · The field</p>
-          <h2>Field Reconnaissance and Sampling</h2>
-          <p class="sub">Direct field investigations to verify mineral prospects.</p>
-          <ol class="steps">
-            <li class="is-on"><b>i</b><span><strong>Reconnaissance</strong>Our DRC teams walk the ground the archive pointed to.</span></li>
-            <li><b>ii</b><span><strong>Sampling</strong>Soil, stream and rock-chip samples test the records.</span></li>
-            <li><b>iii</b><span><strong>Small-scale drilling</strong>Targeted holes reach beneath the weathered cover.</span></li>
-            <li><b>iv</b><span><strong>Evidence</strong>Tangible results that partners can act on.</span></li>
-          </ol>
-          <a class="btn" href="#contact">Explore Services <i class="arrow"></i></a>
-        </div>
-
-        <!-- prints land on top of each other as you scroll -->
-        <div class="pile">
-          <figure class="ph ph--print pile__1" data-slot="field-canopy.jpg — team entering forest">
-            <img src="assets/img/canopy.jpg" alt="Rainforest canopy at the start of the traverse" onerror="this.remove()">
-            <figcaption>Day 1 · Traverse begins</figcaption>
-          </figure>
-          <figure class="ph ph--print pile__2" data-slot="field-sampling.jpg — geologist taking a sample">
-            <img src="assets/img/river.jpg" alt="Stream-sediment sampling" onerror="this.remove()">
-            <figcaption>Day 4 · Stream sediments</figcaption>
-          </figure>
-          <figure class="ph ph--print pile__3" data-slot="field-drilling.jpg — small drill rig">
-            <img src="assets/img/hills-dusk.jpg" alt="Small-scale drilling at dusk" onerror="this.remove()">
-            <figcaption>Day 19 · Hole GG-03</figcaption>
-          </figure>
-          <figure class="ph ph--print ph--frame pile__4" data-slot="field-core.jpg — core tray / ore sample">
-            <img src="assets/img/malachite.jpg" alt="Copper ore recovered from drilling" onerror="this.remove()">
-            <figcaption>Day 22 · Mineralised intercept</figcaption>
-          </figure>
-          <div class="depth"><small>Depth</small><b><span data-depth>0</span> m</b></div>
-        </div>
+    <!-- ================= 3 · OUR APPROACH ================= -->
+    <section class="approach" id="approach">
+      <svg class="edge edge--approach" viewBox="0 0 1440 140" preserveAspectRatio="none" aria-hidden="true">
+        <path class="edge__fill" d="M0 0 L1440 0 L1440 40 C1200 110 980 30 720 80 S260 130 0 60 Z"/>
+      </svg>
+      <div class="slot approach__bg" data-slot="approach-hills.jpg · 2400×1100 · misty panoramic hills, dark green"><img src="assets/img/approach-hills.jpg" alt="" onerror="this.remove()"></div>
+      <div class="approach__tint"></div>
+      <div class="wrap approach__text">
+        <p class="eyebrow">Our Approach</p>
+        <h2><em>From exploration<br>to discovery</em></h2>
+        <p>A disciplined, evidence-led approach that combines geological expertise, local knowledge and responsible exploration to create long-term value.</p>
+        <a class="link" href="#process">Learn More <i class="arr"></i></a>
       </div>
+      <svg class="contours contours--approach" viewBox="0 0 1440 160" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0 110 C300 60 500 140 800 100 S1250 40 1440 90"/>
+        <path d="M0 135 C320 90 520 160 820 125 S1260 70 1440 115"/>
+      </svg>
     </section>
 
-    <!-- ===================== 03 · THE SEAM ===================== -->
-    <section class="ch ch--seam" id="seam">
-      <div class="ph ph--bleed" data-speed="-.12" data-slot="ore-wide.jpg — wide shot of ore face">
-        <img src="assets/img/malachite.jpg" alt="" onerror="this.remove()">
+    <!-- ================= 4 · GEOLOGICAL EXPERTISE (text-led) ================= -->
+    <section class="expertise ivory" id="expertise">
+      <svg class="edge edge--expertise" viewBox="0 0 1440 110" preserveAspectRatio="none" aria-hidden="true">
+        <path class="edge__fill" d="M0 60 C360 110 640 10 900 50 S1300 100 1440 40 L1440 110 L0 110 Z"/>
+      </svg>
+      <div class="wrap expertise__grid">
+        <div class="expertise__lead">
+          <p class="eyebrow eyebrow--dark">Geological Expertise</p>
+          <h2>Reading the ground<br>before we <em>break</em> it</h2>
+        </div>
+        <div class="expertise__body">
+          <p>Exploration begins long before the first sample is taken. Our geologists work from historic survey records, regional mapping and remote sensing to understand where mineral systems are likely to sit, then test those ideas in the field.</p>
+          <p>The result is a programme built on evidence: targets that are chosen for geological reasons, sampled systematically and advanced only when the data supports it.</p>
+          <ul class="expertise__list">
+            <li><strong>Desk study</strong><span>Historic records, regional geology and remote sensing</span></li>
+            <li><strong>Field mapping &amp; sampling</strong><span>Reconnaissance, soil and stream-sediment programmes</span></li>
+            <li><strong>Targeted drilling</strong><span>Small-scale programmes to confirm mineralisation</span></li>
+            <li><strong>Local knowledge</strong><span>Congolese geologists and field teams on every project</span></li>
+          </ul>
+        </div>
       </div>
-      <div class="seam__shade"></div>
-      <div class="wrap seam__copy">
-        <p class="kicker">03 · The seam</p>
-        <h2>We have opportunities in</h2>
-        <ul class="minerals">
-          <li>Copper</li><li>Lithium</li><li>Tantalum</li><li>Tin</li><li>Niobium</li><li>Wolframite</li>
+      <svg class="contours contours--expertise" viewBox="0 0 700 300" aria-hidden="true">
+        <path d="M80 240 C140 150 260 130 330 180 S480 290 600 200"/>
+        <path d="M60 270 C140 170 280 150 360 210 S500 320 640 220"/>
+        <path d="M110 215 C170 140 270 120 320 160 S440 250 560 185"/>
+      </svg>
+    </section>
+
+    <!-- ================= 5 · MINERAL PORTFOLIO (dark, mineral photography) ================= -->
+    <section class="minerals charcoal" id="minerals">
+      <div class="slot minerals__photo" data-slot="minerals.jpg · 1400×1600 · mineral / ore close-up"><img src="assets/img/minerals.jpg" alt="Copper ore with bands of green malachite" onerror="this.remove()"></div>
+      <div class="wrap minerals__text">
+        <p class="eyebrow">Mineral Portfolio</p>
+        <h2>Critical minerals<br>for a changing world</h2>
+        <p>The DRC holds some of the world's most significant deposits of the minerals that power modern industry. Our work focuses on the commodities with the strongest long-term demand.</p>
+        <ul class="minerals__list">
+          <li><b>Cu</b>Copper</li>
+          <li><b>Li</b>Lithium</li>
+          <li><b>Ta</b>Tantalum</li>
+          <li><b>Sn</b>Tin</li>
+          <li><b>Nb</b>Niobium</li>
+          <li><b>W</b>Wolframite</li>
         </ul>
       </div>
     </section>
 
-    <!-- ===================== 04 · THE RECORD ===================== -->
-    <section class="ch ch--record" id="record">
-      <span class="numeral" aria-hidden="true">04</span>
+    <!-- ================= 6 · PROCESS (minimal, numbered) ================= -->
+    <section class="process ivory" id="process">
+      <svg class="edge edge--process" viewBox="0 0 1440 100" preserveAspectRatio="none" aria-hidden="true">
+        <path class="edge__fill" d="M0 40 C200 90 480 0 760 50 S1200 100 1440 30 L1440 100 L0 100 Z"/>
+      </svg>
       <div class="wrap">
-        <div class="record__head">
-          <p class="kicker kicker--dark">04 · The record</p>
-          <h2>Key Strengths Driving Successful Mining Ventures</h2>
-          <p>Our expertise spans data analysis, fieldwork, and strategic connections to advance mining opportunities with clear evidence and trusted partnerships.</p>
+        <div class="process__head">
+          <p class="eyebrow eyebrow--dark">Exploration &amp; Development</p>
+          <h2>From first record<br>to <em>proven</em> project</h2>
         </div>
+        <ol class="process__steps">
+          <li><span>01</span><h3>Identify</h3><p>Regional review of geological records and mineral systems to select prospective ground.</p></li>
+          <li><span>02</span><h3>Verify</h3><p>Field reconnaissance, mapping and sampling to confirm what the records suggest.</p></li>
+          <li><span>03</span><h3>Advance</h3><p>Targeted drilling and technical studies that turn a prospect into a defined project.</p></li>
+          <li><span>04</span><h3>Partner</h3><p>Introducing evidence-based projects to capable partners and investors for development.</p></li>
+        </ol>
+      </div>
+    </section>
 
-        <!-- a wide print with the numbers set across its edge -->
-        <div class="record__stage">
-          <figure class="ph ph--wide" data-speed="-.06" data-slot="record-landscape.jpg — wide landscape">
-            <img src="assets/img/hills-dusk.jpg" alt="" onerror="this.remove()">
-          </figure>
-          <ul class="stats">
-            <li><b>10+</b><strong>Years Experience</strong><p>More than ten years delivering expert mining project identification, development, and geological consulting across the Democratic Republic of Congo.</p></li>
-            <li><b>10+</b><strong>Projects Developed</strong><p>GUILGAL has advanced in excess of ten mining projects by linking evidence-based exploration with capable partners — identifying projects for listed companies in Australia and London.</p></li>
-            <li><b>100%</b><strong>Client Satisfaction</strong><p>GUILGAL maintains a perfect client satisfaction rate through transparent, professional, and results-driven services.</p></li>
-          </ul>
-          <figure class="ph ph--print ph--frame record__ore" data-rot="5" data-speed=".16" data-slot="record-sample.jpg — hand sample">
-            <img src="assets/img/ore-detail.jpg" alt="" onerror="this.remove()">
-            <figcaption>Evidence · in hand</figcaption>
-          </figure>
+    <!-- ================= 7 · THE DRC'S POTENTIAL (full-width photography) ================= -->
+    <section class="potential">
+      <div class="slot potential__bg" data-slot="drc-panorama.jpg · 2400×1000 · wide DRC terrain"><img src="assets/img/drc-panorama.jpg" alt="" onerror="this.remove()"></div>
+      <div class="potential__tint"></div>
+      <div class="wrap potential__text">
+        <p class="eyebrow">The DRC</p>
+        <h2>One of the world's great<br>mineral provinces</h2>
+        <p>From the copper belt of Katanga to the tin and tantalum districts of the east, the Democratic Republic of Congo hosts mineral systems of global significance. Decades of geological work remain under-explored with modern methods.</p>
+        <dl class="potential__facts">
+          <div><dt>Land area</dt><dd>2.3 million km²</dd></div>
+          <div><dt>Copper belt</dt><dd>Katanga · Lualaba</dd></div>
+          <div><dt>GUILGAL presence</dt><dd class="placeholder">[Verified figure]</dd></div>
+        </dl>
+      </div>
+      <svg class="edge edge--potential" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true">
+        <path class="edge__fill" d="M0 80 C300 30 560 120 860 70 S1240 20 1440 70 L1440 120 L0 120 Z"/>
+      </svg>
+    </section>
+
+    <!-- ================= 8 · RESPONSIBLE DEVELOPMENT ================= -->
+    <section class="responsible ivory">
+      <div class="wrap responsible__grid">
+        <div class="responsible__text">
+          <p class="eyebrow eyebrow--dark">Responsible Development</p>
+          <h2>Development that<br>lasts beyond the mine</h2>
+          <p>Exploration in the DRC carries responsibility. We work with local communities and authorities from the earliest stage, employ and train Congolese teams, and plan every programme to minimise its footprint on forest, water and land.</p>
+          <a class="link link--dark" href="#contact">Our commitments <i class="arr"></i></a>
         </div>
+        <figure class="slot responsible__photo" data-slot="focus-forest.jpg · 900×1200 · lush green DRC countryside">
+          <img src="assets/img/focus-forest.jpg" alt="Green forested hills in the DRC" onerror="this.remove()">
+        </figure>
+      </div>
+    </section>
 
-        <div class="service">
-          <svg class="icon" viewBox="0 0 32 32" aria-hidden="true"><path d="M4 28 L13 10 L18 18 L22 12 L28 28Z M16 4v4 M10 6l2 3 M22 6l-2 3"/></svg>
-          <div><h3>Field Reconnaissance and Sampling</h3><p>Direct field investigations to verify mineral prospects.</p></div>
-          <a class="link" href="#contact">Explore Services <i class="arrow"></i></a>
+    <!-- ================= 9 · INVESTORS ================= -->
+    <section class="investors charcoal" id="investors">
+      <svg class="edge edge--investors" viewBox="0 0 1440 110" preserveAspectRatio="none" aria-hidden="true">
+        <path class="edge__fill" d="M0 0 L1440 0 L1440 50 C1180 110 900 20 640 70 S200 110 0 50 Z"/>
+      </svg>
+      <div class="wrap investors__grid">
+        <div class="investors__text">
+          <p class="eyebrow">Investors</p>
+          <h2>Opportunities built<br>on <em>evidence</em></h2>
+          <p>GUILGAL identifies and advances projects for partners and listed companies seeking exposure to the DRC's critical-mineral potential. Every opportunity we present is backed by field data and a clear path to development.</p>
+          <a class="btn btn--gold" href="#contact">Discuss an Opportunity <i class="arr"></i></a>
+        </div>
+        <dl class="investors__facts">
+          <div><dt>Experience in the DRC</dt><dd>Over ten years</dd></div>
+          <div><dt>Projects advanced</dt><dd>More than ten</dd></div>
+          <div><dt>Partner markets</dt><dd>Australia · London</dd></div>
+          <div><dt>Current licences</dt><dd class="placeholder">[Verified information]</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <!-- ================= 10 · COMPANY ================= -->
+    <section class="company ivory">
+      <svg class="edge edge--company" viewBox="0 0 1440 100" preserveAspectRatio="none" aria-hidden="true">
+        <path class="edge__fill" d="M0 50 C280 100 540 10 820 60 S1260 90 1440 40 L1440 100 L0 100 Z"/>
+      </svg>
+      <div class="wrap company__grid">
+        <p class="eyebrow eyebrow--dark">The Company</p>
+        <h2>An exploration company<br>with the DRC at its heart</h2>
+        <div class="company__cols">
+          <p>GUILGAL combines international geological expertise with a permanent network of engineers, geologists and field staff working in the Democratic Republic of Congo. Over more than a decade we have identified, investigated and advanced mineral projects across the country.</p>
+          <p>We work for partners who need reliable evidence before they commit capital, and we build that evidence the only way it can be built: in the archive, on the ground and in the laboratory.</p>
         </div>
       </div>
     </section>
 
-    <!-- ===================== 05 · BACK TO THE SURFACE ===================== -->
-    <section class="ch ch--surface" id="contact">
-      <div class="ph ph--bleed" data-speed="-.15" data-slot="sky-sun.jpg">
-        <img src="assets/img/sky-sun.jpg" alt="" onerror="this.remove()">
-      </div>
-      <div class="surface__shade"></div>
-      <div class="wrap surface__grid">
-        <div class="surface__copy">
-          <p class="kicker">05 · Back to the surface</p>
-          <h2>Start Developing Your Mining Project with GUILGAL Today</h2>
-          <p class="sub">Engage with GUILGAL’s experienced team to investigate, develop, and advance promising mineral projects with confidence and precision.</p>
-          <p class="who">Contact <b>John Paul Boardman</b> to discuss your mining services and project development needs in the DRC.</p>
-          <dl class="details">
-            <div><dt>Telephone:</dt><dd>—</dd></div>
-            <div><dt>E-mail:</dt><dd>—</dd></div>
-            <div><dt>Address:</dt><dd>—</dd></div>
+    <!-- ================= 11 · CONTACT ================= -->
+    <section class="contact" id="contact">
+      <div class="slot contact__bg" data-slot="approach-hills.jpg · 2400×1100 · misty panoramic hills, dark green"><img src="assets/img/approach-hills.jpg" alt="" onerror="this.remove()"></div>
+      <div class="contact__tint"></div>
+      <svg class="edge edge--contact" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true">
+        <path class="edge__fill" d="M0 0 L1440 0 L1440 60 C1160 120 860 10 600 70 S180 110 0 50 Z"/>
+      </svg>
+      <div class="wrap contact__grid">
+        <div class="contact__text">
+          <p class="eyebrow">Contact</p>
+          <h2>Discuss an opportunity</h2>
+          <p>Contact <b>John Paul Boardman</b> to discuss mineral exploration, project development or investment opportunities in the DRC.</p>
+          <dl class="contact__details">
+            <div><dt>Telephone</dt><dd class="placeholder">—</dd></div>
+            <div><dt>E-mail</dt><dd class="placeholder">—</dd></div>
+            <div><dt>Address</dt><dd class="placeholder">—</dd></div>
           </dl>
         </div>
         <form class="form" id="contact-form" novalidate>
-          <h3>Send a message</h3>
-          <label class="input"><span>Name*</span><input type="text" name="name" autocomplete="name" required></label>
-          <label class="input"><span>Message*</span><textarea name="message" rows="4" required></textarea></label>
+          <label><span>Name*</span><input type="text" name="name" autocomplete="name" required></label>
+          <label><span>E-mail</span><input type="email" name="email" autocomplete="email"></label>
+          <label><span>Message*</span><textarea name="message" rows="4" required></textarea></label>
           <label class="consent"><input type="checkbox" name="consent" required><span>I hereby agree that this data will be stored and processed for the purpose of establishing contact. I am aware that I can revoke my consent at any time.*</span></label>
           <p class="form__msg" role="alert" hidden>* Please fill in all the required fields.</p>
-          <button class="btn" type="submit">Send <i class="arrow"></i></button>
+          <button class="btn btn--gold" type="submit">Send <i class="arr"></i></button>
         </form>
       </div>
     </section>
   </main>
 
-  <footer class="site-footer" id="footer">
-    <a class="brand brand--small" href="#top" aria-label="GUILGAL home">
-      <svg class="brand__mark" viewBox="0 0 80 24" aria-hidden="true"><path d="M2 22 L26 6 L34 12 L48 2 L78 22" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/></svg>
-      <span class="brand__word">GUILGAL</span>
-    </a>
-    <p><a href="https://www.guilgal.org/legal-notice/">Legal Notice</a> | <a href="https://www.guilgal.org/privacy-policy/">Privacy Policy</a></p>
-    <p>©Copyright. All rights reserved.</p>
+  <footer class="footer">
+    <div class="wrap footer__grid">
+      <a class="logo logo--small" href="#top" aria-label="GUILGAL home">
+        <svg viewBox="0 0 80 24" aria-hidden="true"><path d="M2 22 L26 6 L34 12 L48 2 L78 22" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/></svg>
+        <span>GUILGAL</span>
+      </a>
+      <nav aria-label="Footer"><a href="#about">About</a><a href="#expertise">Expertise</a><a href="#minerals">Minerals</a><a href="#investors">Investors</a><a href="#contact">Contact</a></nav>
+      <p><a href="https://www.guilgal.org/legal-notice/">Legal Notice</a> · <a href="https://www.guilgal.org/privacy-policy/">Privacy Policy</a> · © Copyright. All rights reserved.</p>
+    </div>
   </footer>
 
   <script src="js/main.js"></script>
