@@ -42,7 +42,7 @@
         <div class="hero__bg"><img src="public/images/guilgal_hero_background_1920x1080.png" alt="Sunset over mountains and misty forested hills in the Democratic Republic of Congo"></div>
         <div class="hero__tint"></div>
         <!-- gold-outlined DRC, filled with a river-valley sunset; positioned in the stage's own coordinates -->
-        <div class="hero__map" aria-hidden="true"><img src="public/images/guilgal_drc_map_layer.png" alt=""></div>
+        <div class="hero__map" aria-hidden="true"><img src="public/images/guilgal_drc_map_layer_mining_2x.png" alt=""></div>
       </div>
 
       <div class="hero__text">
@@ -75,7 +75,13 @@
     </section>
 
     <!-- ================= 3 · OUR APPROACH: IDENTIFY · EVALUATE · PARTNER · DEVELOP ================= -->
-    <section class="method ivory" id="method">
+    <!-- a warmer sand band: enters on a soft gold-lined ridge, leaves over layered hills -->
+    <section class="method" id="method">
+      <svg class="method__top" viewBox="0 0 1440 140" preserveAspectRatio="none" aria-hidden="true">
+        <path class="fill" d="M0 0 H1440 V34 C1210 92 960 22 700 58 C470 90 230 84 0 26 Z"/>
+        <path class="line" d="M1440 34 C1210 92 960 22 700 58 C470 90 230 84 0 26"/>
+      </svg>
+      <div class="method__contours" aria-hidden="true"></div>
       <div class="wrap">
         <div class="method__head">
           <div>
@@ -84,27 +90,35 @@
           </div>
           <p class="method__lead">A structured, partnership-led approach that progresses high-potential mineral opportunities across the DRC and Ghana.</p>
         </div>
-        <ol class="method__steps">
-          <li><span class="method__num">01</span><h3>Identify</h3><p>Source and assess high-potential mineral opportunities across Africa.</p></li>
-          <li><span class="method__num">02</span><h3>Evaluate</h3><p>Conduct technical, commercial and risk evaluation with industry specialists.</p></li>
-          <li><span class="method__num">03</span><h3>Partner</h3><p>Bring together the right technical, financial and operational partners.</p></li>
-          <li><span class="method__num">04</span><h3>Develop</h3><p>Support project advancement through strategic partnerships to realise long-term value.</p></li>
-        </ol>
+        <div class="method__path">
+          <svg class="method__route" aria-hidden="true"><path d=""/></svg>
+          <ol class="method__steps">
+            <li><span class="method__num">01</span><h3>Identify</h3><p>Source and assess high-potential mineral opportunities across Africa.</p></li>
+            <li><span class="method__num">02</span><h3>Evaluate</h3><p>Conduct technical, commercial and risk evaluation with industry specialists.</p></li>
+            <li><span class="method__num">03</span><h3>Partner</h3><p>Bring together the right technical, financial and operational partners.</p></li>
+            <li><span class="method__num">04</span><h3>Develop</h3><p>Support project advancement through strategic partnerships to realise long-term value.</p></li>
+          </ol>
+        </div>
       </div>
+      <svg class="method__hills" viewBox="0 0 1440 170" preserveAspectRatio="none" aria-hidden="true">
+        <path class="h1" d="M0 96 C110 70 210 44 340 58 C450 70 520 34 650 22 C790 10 880 64 1020 74 C1150 84 1290 38 1440 50 V170 H0 Z"/>
+        <path class="h2" d="M0 128 C170 100 310 118 470 110 C630 102 760 74 930 92 C1090 110 1250 90 1440 98 V170 H0 Z"/>
+        <path class="h3" d="M0 152 C250 128 500 158 760 142 C1010 128 1230 152 1440 138 V170 H0 Z"/>
+      </svg>
     </section>
 
     <!-- ================= 4 · LATEST NEWS & MILESTONES ================= -->
     <section class="news ivory" id="news">
-      <div class="wrap">
+      <div class="news__contours" aria-hidden="true"></div>
+      <div class="wrap news__grid">
         <div class="news__head">
-          <div>
-            <p class="eyebrow eyebrow--dark">Latest News &amp; Milestones</p>
-            <h2><em>News &amp; Milestones</em></h2>
-          </div>
+          <p class="eyebrow eyebrow--dark">Latest News &amp; Milestones</p>
+          <h2><em>News &amp;<br>Milestones</em></h2>
+          <span class="rule"></span>
           <a class="link link--dark" href="#">View all updates <i class="arr"></i></a>
         </div>
         <ul class="news__cards">
-          <li class="news__card">
+          <li class="news__card news__card--lead">
             <a href="#">
               <div class="news__photo"><img src="public/images/news-1.jpg" alt="Terraced open-pit mine"></div>
               <div class="news__body"><time datetime="2026-10-30">30 Oct 2026</time><h3>Guilgal Advances DRC Project Portfolio</h3><i class="arr"></i></div>
@@ -126,20 +140,9 @@
       </div>
     </section>
 
-    <!-- ================= 5 · OUR APPROACH (panorama) ================= -->
-    <section class="approach" id="approach">
+    <!-- ================= 5 · LANDSCAPE CLOSE: the panorama rises out of the ivory and settles into the footer ================= -->
+    <section class="approach" aria-hidden="true">
       <div class="approach__bg"><img src="public/images/guilgal_approach_natural_mirrored.png" alt=""></div>
-      <div class="approach__tint"></div>
-      <div class="wrap approach__text">
-        <p class="eyebrow">Our Approach</p>
-        <h2><em>From exploration<br>to discovery</em></h2>
-        <p>A disciplined, evidence-led approach that combines geological expertise, local knowledge and responsible exploration to create long-term value.</p>
-        <a class="link" href="#">Learn More <i class="arr"></i></a>
-      </div>
-      <svg class="contours contours--approach" viewBox="0 0 1440 160" preserveAspectRatio="none" aria-hidden="true">
-        <path d="M0 110 C300 60 500 140 800 100 S1250 40 1440 90"/>
-        <path d="M0 135 C320 90 520 160 820 125 S1260 70 1440 115"/>
-      </svg>
     </section>
 
     </main>
