@@ -105,33 +105,24 @@ p { margin: 0 0 1em; }
 .focus__panels img { width: 100%; height: auto; display: block; }
 .focus__quote { grid-column: 2; max-width: 30em; margin: -19% 0 0 42%; padding-left: 22px; border-left: 1px solid var(--gold); font-size: 1.05rem; color: var(--ink); }
 
-/* ---------- 3 · method: a warmer sand band with its own edges ---------- */
-:root { --sand: #ece3d1; }
-.method { position: relative; background: var(--sand); padding: calc(clamp(60px, 9vw, 130px) + 40px) 0 calc(clamp(70px, 11vw, 160px) + 30px); overflow: hidden; }
-.method__top { position: absolute; top: -1px; left: 0; width: 100%; height: clamp(60px, 9vw, 130px); z-index: 2; pointer-events: none; }
-.method__top .fill { fill: var(--ivory); }
-.method__top .line { fill: none; stroke: var(--gold); stroke-width: 1; opacity: .75; vector-effect: non-scaling-stroke; }
-.method__hills { position: absolute; bottom: -1px; left: 0; width: 100%; height: clamp(80px, 12vw, 180px); z-index: 2; pointer-events: none; }
-.method__hills .h1 { fill: #e1d4ba; }
-.method__hills .h2 { fill: #e9e0cd; }
-.method__hills .h3 { fill: var(--ivory); }
-.method__contours { position: absolute; z-index: 0; right: -14vw; top: 4%; width: 64vw; aspect-ratio: 1100 / 900; background: url(../public/images/contours.svg) center / contain no-repeat; opacity: .28; pointer-events: none; }
-.method .wrap { z-index: 3; }
-.method__head { display: grid; grid-template-columns: 1.1fr .9fr; gap: 30px clamp(30px, 6vw, 90px); align-items: center; margin-bottom: clamp(30px, 3vw, 50px); }
-.method__head h2 { font-size: clamp(2.3rem, 4.2vw, 3.7rem); margin: 0; color: var(--ink); }
-.method__head .eyebrow { color: var(--ink-soft); }
-.method__lead { margin: 0; padding-left: 28px; border-left: 1px solid var(--gold); font-size: 1.12rem; line-height: 1.55; max-width: 26em; color: var(--ink); }
-.method__path { position: relative; }
-.method__route { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
-.method__route path { fill: none; stroke: var(--gold); stroke-width: 1.4; stroke-dasharray: 1 7; stroke-linecap: round; }
-.method__steps { position: relative; list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(28px, 4vw, 64px); align-items: start; }
-/* the four steps climb, like a route up a hillside */
-.method__steps li:nth-child(1) { padding-top: 9rem; }
-.method__steps li:nth-child(2) { padding-top: 6rem; }
-.method__steps li:nth-child(3) { padding-top: 3rem; }
-.method__num { display: inline-block; font: italic 400 clamp(2.4rem, 3.4vw, 3rem)/1 var(--serif); color: var(--gold); margin-bottom: .5rem; }
-.method__steps h3 { font-size: clamp(1.5rem, 2vw, 1.9rem); margin-bottom: .55em; color: var(--ink); }
-.method__steps p { font-size: .98rem; max-width: 16em; margin: 0; color: var(--ink-soft); }
+/* ---------- 3 · method: steps over the rock landscape ---------- */
+:root { --cream: #faf1e4; }
+.method { position: relative; overflow: hidden; min-height: max(760px, calc(43.3vw + 170px));
+  padding: clamp(60px, 6vw, 100px) 0 0;
+  background:
+    linear-gradient(180deg, var(--ivory) 0, rgba(250,241,228,0) 140px),
+    linear-gradient(0deg, var(--ivory) 0, rgba(250,241,228,0) 120px),
+    url(../public/images/guilgal_steps_background_2400x1040.png) center bottom / 100% auto no-repeat,
+    var(--cream); }
+.method .wrap { max-width: 1660px; }
+.method__grid { display: grid; grid-template-columns: minmax(260px, .95fr) 3.2fr; gap: 40px clamp(40px, 5vw, 90px); align-items: start; }
+.method__head .eyebrow { color: var(--ink); margin-bottom: 1.4rem; }
+.method__head h2 { font-size: clamp(2.6rem, 4.4vw, 5.2rem); line-height: 1.02; margin: 0; color: var(--ink); }
+.method__steps { list-style: none; margin: 0; padding: clamp(3.5rem, 6vw, 7.5rem) 0 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(24px, 3vw, 48px); }
+.method__num { display: block; font: italic 400 clamp(2rem, 2.6vw, 3.2rem)/1 var(--serif); color: var(--gold-deep, #b8862e); margin-bottom: .5rem; }
+.method__steps h3 { position: relative; font-size: clamp(1.45rem, 2vw, 2.5rem); line-height: 1.1; color: var(--ink); margin: 0 0 1.3rem; padding-bottom: 1.1rem; }
+.method__steps h3::after { content: ""; position: absolute; left: 0; bottom: 0; width: 40px; height: 2px; background: var(--gold); }
+.method__steps p { font-size: clamp(1rem, 1.02vw, 1.22rem); line-height: 1.6; color: var(--ink-soft); margin: 0; max-width: 15.5em; }
 
 /* ---------- 4 · news & milestones: editorial, heading column + lead story ---------- */
 .news { position: relative; padding: clamp(50px, 6vw, 90px) 0 clamp(70px, 8vw, 120px); overflow: hidden; }
@@ -193,12 +184,9 @@ p { margin: 0 0 1em; }
     .focus__grid { grid-template-columns: 1fr; }
   .focus__panels { width: calc(100% + 2 * var(--gutter)); margin-left: calc(-1 * var(--gutter)); }
   .focus__quote { grid-column: 1; margin: 8px 0 0; max-width: none; }
-  .method__head { grid-template-columns: 1fr; }
-  .method__steps { grid-template-columns: 1fr 1fr; row-gap: 44px; }
-  .method__steps li:nth-child(n) { padding-top: 0; }
-  .method__steps li:nth-child(even) { padding-top: 3.5rem; }
-  .method__route { display: none; }
-  .method__contours { width: 110vw; right: -40vw; top: 18%; }
+  .method { min-height: 0; padding-bottom: 62vw; background-size: auto, auto, 190% auto, auto; background-position: 0 0, 0 0, 10% bottom, 0 0; }
+  .method__grid { grid-template-columns: 1fr; }
+  .method__steps { grid-template-columns: 1fr 1fr; row-gap: 40px; }
   .news__grid { grid-template-columns: 1fr; }
   .news__head, .news__cards { grid-column: 1; grid-row: auto; }
   .news__head .rule { display: none; }
@@ -213,9 +201,8 @@ p { margin: 0 0 1em; }
   .approach__bg::after { background: linear-gradient(180deg, var(--ivory) 0%, rgba(243,239,230,.6) 6%, rgba(243,239,230,0) 18%), linear-gradient(180deg, rgba(11,31,34,0) 45%, rgba(11,31,34,.7) 80%, #0b1f22 100%); }
 }
 @media (max-width: 600px) {
-  .method__steps { grid-template-columns: 1fr; row-gap: 38px; }
-  .method__steps li:nth-child(n) { padding-top: 0; }
-  .method__steps li:nth-child(even) { margin-left: 22%; }
+  .method { padding-bottom: 78vw; background-size: auto, auto, 230% auto, auto; }
+  .method__steps { grid-template-columns: 1fr; row-gap: 32px; }
   .method__steps p { max-width: 20em; }
   .news__cards { grid-template-columns: 1fr; }
   .news__card:not(.news__card--lead) a { flex-direction: row; }
