@@ -76,6 +76,7 @@ p { margin: 0 0 1em; }
 .hero__bg img, .approach__bg img { width: 100%; height: 100%; object-fit: cover; }
 .hero__bg img { object-position: 50% 40%; }
 .approach__bg img { object-position: 50% 100%; }
+.approach__bg::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(15,42,46,0) 45%, rgba(15,42,46,.55) 100%); }
 .panel img { width: 100%; height: 100%; object-fit: cover; }
 
 .hero__tint { position: absolute; inset: 0; z-index: 1; background: linear-gradient(90deg, rgba(15,42,46,.82) 0%, rgba(15,42,46,.5) 38%, rgba(15,42,46,.05) 68%), linear-gradient(180deg, rgba(15,42,46,.55), transparent 28%, transparent 78%, rgba(15,42,46,.35)); }
@@ -102,11 +103,11 @@ p { margin: 0 0 1em; }
 .focus__quote { grid-column: 2; max-width: 30em; margin: -6% 0 0 36%; padding-left: 22px; border-left: 1px solid var(--gold); font-size: 1.05rem; color: var(--ink); }
 
 /* ---------- 3 · our approach ---------- */
-.approach { position: relative; min-height: 86vh; display: flex; align-items: center; color: var(--white); overflow: hidden; background: var(--teal); padding: 160px 0 200px; }
+.approach { position: relative; min-height: 92vh; display: flex; align-items: flex-end; color: var(--white); overflow: hidden; background: var(--teal); padding: 300px 0 170px; }
 .approach__bg { position: absolute; inset: 0; }
 .approach__tint { position: absolute; inset: 0; z-index: 1; background: linear-gradient(90deg, rgba(15,42,46,0) 40%, rgba(15,42,46,.45) 80%), linear-gradient(180deg, rgba(15,42,46,.22), transparent 30%, transparent 70%, rgba(15,42,46,.42)); }
 .approach__text { z-index: 4; width: 100%; display: flex; flex-direction: column; align-items: flex-start; margin-left: auto; max-width: none; padding-left: max(var(--gutter), 55%); }
-.approach__text::before { content: ""; position: absolute; z-index: -1; left: 42%; right: -10%; top: -45%; bottom: -45%; background: radial-gradient(ellipse at 55% 50%, rgba(15,42,46,.62) 0%, rgba(15,42,46,.38) 40%, rgba(15,42,46,0) 72%); pointer-events: none; }
+.approach__text::before { content: ""; position: absolute; z-index: -1; left: 40%; right: -12%; top: -50%; bottom: -50%; background: radial-gradient(ellipse at 55% 50%, rgba(15,42,46,.7) 0%, rgba(15,42,46,.45) 40%, rgba(15,42,46,0) 72%); pointer-events: none; }
 .approach__text p { max-width: 28em; opacity: .92; font-size: 1.02rem; margin-bottom: 1.6rem; }
 .contours--approach { left: 0; right: 0; bottom: 0; width: 100%; height: 160px; }
 
