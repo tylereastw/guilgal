@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>GUILGAL — Mineral Exploration in the DRC</title>
   <meta name="description" content="GUILGAL is a mineral exploration company focused on discovering and advancing critical minerals across the Democratic Republic of Congo.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Mulish:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="preload" href="assets/fonts/DMSerifDisplay-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/DMSans-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="css/fonts.css">
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
@@ -31,6 +31,8 @@
     <button class="burger" aria-expanded="false" aria-controls="menu" aria-label="Menu"><span></span><span></span><span></span></button>
   </header>
 
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="glow" x="-5%" y="-100%" width="110%" height="300%"><feGaussianBlur stdDeviation="4"/></filter></svg>
+
   <main id="main">
 
     <!-- ================= 1 · HERO ================= -->
@@ -42,10 +44,10 @@
       <div class="hero__map slot" data-slot="map-fill.jpg · 1200×1200 · river valley &amp; sunset, fills the DRC outline" aria-hidden="true">
         <svg viewBox="0 0 100 100">
           <defs>
-            <clipPath id="drc"><path d="M1.0 59.4 L5.1 58.9 L12.3 54.2 L23.1 45.3 L28.2 33.9 L30.8 18.2 L33.8 10.4 L38.5 2.6 L51.3 3.1 L66.7 1.0 L79.0 1.6 L89.7 4.7 L96.4 10.4 L91.8 20.8 L90.3 35.9 L88.2 43.2 L88.7 52.1 L89.2 59.9 L91.8 71.9 L84.1 77.1 L85.1 84.4 L84.1 93.2 L91.3 92.2 L91.3 98.7 L85.1 98.4 L79.5 92.7 L68.2 87.0 L61.5 85.9 L52.3 86.5 L53.3 69.8 L50.3 66.7 L44.1 65.1 L38.5 69.8 L30.8 70.3 L28.2 70.8 L23.6 59.9 L20.5 59.4 L5.6 59.4 Z"/></clipPath>
+            <clipPath id="drc"><path d="M1.0 60.1 C0.9 59.8 1.3 59.4 1.6 58.5 C1.8 57.7 1.9 55.9 2.6 54.9 C3.3 54.0 4.9 53.1 5.7 52.8 C6.6 52.6 6.7 53.5 7.8 53.4 C8.9 53.2 11.0 52.2 12.5 51.8 C14.0 51.5 15.6 51.6 16.7 51.3 C17.7 50.9 17.9 50.6 18.8 49.7 C19.6 48.9 21.0 47.4 21.9 46.1 C22.7 44.8 23.3 43.5 24.0 42.0 C24.7 40.4 25.3 38.2 26.0 36.8 C26.7 35.4 27.5 34.8 28.1 33.7 C28.7 32.6 29.3 31.5 29.7 30.1 C30.1 28.6 30.4 26.5 30.7 24.9 C31.1 23.2 31.5 21.7 31.8 20.2 C32.0 18.7 31.9 17.5 32.3 16.1 C32.7 14.6 33.8 12.8 34.4 11.4 C35.0 10.0 35.3 8.8 35.9 7.8 C36.5 6.7 37.2 6.0 38.0 5.2 C38.8 4.3 39.5 2.5 40.6 2.6 C41.8 2.7 43.3 5.0 44.8 5.7 C46.3 6.4 47.9 6.4 49.5 6.7 C51.0 7.1 52.6 8.0 54.2 7.8 C55.7 7.5 57.2 6.0 58.9 5.2 C60.5 4.4 62.4 3.7 64.1 3.1 C65.7 2.5 67.1 1.6 68.8 1.6 C70.4 1.5 72.1 2.5 74.0 2.6 C75.8 2.7 77.9 1.6 79.7 2.1 C81.5 2.6 83.2 5.2 84.9 5.7 C86.5 6.2 88.3 5.1 89.6 5.2 C90.9 5.3 91.8 5.7 92.7 6.2 C93.7 6.7 94.4 7.6 95.3 8.3 C96.2 9.0 97.4 9.5 97.9 10.4 C98.4 11.2 98.5 12.4 98.4 13.5 C98.4 14.5 97.8 15.0 97.4 16.6 C97.0 18.1 96.4 21.3 95.8 22.8 C95.2 24.3 94.4 24.5 93.8 25.4 C93.1 26.3 92.5 26.9 92.2 28.0 C91.8 29.1 91.8 30.7 91.7 32.1 C91.6 33.5 92.1 35.1 91.7 36.3 C91.2 37.5 89.7 38.6 89.1 39.4 C88.5 40.2 87.9 40.2 88.0 40.9 C88.1 41.6 89.2 42.6 89.6 43.5 C89.9 44.5 90.1 45.3 90.1 46.6 C90.1 47.9 89.5 49.9 89.6 51.3 C89.7 52.7 90.4 53.5 90.6 54.9 C90.9 56.4 90.9 58.4 91.1 60.1 C91.4 61.8 91.6 63.6 92.2 65.3 C92.8 66.9 94.6 68.8 94.8 69.9 C95.0 71.1 94.0 71.5 93.2 72.0 C92.4 72.5 91.0 72.9 90.1 73.1 C89.2 73.2 88.8 72.5 88.0 73.1 C87.2 73.7 85.7 75.6 85.4 76.7 C85.2 77.8 86.2 78.7 86.5 79.8 C86.7 80.9 87.0 82.1 87.0 83.4 C87.0 84.7 86.7 86.4 86.5 87.6 C86.2 88.7 85.5 89.3 85.4 90.2 C85.3 91.0 85.4 92.2 85.9 92.7 C86.5 93.3 87.7 93.4 88.5 93.3 C89.4 93.2 90.5 92.3 91.1 92.2 C91.8 92.1 92.4 92.1 92.7 92.7 C93.0 93.4 92.9 95.4 92.7 96.4 C92.5 97.3 92.3 98.1 91.7 98.4 C91.1 98.8 89.9 98.6 89.1 98.4 C88.2 98.3 87.2 98.0 86.5 97.4 C85.7 96.8 85.2 95.9 84.4 94.8 C83.5 93.8 82.3 92.1 81.3 91.2 C80.2 90.2 79.5 89.2 78.1 89.1 C76.7 89.0 74.4 90.9 72.9 90.7 C71.4 90.4 70.6 88.1 69.3 87.6 C68.0 87.0 66.2 87.8 65.1 87.6 C64.0 87.3 63.5 86.3 62.5 86.0 C61.5 85.8 60.7 85.9 59.4 86.0 C58.1 86.1 55.7 86.5 54.7 86.5 C53.6 86.5 53.3 87.0 53.1 86.0 C53.0 85.1 53.4 82.6 53.6 80.8 C53.9 79.1 54.6 77.4 54.7 75.6 C54.8 73.9 54.7 71.9 54.2 70.5 C53.6 69.0 52.6 67.4 51.6 66.8 C50.5 66.2 49.0 67.1 47.9 66.8 C46.8 66.6 45.8 65.4 44.8 65.3 C43.8 65.2 42.6 65.5 41.7 66.3 C40.7 67.1 39.9 69.3 39.1 69.9 C38.2 70.6 37.8 70.4 36.5 70.5 C35.2 70.6 32.5 70.4 31.2 70.5 C30.0 70.6 29.9 71.5 29.2 71.0 C28.5 70.5 27.7 68.4 27.1 67.4 C26.5 66.3 26.0 65.8 25.5 64.8 C25.0 63.7 24.3 62.0 24.0 61.1 C23.6 60.3 24.4 59.8 23.4 59.6 C22.5 59.3 20.1 59.6 18.2 59.6 C16.4 59.6 14.3 59.6 12.5 59.6 C10.7 59.6 8.5 59.6 7.3 59.6 C6.1 59.6 6.0 59.5 5.2 59.6 C4.4 59.7 3.3 60.0 2.6 60.1 C1.9 60.2 1.2 60.4 1.0 60.1 Z"/></clipPath>
           </defs>
           <image class="hero__map-img" href="assets/img/map-fill.jpg" onerror="this.remove()" width="100" height="100" preserveAspectRatio="xMidYMid slice" clip-path="url(#drc)"/>
-          <path class="hero__map-line" d="M1.0 59.4 L5.1 58.9 L12.3 54.2 L23.1 45.3 L28.2 33.9 L30.8 18.2 L33.8 10.4 L38.5 2.6 L51.3 3.1 L66.7 1.0 L79.0 1.6 L89.7 4.7 L96.4 10.4 L91.8 20.8 L90.3 35.9 L88.2 43.2 L88.7 52.1 L89.2 59.9 L91.8 71.9 L84.1 77.1 L85.1 84.4 L84.1 93.2 L91.3 92.2 L91.3 98.7 L85.1 98.4 L79.5 92.7 L68.2 87.0 L61.5 85.9 L52.3 86.5 L53.3 69.8 L50.3 66.7 L44.1 65.1 L38.5 69.8 L30.8 70.3 L28.2 70.8 L23.6 59.9 L20.5 59.4 L5.6 59.4 Z"/>
+          <path class="hero__map-line" d="M1.0 60.1 C0.9 59.8 1.3 59.4 1.6 58.5 C1.8 57.7 1.9 55.9 2.6 54.9 C3.3 54.0 4.9 53.1 5.7 52.8 C6.6 52.6 6.7 53.5 7.8 53.4 C8.9 53.2 11.0 52.2 12.5 51.8 C14.0 51.5 15.6 51.6 16.7 51.3 C17.7 50.9 17.9 50.6 18.8 49.7 C19.6 48.9 21.0 47.4 21.9 46.1 C22.7 44.8 23.3 43.5 24.0 42.0 C24.7 40.4 25.3 38.2 26.0 36.8 C26.7 35.4 27.5 34.8 28.1 33.7 C28.7 32.6 29.3 31.5 29.7 30.1 C30.1 28.6 30.4 26.5 30.7 24.9 C31.1 23.2 31.5 21.7 31.8 20.2 C32.0 18.7 31.9 17.5 32.3 16.1 C32.7 14.6 33.8 12.8 34.4 11.4 C35.0 10.0 35.3 8.8 35.9 7.8 C36.5 6.7 37.2 6.0 38.0 5.2 C38.8 4.3 39.5 2.5 40.6 2.6 C41.8 2.7 43.3 5.0 44.8 5.7 C46.3 6.4 47.9 6.4 49.5 6.7 C51.0 7.1 52.6 8.0 54.2 7.8 C55.7 7.5 57.2 6.0 58.9 5.2 C60.5 4.4 62.4 3.7 64.1 3.1 C65.7 2.5 67.1 1.6 68.8 1.6 C70.4 1.5 72.1 2.5 74.0 2.6 C75.8 2.7 77.9 1.6 79.7 2.1 C81.5 2.6 83.2 5.2 84.9 5.7 C86.5 6.2 88.3 5.1 89.6 5.2 C90.9 5.3 91.8 5.7 92.7 6.2 C93.7 6.7 94.4 7.6 95.3 8.3 C96.2 9.0 97.4 9.5 97.9 10.4 C98.4 11.2 98.5 12.4 98.4 13.5 C98.4 14.5 97.8 15.0 97.4 16.6 C97.0 18.1 96.4 21.3 95.8 22.8 C95.2 24.3 94.4 24.5 93.8 25.4 C93.1 26.3 92.5 26.9 92.2 28.0 C91.8 29.1 91.8 30.7 91.7 32.1 C91.6 33.5 92.1 35.1 91.7 36.3 C91.2 37.5 89.7 38.6 89.1 39.4 C88.5 40.2 87.9 40.2 88.0 40.9 C88.1 41.6 89.2 42.6 89.6 43.5 C89.9 44.5 90.1 45.3 90.1 46.6 C90.1 47.9 89.5 49.9 89.6 51.3 C89.7 52.7 90.4 53.5 90.6 54.9 C90.9 56.4 90.9 58.4 91.1 60.1 C91.4 61.8 91.6 63.6 92.2 65.3 C92.8 66.9 94.6 68.8 94.8 69.9 C95.0 71.1 94.0 71.5 93.2 72.0 C92.4 72.5 91.0 72.9 90.1 73.1 C89.2 73.2 88.8 72.5 88.0 73.1 C87.2 73.7 85.7 75.6 85.4 76.7 C85.2 77.8 86.2 78.7 86.5 79.8 C86.7 80.9 87.0 82.1 87.0 83.4 C87.0 84.7 86.7 86.4 86.5 87.6 C86.2 88.7 85.5 89.3 85.4 90.2 C85.3 91.0 85.4 92.2 85.9 92.7 C86.5 93.3 87.7 93.4 88.5 93.3 C89.4 93.2 90.5 92.3 91.1 92.2 C91.8 92.1 92.4 92.1 92.7 92.7 C93.0 93.4 92.9 95.4 92.7 96.4 C92.5 97.3 92.3 98.1 91.7 98.4 C91.1 98.8 89.9 98.6 89.1 98.4 C88.2 98.3 87.2 98.0 86.5 97.4 C85.7 96.8 85.2 95.9 84.4 94.8 C83.5 93.8 82.3 92.1 81.3 91.2 C80.2 90.2 79.5 89.2 78.1 89.1 C76.7 89.0 74.4 90.9 72.9 90.7 C71.4 90.4 70.6 88.1 69.3 87.6 C68.0 87.0 66.2 87.8 65.1 87.6 C64.0 87.3 63.5 86.3 62.5 86.0 C61.5 85.8 60.7 85.9 59.4 86.0 C58.1 86.1 55.7 86.5 54.7 86.5 C53.6 86.5 53.3 87.0 53.1 86.0 C53.0 85.1 53.4 82.6 53.6 80.8 C53.9 79.1 54.6 77.4 54.7 75.6 C54.8 73.9 54.7 71.9 54.2 70.5 C53.6 69.0 52.6 67.4 51.6 66.8 C50.5 66.2 49.0 67.1 47.9 66.8 C46.8 66.6 45.8 65.4 44.8 65.3 C43.8 65.2 42.6 65.5 41.7 66.3 C40.7 67.1 39.9 69.3 39.1 69.9 C38.2 70.6 37.8 70.4 36.5 70.5 C35.2 70.6 32.5 70.4 31.2 70.5 C30.0 70.6 29.9 71.5 29.2 71.0 C28.5 70.5 27.7 68.4 27.1 67.4 C26.5 66.3 26.0 65.8 25.5 64.8 C25.0 63.7 24.3 62.0 24.0 61.1 C23.6 60.3 24.4 59.8 23.4 59.6 C22.5 59.3 20.1 59.6 18.2 59.6 C16.4 59.6 14.3 59.6 12.5 59.6 C10.7 59.6 8.5 59.6 7.3 59.6 C6.1 59.6 6.0 59.5 5.2 59.6 C4.4 59.7 3.3 60.0 2.6 60.1 C1.9 60.2 1.2 60.4 1.0 60.1 Z"/>
         </svg>
       </div>
 
@@ -64,14 +66,11 @@
         <path d="M200 215 C300 195 380 225 480 205 S580 190 600 205"/>
       </svg>
       <!-- curved transition into the ivory section -->
-      <svg class="edge edge--hero" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true">
-        <path class="edge__fill" d="M0 70 C240 20 420 110 700 60 S1100 10 1440 60 L1440 120 L0 120 Z"/>
-        <path class="edge__line" d="M0 70 C240 20 420 110 700 60 S1100 10 1440 60"/>
-      </svg>
     </section>
 
     <!-- ================= 2 · OUR FOCUS ================= -->
     <section class="focus ivory" id="about">
+      <svg class="edge edge--teal" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true"><path class="edge__fill" d="M0 70 C240 20 420 110 700 60 S1100 10 1440 60 L1440 0 L0 0 Z"/><path class="edge__glow" d="M0 70 C240 20 420 110 700 60 S1100 10 1440 60"/><path class="edge__line" d="M0 70 C240 20 420 110 700 60 S1100 10 1440 60"/></svg>
       <div class="wrap focus__grid">
         <div class="focus__text">
           <p class="eyebrow eyebrow--dark">Our Focus</p>
@@ -89,9 +88,7 @@
 
     <!-- ================= 3 · OUR APPROACH ================= -->
     <section class="approach" id="approach">
-      <svg class="edge edge--approach" viewBox="0 0 1440 140" preserveAspectRatio="none" aria-hidden="true">
-        <path class="edge__fill" d="M0 0 L1440 0 L1440 40 C1200 110 980 30 720 80 S260 130 0 60 Z"/>
-      </svg>
+      <svg class="edge edge--ivory" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true"><path class="edge__fill" d="M0 50 C300 120 560 20 800 70 S1180 110 1440 40 L1440 0 L0 0 Z"/><path class="edge__glow" d="M0 50 C300 120 560 20 800 70 S1180 110 1440 40"/><path class="edge__line" d="M0 50 C300 120 560 20 800 70 S1180 110 1440 40"/></svg>
       <div class="slot approach__bg" data-slot="approach-hills.jpg · 2400×1100 · misty panoramic hills, dark green"><img src="assets/img/approach-hills.jpg" alt="" onerror="this.remove()"></div>
       <div class="approach__tint"></div>
       <div class="wrap approach__text">
@@ -108,9 +105,7 @@
 
     <!-- ================= 4 · GEOLOGICAL EXPERTISE (text-led) ================= -->
     <section class="expertise ivory" id="expertise">
-      <svg class="edge edge--expertise" viewBox="0 0 1440 110" preserveAspectRatio="none" aria-hidden="true">
-        <path class="edge__fill" d="M0 60 C360 110 640 10 900 50 S1300 100 1440 40 L1440 110 L0 110 Z"/>
-      </svg>
+      <svg class="edge edge--teal" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true"><path class="edge__fill" d="M0 40 C360 100 640 10 900 50 S1300 100 1440 30 L1440 0 L0 0 Z"/><path class="edge__glow" d="M0 40 C360 100 640 10 900 50 S1300 100 1440 30"/><path class="edge__line" d="M0 40 C360 100 640 10 900 50 S1300 100 1440 30"/></svg>
       <div class="wrap expertise__grid">
         <div class="expertise__lead">
           <p class="eyebrow eyebrow--dark">Geological Expertise</p>
@@ -136,6 +131,7 @@
 
     <!-- ================= 5 · MINERAL PORTFOLIO (dark, mineral photography) ================= -->
     <section class="minerals charcoal" id="minerals">
+      <svg class="edge edge--ivory" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true"><path class="edge__fill" d="M0 80 C250 30 520 110 800 60 S1220 20 1440 70 L1440 0 L0 0 Z"/><path class="edge__glow" d="M0 80 C250 30 520 110 800 60 S1220 20 1440 70"/><path class="edge__line" d="M0 80 C250 30 520 110 800 60 S1220 20 1440 70"/></svg>
       <div class="slot minerals__photo" data-slot="minerals.jpg · 1400×1600 · mineral / ore close-up"><img src="assets/img/minerals.jpg" alt="Copper ore with bands of green malachite" onerror="this.remove()"></div>
       <div class="wrap minerals__text">
         <p class="eyebrow">Mineral Portfolio</p>
@@ -154,9 +150,7 @@
 
     <!-- ================= 6 · PROCESS (minimal, numbered) ================= -->
     <section class="process ivory" id="process">
-      <svg class="edge edge--process" viewBox="0 0 1440 100" preserveAspectRatio="none" aria-hidden="true">
-        <path class="edge__fill" d="M0 40 C200 90 480 0 760 50 S1200 100 1440 30 L1440 100 L0 100 Z"/>
-      </svg>
+      <svg class="edge edge--charcoal" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true"><path class="edge__fill" d="M0 30 C200 90 480 0 760 50 S1200 100 1440 30 L1440 0 L0 0 Z"/><path class="edge__glow" d="M0 30 C200 90 480 0 760 50 S1200 100 1440 30"/><path class="edge__line" d="M0 30 C200 90 480 0 760 50 S1200 100 1440 30"/></svg>
       <div class="wrap">
         <div class="process__head">
           <p class="eyebrow eyebrow--dark">Exploration &amp; Development</p>
@@ -173,6 +167,7 @@
 
     <!-- ================= 7 · THE DRC'S POTENTIAL (full-width photography) ================= -->
     <section class="potential">
+      <svg class="edge edge--ivory" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true"><path class="edge__fill" d="M0 60 C300 110 560 20 860 60 S1240 110 1440 50 L1440 0 L0 0 Z"/><path class="edge__glow" d="M0 60 C300 110 560 20 860 60 S1240 110 1440 50"/><path class="edge__line" d="M0 60 C300 110 560 20 860 60 S1240 110 1440 50"/></svg>
       <div class="slot potential__bg" data-slot="drc-panorama.jpg · 2400×1000 · wide DRC terrain"><img src="assets/img/drc-panorama.jpg" alt="" onerror="this.remove()"></div>
       <div class="potential__tint"></div>
       <div class="wrap potential__text">
@@ -185,13 +180,11 @@
           <div><dt>GUILGAL presence</dt><dd class="placeholder">[Verified figure]</dd></div>
         </dl>
       </div>
-      <svg class="edge edge--potential" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true">
-        <path class="edge__fill" d="M0 80 C300 30 560 120 860 70 S1240 20 1440 70 L1440 120 L0 120 Z"/>
-      </svg>
     </section>
 
     <!-- ================= 8 · RESPONSIBLE DEVELOPMENT ================= -->
     <section class="responsible ivory">
+      <svg class="edge edge--teal2" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true"><path class="edge__fill" d="M0 50 C280 10 520 100 780 60 S1230 20 1440 60 L1440 0 L0 0 Z"/><path class="edge__glow" d="M0 50 C280 10 520 100 780 60 S1230 20 1440 60"/><path class="edge__line" d="M0 50 C280 10 520 100 780 60 S1230 20 1440 60"/></svg>
       <div class="wrap responsible__grid">
         <div class="responsible__text">
           <p class="eyebrow eyebrow--dark">Responsible Development</p>
@@ -207,9 +200,7 @@
 
     <!-- ================= 9 · INVESTORS ================= -->
     <section class="investors charcoal" id="investors">
-      <svg class="edge edge--investors" viewBox="0 0 1440 110" preserveAspectRatio="none" aria-hidden="true">
-        <path class="edge__fill" d="M0 0 L1440 0 L1440 50 C1180 110 900 20 640 70 S200 110 0 50 Z"/>
-      </svg>
+      <svg class="edge edge--ivory" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true"><path class="edge__fill" d="M0 40 C260 100 500 10 740 70 S1200 110 1440 40 L1440 0 L0 0 Z"/><path class="edge__glow" d="M0 40 C260 100 500 10 740 70 S1200 110 1440 40"/><path class="edge__line" d="M0 40 C260 100 500 10 740 70 S1200 110 1440 40"/></svg>
       <div class="wrap investors__grid">
         <div class="investors__text">
           <p class="eyebrow">Investors</p>
@@ -228,9 +219,7 @@
 
     <!-- ================= 10 · COMPANY ================= -->
     <section class="company ivory">
-      <svg class="edge edge--company" viewBox="0 0 1440 100" preserveAspectRatio="none" aria-hidden="true">
-        <path class="edge__fill" d="M0 50 C280 100 540 10 820 60 S1260 90 1440 40 L1440 100 L0 100 Z"/>
-      </svg>
+      <svg class="edge edge--charcoal" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true"><path class="edge__fill" d="M0 60 C300 10 560 100 820 50 S1260 20 1440 60 L1440 0 L0 0 Z"/><path class="edge__glow" d="M0 60 C300 10 560 100 820 50 S1260 20 1440 60"/><path class="edge__line" d="M0 60 C300 10 560 100 820 50 S1260 20 1440 60"/></svg>
       <div class="wrap company__grid">
         <p class="eyebrow eyebrow--dark">The Company</p>
         <h2>An exploration company<br>with the DRC at its heart</h2>
@@ -243,11 +232,9 @@
 
     <!-- ================= 11 · CONTACT ================= -->
     <section class="contact" id="contact">
+      <svg class="edge edge--ivory" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true"><path class="edge__fill" d="M0 50 C260 110 520 10 760 70 S1200 100 1440 40 L1440 0 L0 0 Z"/><path class="edge__glow" d="M0 50 C260 110 520 10 760 70 S1200 100 1440 40"/><path class="edge__line" d="M0 50 C260 110 520 10 760 70 S1200 100 1440 40"/></svg>
       <div class="slot contact__bg" data-slot="approach-hills.jpg · 2400×1100 · misty panoramic hills, dark green"><img src="assets/img/approach-hills.jpg" alt="" onerror="this.remove()"></div>
       <div class="contact__tint"></div>
-      <svg class="edge edge--contact" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true">
-        <path class="edge__fill" d="M0 0 L1440 0 L1440 60 C1160 120 860 10 600 70 S180 110 0 50 Z"/>
-      </svg>
       <div class="wrap contact__grid">
         <div class="contact__text">
           <p class="eyebrow">Contact</p>

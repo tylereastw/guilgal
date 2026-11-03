@@ -39,6 +39,12 @@ with the exact name below and it appears — no code changes needed.
 For a different phone crop of the hero, add `hero-mobile.jpg` (1200 × 1800) and switch the
 `<img>` in the hero to a `<picture>` with a `(max-width: 760px)` source.
 
+## Fonts
+DM Serif Display (regular, italic) and DM Sans (variable 400–700, regular and italic) are
+self-hosted as WOFF2 in `assets/fonts/` and declared in `css/fonts.css`. There are no requests
+to Google Fonts or any other third party; the page makes no external requests at all.
+Both families are licensed under the SIL Open Font License.
+
 ## Placeholders to replace
 - Contact telephone, e-mail and address (shown as —).
 - `[Verified figure]` / `[Verified information]` in sections 7 and 9 — no statistics or licence
