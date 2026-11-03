@@ -14,22 +14,19 @@ Three sections, matching the reference designs:
 
 Navigation links other than "Our Approach" point to `#` until those pages exist.
 
-## Adding the photography
-Every image slot shows a dashed label until its file exists. Put the file in `assets/img/`
-with the exact name below and it appears — no code changes needed.
+## Photography
+No separate photo files were supplied, so the images in `assets/img/` are cut from the two
+approved reference mockups (desktop and mobile) and should be replaced with the original
+full-resolution photographs when available — same file names, no code changes:
 
-| File | Position | Size (px) | Subject |
-|---|---|---|---|
-| `hero.jpg` | 1 · hero background | 2400 × 1400 | DRC landscape at sunset, dark teal tones, river valley |
-| `map-fill.jpg` | 1 · inside the DRC outline | 1200 × 1200 | river valley, forest and sunset (square crop, centre of interest in the middle) |
-| `outcrop.jpg` | 1 · bottom-left overlap | 1200 × 600 | rocky outcrop, lit from the right; edges are faded in CSS |
-| `focus-mine.jpg` | 2 · first panel | 900 × 1200 | open-pit mine / haul road |
-| `focus-forest.jpg` | 2 · second panel | 900 × 1200 | lush green DRC countryside |
-| `focus-mountain.jpg` | 2 · third panel | 900 × 1200 | mountainous landscape |
-| `approach-hills.jpg` | 3 · background | 2400 × 1100 | misty panoramic hills, dark green |
+| File | Position | Notes |
+|---|---|---|
+| `hero.jpg` | hero background | composed from the mockup's misty hills + outcrop; sunset glow top-right |
+| `map-fill.jpg` | inside the DRC outline | sunset river valley from the mockup map |
+| `focus-mine.jpg`, `focus-forest.jpg`, `focus-mountain.jpg` | the three angled panels | exact panel crops; the clip-path matches the mockup's slant |
+| `approach-hills.jpg` | Our Approach background | mockup panorama, mirrored |
 
-For a different phone crop of the hero, add `hero-mobile.jpg` (1200 × 1800) and switch the
-`<img>` in the hero to a `<picture>` with a `(max-width: 760px)` source.
+The DRC outline is the real boundary (from a public-domain country GeoJSON), scaled uniformly.
 
 ## Fonts
 DM Serif Display (regular, italic) and DM Sans (variable 400–700, regular and italic) are
@@ -39,4 +36,3 @@ Both families are licensed under the SIL Open Font License.
 
 ## Placeholders to replace
 - Navigation links (About, Expertise, Minerals, Investors, Contact, Discuss an Opportunity) — point to their pages once built.
-- The DRC outline is traced from approximate border coordinates; swap in an official vector if required.
