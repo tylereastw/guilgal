@@ -15,18 +15,14 @@ Three sections, matching the reference designs:
 Navigation links other than "Our Approach" point to `#` until those pages exist.
 
 ## Photography
-No separate photo files were supplied, so the images in `assets/img/` are cut from the two
-approved reference mockups (desktop and mobile) and should be replaced with the original
-full-resolution photographs when available — same file names, no code changes:
+The supplied artwork lives in `public/images/`:
 
-| File | Position | Notes |
-|---|---|---|
-| `hero.jpg` | hero background | composed from the mockup's misty hills + outcrop; sunset glow top-right |
-| `map-fill.jpg` | inside the DRC outline | sunset river valley from the mockup map |
-| `focus-mine.jpg`, `focus-forest.jpg`, `focus-mountain.jpg` | the three angled panels | exact panel crops; the clip-path matches the mockup's slant |
-| `approach-hills.jpg` | Our Approach background | mockup panorama, mirrored |
-
-The DRC outline is the real boundary (from a public-domain country GeoJSON), scaled uniformly.
+| File | Position |
+|---|---|
+| `guilgal_hero_background_1920x1080.png` | hero background |
+| `guilgal_drc_map_layer.png` | DRC silhouette overlay in the hero (transparent PNG with gold outline) |
+| `guilgal_focus_triptych.png` | Our Focus angled triptych (transparent PNG) |
+| `guilgal_approach_natural_mirrored.png` | Our Approach background |
 
 ## Fonts
 DM Serif Display (regular, italic) and DM Sans (variable 400–700, regular and italic) are
