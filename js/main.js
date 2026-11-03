@@ -1,9 +1,9 @@
-/* GUILGAL — navigation, section tracking, contact form (no dependencies) */
+/* Guilgal International: navigation, news filters and forms (no dependencies) */
 (() => {
   const $ = (s, c = document) => c.querySelector(s);
   const $$ = (s, c = document) => [...c.querySelectorAll(s)];
 
-  // navigation background after scrolling
+  // header background after scrolling
   const nav = $('.nav');
   const onScroll = () => nav.classList.toggle('is-scrolled', scrollY > 30);
   addEventListener('scroll', onScroll, { passive: true });
@@ -14,35 +14,54 @@
   const setMenu = open => { burger.setAttribute('aria-expanded', open); links.classList.toggle('is-open', open); document.body.style.overflow = open ? 'hidden' : ''; };
   burger.addEventListener('click', () => setMenu(burger.getAttribute('aria-expanded') !== 'true'));
   $$('a', links).forEach(a => a.addEventListener('click', () => setMenu(false)));
+  addEventListener('keydown', e => { if (e.key === 'Escape') setMenu(false); });
 
-  // highlight the section in view
-  const items = $$('a:not(.btn)', links);
-  const spy = new IntersectionObserver(entries => entries.forEach(e => {
-    if (!e.isIntersecting) return;
-    items.forEach(a => a.classList.toggle('is-active', a.getAttribute('href') === '#' + e.target.id));
-  }), { rootMargin: '-40% 0px -55% 0px' });
-  items.forEach(a => { const href = a.getAttribute('href'); if (href.length > 1) { const t = $(href); if (t) spy.observe(t); } });
+  // About submenu toggle (desktop also opens on hover and focus)
+  $$('.nav__subtoggle').forEach(btn => btn.addEventListener('click', () => {
+    const item = btn.closest('.nav__item');
+    const open = !item.classList.contains('is-open');
+    item.classList.toggle('is-open', open);
+    btn.setAttribute('aria-expanded', open);
+  }));
 
-  // dotted route through the four approach steps, drawn from their actual positions
-  const path = $('.method__path'), route = path && $('.method__route path', path);
-  const drawRoute = () => {
-    if (!route) return;
-    const box = path.getBoundingClientRect();
-    const nums = $$('.method__num', path).map(n => n.getBoundingClientRect());
-    let d = '';
-    for (let i = 0; i < nums.length - 1; i++) {
-      const a = nums[i], b = nums[i + 1];
-      const side = b.left - a.right > 40; // next step sits to the right → leave sideways, else leave downwards
-      const x1 = side ? a.right + 14 : a.left + a.width / 2, y1 = side ? a.top + a.height / 2 : a.bottom + 10;
-      const x2 = side ? b.left - 14 : b.left + b.width / 2, y2 = side ? b.top + b.height / 2 : b.top - 10;
-      const [sx1, sy1, sx2, sy2] = [x1 - box.left, y1 - box.top, x2 - box.left, y2 - box.top];
-      const c = side ? `C${sx1 + (sx2 - sx1) / 2} ${sy1} ${sx2 - (sx2 - sx1) / 2} ${sy2}` : `C${sx1} ${sy1 + (sy2 - sy1) / 2} ${sx2} ${sy2 - (sy2 - sy1) / 2}`;
-      d += `M${sx1} ${sy1} ${c} ${sx2} ${sy2} `;
-    }
-    route.setAttribute('d', d.trim());
-  };
-  drawRoute();
-  addEventListener('resize', drawRoute);
-  if (document.fonts) document.fonts.ready.then(drawRoute);
+  // News & Milestones: filter by kind and by project
+  const feed = $('[data-feed]');
+  if (feed) {
+    let kind = 'all', project = '';
+    const chips = $$('.chip[data-kind]'), select = $('[data-project-filter]'), empty = $('.feed__empty');
+    const apply = () => {
+      let shown = 0;
+      $$('.news__card', feed).forEach(card => {
+        const ok = (kind === 'all' || card.dataset.kind === kind) && (!project || card.dataset.project === project);
+        card.hidden = !ok; if (ok) shown++;
+      });
+      empty.hidden = shown > 0;
+    };
+    chips.forEach(c => c.addEventListener('click', () => {
+      kind = c.dataset.kind;
+      chips.forEach(x => { x.classList.toggle('is-on', x === c); x.setAttribute('aria-pressed', x === c); });
+      apply();
+    }));
+    select.addEventListener('change', () => { project = select.value; apply(); });
+    const fromUrl = new URLSearchParams(location.search).get('project');
+    if (fromUrl) { select.value = fromUrl; project = fromUrl; apply(); }
+  }
 
+  // Forms: client-side validation. FORMS: set data-endpoint to the site's form handler.
+  $$('[data-form]').forEach(form => form.addEventListener('submit', e => {
+    e.preventDefault();
+    let ok = true;
+    $$('[required]', form).forEach(f => {
+      const v = f.type === 'checkbox' ? f.checked : f.value.trim() !== '' && (f.type !== 'email' || /.+@.+\..+/.test(f.value));
+      f.closest('label').classList.toggle('invalid', !v);
+      ok = ok && v;
+    });
+    const msg = $('.form__msg', form);
+    msg.hidden = false;
+    if (!ok) { msg.textContent = 'Please complete the required fields.'; return; }
+    if (!form.dataset.endpoint) { msg.textContent = 'Thank you. This form is not yet connected; please email john@guilgal.org.'; return; }
+    fetch(form.dataset.endpoint, { method: 'POST', body: new FormData(form) })
+      .then(r => { msg.textContent = r.ok ? 'Thank you. We will be in touch.' : 'Sorry, something went wrong. Please email john@guilgal.org.'; if (r.ok) form.reset(); })
+      .catch(() => { msg.textContent = 'Sorry, something went wrong. Please email john@guilgal.org.'; });
+  }));
 })();

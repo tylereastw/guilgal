@@ -1,10 +1,11 @@
 <!doctype html>
-<html lang="en">
+<html lang="en-GB">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>GUILGAL — Unlocking Africa's Mining Potential</title>
-  <meta name="description" content="GUILGAL is a mineral exploration company focused on discovering and advancing critical minerals across the Democratic Republic of Congo.">
+  <title>Guilgal International | Unlocking Africa&#x27;s Mineral Potential</title>
+  <meta name="description" content="Guilgal International connects high-potential mineral projects in the DRC and Ghana with technical expertise and international partners.">
+  <link rel="canonical" href="https://www.guilgal.org/">
   <link rel="preload" href="assets/fonts/DMSerifDisplay-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/DMSans-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="css/fonts.css">
@@ -12,54 +13,53 @@
 </head>
 <body>
   <a class="skip" href="#main">Skip to main content</a>
-
-  <!-- ================= NAVIGATION ================= -->
   <header class="nav" id="top">
-    <a class="logo" href="#top" aria-label="GUILGAL home">
-      <svg viewBox="0 0 80 24" aria-hidden="true"><path d="M2 22 L26 6 L34 12 L48 2 L78 22" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/></svg>
-      <span>GUILGAL</span>
+    <a class="logo" href="" aria-label="Guilgal International home">
+      <svg class="logo__mark" viewBox="0 0 80 24" aria-hidden="true"><path d="M2 22 L26 6 L34 12 L48 2 L78 22" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/></svg>
+      <span class="logo__name">GUILGAL INTERNATIONAL</span>
+      <span class="logo__tag">EXPLORATION | DEVELOPMENT | PARTNERSHIPS</span>
     </a>
     <nav class="nav__links" id="menu" aria-label="Main">
-      <a href="#">About</a>
-      <a href="#">Expertise</a>
-      <a href="#">Minerals</a>
-      <a href="#approach">Our Approach</a>
-      <a href="#">Investors</a>
-      <a href="#">Contact</a>
-      <a class="btn btn--outline" href="#">Discuss an Opportunity <i class="arr"></i></a>
+      <ul class="nav__list">
+        <li class="nav__item"><a href="" aria-current="page">Home</a></li><li class="nav__item nav__item--has-sub">
+          <a href="about/">About</a>
+          <button class="nav__subtoggle" aria-expanded="false" aria-label="Show About pages"><i></i></button>
+          <ul class="nav__sub"><li><a href="about/">About Guilgal International</a></li><li><a href="about/#our-name">Our Name</a></li><li><a href="about/team/">Meet the Team</a></li></ul>
+        </li><li class="nav__item"><a href="projects/">Projects</a></li><li class="nav__item"><a href="investors/">Investors</a></li><li class="nav__item"><a href="news/">News &amp; Milestones</a></li><li class="nav__item"><a href="contact/">Contact</a></li>
+      </ul>
+      <a class="btn btn--outline nav__cta" href="investors/#enquiry">Investor Enquiries</a>
     </nav>
     <button class="burger" aria-expanded="false" aria-controls="menu" aria-label="Menu"><span></span><span></span><span></span></button>
   </header>
-
   <svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="glow" x="-5%" y="-100%" width="110%" height="300%"><feGaussianBlur stdDeviation="4"/></filter></svg>
 
   <main id="main">
-
-    <!-- ================= 1 · HERO ================= -->
+    <!-- ================= HERO ================= -->
     <section class="hero">
-      <!-- the stage keeps the background and the map in the same 16:9 frame, so the silhouette stays lined up with the mountains at any screen size -->
       <div class="hero__stage">
-        <div class="hero__bg"><img src="public/images/guilgal_hero_background_1920x1080.png" alt="Sunset over mountains and misty forested hills in the Democratic Republic of Congo"></div>
+        <div class="hero__bg"><img src="public/images/guilgal_hero_background_1920x1080.png" alt="Sunset over mountains and misty forested hills in Central Africa"></div>
         <div class="hero__tint"></div>
-        <!-- gold-outlined DRC, filled with a river-valley sunset; positioned in the stage's own coordinates -->
         <div class="hero__map" aria-hidden="true"><img src="public/images/guilgal_drc_map_layer_mining_2x.png" alt=""></div>
       </div>
-
       <div class="hero__text">
-        <h1>Unlocking<br>Africa's Mining<br><em>Potential</em></h1>
+        <p class="eyebrow">Mineral Exploration &amp; Strategic Development</p>
+        <h1>Unlocking<br>Africa's Mineral<br><em>Potential</em></h1>
         <p class="hero__sub">Connecting high-potential mineral projects with technical expertise, development partners and international partnerships.</p>
-        <a class="btn btn--gold" href="#approach">Our Approach <i class="arr"></i></a>
+        <div class="hero__actions">
+          <a class="btn btn--gold" href="projects/">Explore Our Projects <i class="arr"></i></a>
+          <a class="btn btn--outline" href="investors/#enquiry">Investor Enquiries</a>
+        </div>
+        <figure class="qr">
+          <img src="public/images/qr-projects.svg" alt="QR code linking to the Guilgal International projects page" width="72" height="72">
+          <figcaption>Scan to explore our projects</figcaption>
+        </figure>
       </div>
-      <!-- contour lines bottom-right -->
       <svg class="contours contours--hero" viewBox="0 0 600 220" preserveAspectRatio="none" aria-hidden="true">
         <path d="M0 200 C120 170 220 210 340 180 S520 150 600 170"/>
         <path d="M60 220 C180 190 260 230 380 200 S540 170 600 190"/>
         <path d="M200 215 C300 195 380 225 480 205 S580 190 600 205"/>
       </svg>
-      <!-- curved transition into the ivory section -->
-      <!-- open-pit rock face along the bottom of the hero, fading up into the hills -->
       <div class="hero__rockface" aria-hidden="true"><img src="public/images/news-1.jpg" alt=""></div>
-      <!-- rock cut: the ivory of the next section rises in benches, boulders and broken ledges, like an open-pit face -->
       <svg class="ridge" viewBox="0 0 1440 200" preserveAspectRatio="none" aria-hidden="true">
         <path class="ridge__fill" d="M0.0 78.0 L42.0 76.8 L70.0 77.9 L112.0 76.4 L140.0 77.9 L182.0 78.7 L210.0 77.8 L216.4 91.8 L220.4 109.8 L228.8 117.8 L226.0 117.8 L316.0 118.9 L376.0 117.3 L466.0 115.6 L526.0 116.8 L534.8 128.7 L537.9 144.0 L543.4 150.8 L542.0 150.8 L614.0 148.8 L662.0 149.8 L734.0 149.8 L782.0 148.8 L790.7 139.7 L792.8 128.0 L802.2 122.8 L798.0 122.8 L897.0 124.9 L963.0 122.4 L1062.0 121.0 L1128.0 122.1 L1133.9 137.5 L1139.4 157.3 L1149.1 166.1 L1144.0 165.0 L1222.0 164.5 L1274.0 165.8 L1352.0 165.0 L1404.0 166.6 L1409.2 177.1 L1415.1 190.6 L1418.0 196.6 L1420.0 165.0 L1460.0 166.7 L1486.7 164.8 L1526.7 163.0 L1553.3 164.6 L1593.3 163.3 L1440.0 164.5 L1440 200 L0 200 Z"/>
         <path class="ridge__glow" d="M0.0 78.0 L42.0 76.8 L70.0 77.9 L112.0 76.4 L140.0 77.9 L182.0 78.7 L210.0 77.8 L216.4 91.8 L220.4 109.8 L228.8 117.8 L226.0 117.8 L316.0 118.9 L376.0 117.3 L466.0 115.6 L526.0 116.8 L534.8 128.7 L537.9 144.0 L543.4 150.8 L542.0 150.8 L614.0 148.8 L662.0 149.8 L734.0 149.8 L782.0 148.8 L790.7 139.7 L792.8 128.0 L802.2 122.8 L798.0 122.8 L897.0 124.9 L963.0 122.4 L1062.0 121.0 L1128.0 122.1 L1133.9 137.5 L1139.4 157.3 L1149.1 166.1 L1144.0 165.0 L1222.0 164.5 L1274.0 165.8 L1352.0 165.0 L1404.0 166.6 L1409.2 177.1 L1415.1 190.6 L1418.0 196.6 L1420.0 165.0 L1460.0 166.7 L1486.7 164.8 L1526.7 163.0 L1553.3 164.6 L1593.3 163.3 L1440.0 164.5"/>
@@ -67,78 +67,163 @@
       </svg>
     </section>
 
-    <!-- ================= 2 · OUR FOCUS ================= -->
-    <section class="focus ivory" id="about">
+    <!-- ================= HIGHLIGHT STRIP ================= -->
+    <section class="strip ivory" aria-label="Focus areas">
+      <ul class="wrap strip__list">
+        <li><strong>Copper &amp; Gold</strong><span>Exploration opportunities</span></li>
+        <li><strong>Critical Minerals</strong><span>Strategic resources</span></li>
+        <li><strong>Strategic Partnerships</strong><span>Lasting value</span></li>
+      </ul>
+    </section>
+
+    <!-- ================= ADVANCING AFRICA'S MINERAL OPPORTUNITIES ================= -->
+    <section class="focus ivory" id="who-we-are">
       <div class="wrap focus__grid">
         <div class="focus__text">
-          <h2>Sustainable<br>Development,<br>Real Impact</h2>
+          <h2>Advancing Africa's<br>Mineral<br>Opportunities</h2>
           <span class="rule"></span>
         </div>
         <figure class="focus__panels"><img src="public/images/guilgal_focus_triptych.png" alt="Three angled photographs: geologists surveying a site, a mine with processing plant in the hills, and an open-pit terrace"></figure>
-        <p class="focus__quote">From responsible exploration to production, we develop mineral assets that support economic growth and lasting opportunity in the DRC.</p>
-      </div>
-    </section>
-
-    <!-- ================= 3 · OUR APPROACH: IDENTIFY · EVALUATE · PARTNER · DEVELOP ================= -->
-    <!-- the steps sit in the open sky of the landscape; its cream edges blend into the ivory above and below -->
-    <section class="method" id="method">
-      <div class="wrap method__grid">
-        <div class="method__head">
-          <h2><em>Identify.<br class="br-wide"> Evaluate.<br>Partner.<br class="br-wide"> Develop.</em></h2>
+        <div class="focus__quote">
+          <p>Guilgal International brings together mineral projects in the Democratic Republic of the Congo, Ghana and across Africa with the technical expertise and international partners needed to move them forward.</p>
+          <a class="link link--dark" href="about/">About Guilgal International <i class="arr"></i></a>
         </div>
-        <ol class="method__steps">
-          <li><span class="method__num">01</span><h3>Identify</h3><p>Source and assess high-potential mineral opportunities across Africa.</p></li>
-          <li><span class="method__num">02</span><h3>Evaluate</h3><p>Conduct technical, commercial and risk evaluation with industry specialists.</p></li>
-          <li><span class="method__num">03</span><h3>Partner</h3><p>Bring together the right technical, financial and operational partners.</p></li>
-          <li><span class="method__num">04</span><h3>Develop</h3><p>Support project advancement through strategic partnerships to realise long-term value.</p></li>
-        </ol>
       </div>
     </section>
 
-    <!-- ================= 4 · LATEST NEWS & MILESTONES ================= -->
+    <!-- ================= OUR PROJECTS ================= -->
+    <section class="projects ivory" id="projects">
+      <div class="wrap">
+        <div class="section-head">
+          <h2><em>Our Projects</em></h2>
+          <p>Six projects across the Democratic Republic of the Congo and Ghana. Full project information is available to invited partners.</p>
+        </div>
+        <ul class="pcards"><li class="pcard">
+            <div class="pcard__photo"><img src="public/images/project-openpit.jpg" alt="" loading="lazy"></div>
+            <div class="pcard__body">
+              <h3>Pumba Copper &amp; Gold</h3>
+              <p class="pcard__meta"><span>DRC</span><span>Copper &amp; Gold</span></p>
+              <a class="btn btn--small" href="members/projects/pumba/" rel="nofollow">Partner Access <i class="arr"></i></a>
+            </div>
+          </li><li class="pcard">
+            <div class="pcard__photo"><img src="public/images/project-plant.jpg" alt="" loading="lazy"></div>
+            <div class="pcard__body">
+              <h3>Alpha Tantalum &amp; Tin</h3>
+              <p class="pcard__meta"><span>DRC</span><span>Tantalum &amp; Tin</span></p>
+              <a class="btn btn--small" href="members/projects/alpha/" rel="nofollow">Partner Access <i class="arr"></i></a>
+            </div>
+          </li><li class="pcard">
+            <div class="pcard__photo"><img src="public/images/project-geologists.jpg" alt="" loading="lazy"></div>
+            <div class="pcard__body">
+              <h3>Ndela–Mpaza</h3>
+              <p class="pcard__meta"><span>DRC</span><span>Critical Minerals</span></p>
+              <a class="btn btn--small" href="members/projects/ndela-mpaza/" rel="nofollow">Partner Access <i class="arr"></i></a>
+            </div>
+          </li><li class="pcard">
+            <div class="pcard__photo"><img src="public/images/project-rock.jpg" alt="" loading="lazy"></div>
+            <div class="pcard__body">
+              <h3>Nizi–Baluma Gold</h3>
+              <p class="pcard__meta"><span>DRC</span><span>Gold</span></p>
+              <a class="btn btn--small" href="members/projects/nizi-baluma/" rel="nofollow">Partner Access <i class="arr"></i></a>
+            </div>
+          </li><li class="pcard">
+            <div class="pcard__photo"><img src="public/images/project-forest.jpg" alt="" loading="lazy"></div>
+            <div class="pcard__body">
+              <h3>Tumfa Gold</h3>
+              <p class="pcard__meta"><span>Ghana</span><span>Gold</span></p>
+              <a class="btn btn--small" href="members/projects/tumfa/" rel="nofollow">Partner Access <i class="arr"></i></a>
+            </div>
+          </li><li class="pcard">
+            <div class="pcard__photo"><img src="public/images/project-valley.jpg" alt="" loading="lazy"></div>
+            <div class="pcard__body">
+              <h3>Hydropower &amp; Infrastructure</h3>
+              <p class="pcard__meta"><span>DRC</span><span>Energy &amp; Infrastructure</span></p>
+              <a class="btn btn--small" href="members/projects/hydropower/" rel="nofollow">Partner Access <i class="arr"></i></a>
+            </div>
+          </li></ul>
+        <p class="projects__more"><a class="link link--dark" href="projects/">Explore Our Projects <i class="arr"></i></a></p>
+      </div>
+    </section>
+
+    <section class="path" id="approach">
+      <svg class="ridge ridge--top" viewBox="0 0 1440 200" preserveAspectRatio="none" aria-hidden="true">
+        <path class="ridge__fill" d="M0.0 78.0 L42.0 76.8 L70.0 77.9 L112.0 76.4 L140.0 77.9 L182.0 78.7 L210.0 77.8 L216.4 91.8 L220.4 109.8 L228.8 117.8 L226.0 117.8 L316.0 118.9 L376.0 117.3 L466.0 115.6 L526.0 116.8 L534.8 128.7 L537.9 144.0 L543.4 150.8 L542.0 150.8 L614.0 148.8 L662.0 149.8 L734.0 149.8 L782.0 148.8 L790.7 139.7 L792.8 128.0 L802.2 122.8 L798.0 122.8 L897.0 124.9 L963.0 122.4 L1062.0 121.0 L1128.0 122.1 L1133.9 137.5 L1139.4 157.3 L1149.1 166.1 L1144.0 165.0 L1222.0 164.5 L1274.0 165.8 L1352.0 165.0 L1404.0 166.6 L1409.2 177.1 L1415.1 190.6 L1418.0 196.6 L1420.0 165.0 L1460.0 166.7 L1486.7 164.8 L1526.7 163.0 L1553.3 164.6 L1593.3 163.3 L1440.0 164.5 L1440 200 L0 200 Z"/>
+        <path class="ridge__glow" d="M0.0 78.0 L42.0 76.8 L70.0 77.9 L112.0 76.4 L140.0 77.9 L182.0 78.7 L210.0 77.8 L216.4 91.8 L220.4 109.8 L228.8 117.8 L226.0 117.8 L316.0 118.9 L376.0 117.3 L466.0 115.6 L526.0 116.8 L534.8 128.7 L537.9 144.0 L543.4 150.8 L542.0 150.8 L614.0 148.8 L662.0 149.8 L734.0 149.8 L782.0 148.8 L790.7 139.7 L792.8 128.0 L802.2 122.8 L798.0 122.8 L897.0 124.9 L963.0 122.4 L1062.0 121.0 L1128.0 122.1 L1133.9 137.5 L1139.4 157.3 L1149.1 166.1 L1144.0 165.0 L1222.0 164.5 L1274.0 165.8 L1352.0 165.0 L1404.0 166.6 L1409.2 177.1 L1415.1 190.6 L1418.0 196.6 L1420.0 165.0 L1460.0 166.7 L1486.7 164.8 L1526.7 163.0 L1553.3 164.6 L1593.3 163.3 L1440.0 164.5"/>
+        <path class="ridge__line" d="M0.0 78.0 L42.0 76.8 L70.0 77.9 L112.0 76.4 L140.0 77.9 L182.0 78.7 L210.0 77.8 L216.4 91.8 L220.4 109.8 L228.8 117.8 L226.0 117.8 L316.0 118.9 L376.0 117.3 L466.0 115.6 L526.0 116.8 L534.8 128.7 L537.9 144.0 L543.4 150.8 L542.0 150.8 L614.0 148.8 L662.0 149.8 L734.0 149.8 L782.0 148.8 L790.7 139.7 L792.8 128.0 L802.2 122.8 L798.0 122.8 L897.0 124.9 L963.0 122.4 L1062.0 121.0 L1128.0 122.1 L1133.9 137.5 L1139.4 157.3 L1149.1 166.1 L1144.0 165.0 L1222.0 164.5 L1274.0 165.8 L1352.0 165.0 L1404.0 166.6 L1409.2 177.1 L1415.1 190.6 L1418.0 196.6 L1420.0 165.0 L1460.0 166.7 L1486.7 164.8 L1526.7 163.0 L1553.3 164.6 L1593.3 163.3 L1440.0 164.5"/>
+      </svg>
+      <div class="wrap">
+        <div class="path__head">
+          <h2>Our <em>Approach</em></h2>
+          <p>Identify · Evaluate · Partner · Develop</p>
+        </div>
+        <ol class="path__steps"><li><span class="path__num">01</span><h3>Identify</h3><p>Source and review promising project opportunities.</p></li><li><span class="path__num">02</span><h3>Evaluate</h3><p>Coordinate geological, technical and commercial assessment.</p></li><li><span class="path__num">03</span><h3>Partner</h3><p>Bring together project owners, specialists and strategic partners.</p></li><li><span class="path__num">04</span><h3>Develop</h3><p>Support progress towards structured, responsible and commercially viable outcomes.</p></li></ol>
+        <a class="link path__link" href="about/#approach">How we work <i class="arr"></i></a>
+      </div>
+      <svg class="ridge ridge--bottom" viewBox="0 0 1440 200" preserveAspectRatio="none" aria-hidden="true">
+        <path class="ridge__fill" d="M0.0 78.0 L42.0 76.8 L70.0 77.9 L112.0 76.4 L140.0 77.9 L182.0 78.7 L210.0 77.8 L216.4 91.8 L220.4 109.8 L228.8 117.8 L226.0 117.8 L316.0 118.9 L376.0 117.3 L466.0 115.6 L526.0 116.8 L534.8 128.7 L537.9 144.0 L543.4 150.8 L542.0 150.8 L614.0 148.8 L662.0 149.8 L734.0 149.8 L782.0 148.8 L790.7 139.7 L792.8 128.0 L802.2 122.8 L798.0 122.8 L897.0 124.9 L963.0 122.4 L1062.0 121.0 L1128.0 122.1 L1133.9 137.5 L1139.4 157.3 L1149.1 166.1 L1144.0 165.0 L1222.0 164.5 L1274.0 165.8 L1352.0 165.0 L1404.0 166.6 L1409.2 177.1 L1415.1 190.6 L1418.0 196.6 L1420.0 165.0 L1460.0 166.7 L1486.7 164.8 L1526.7 163.0 L1553.3 164.6 L1593.3 163.3 L1440.0 164.5 L1440 200 L0 200 Z"/>
+        <path class="ridge__glow" d="M0.0 78.0 L42.0 76.8 L70.0 77.9 L112.0 76.4 L140.0 77.9 L182.0 78.7 L210.0 77.8 L216.4 91.8 L220.4 109.8 L228.8 117.8 L226.0 117.8 L316.0 118.9 L376.0 117.3 L466.0 115.6 L526.0 116.8 L534.8 128.7 L537.9 144.0 L543.4 150.8 L542.0 150.8 L614.0 148.8 L662.0 149.8 L734.0 149.8 L782.0 148.8 L790.7 139.7 L792.8 128.0 L802.2 122.8 L798.0 122.8 L897.0 124.9 L963.0 122.4 L1062.0 121.0 L1128.0 122.1 L1133.9 137.5 L1139.4 157.3 L1149.1 166.1 L1144.0 165.0 L1222.0 164.5 L1274.0 165.8 L1352.0 165.0 L1404.0 166.6 L1409.2 177.1 L1415.1 190.6 L1418.0 196.6 L1420.0 165.0 L1460.0 166.7 L1486.7 164.8 L1526.7 163.0 L1553.3 164.6 L1593.3 163.3 L1440.0 164.5"/>
+        <path class="ridge__line" d="M0.0 78.0 L42.0 76.8 L70.0 77.9 L112.0 76.4 L140.0 77.9 L182.0 78.7 L210.0 77.8 L216.4 91.8 L220.4 109.8 L228.8 117.8 L226.0 117.8 L316.0 118.9 L376.0 117.3 L466.0 115.6 L526.0 116.8 L534.8 128.7 L537.9 144.0 L543.4 150.8 L542.0 150.8 L614.0 148.8 L662.0 149.8 L734.0 149.8 L782.0 148.8 L790.7 139.7 L792.8 128.0 L802.2 122.8 L798.0 122.8 L897.0 124.9 L963.0 122.4 L1062.0 121.0 L1128.0 122.1 L1133.9 137.5 L1139.4 157.3 L1149.1 166.1 L1144.0 165.0 L1222.0 164.5 L1274.0 165.8 L1352.0 165.0 L1404.0 166.6 L1409.2 177.1 L1415.1 190.6 L1418.0 196.6 L1420.0 165.0 L1460.0 166.7 L1486.7 164.8 L1526.7 163.0 L1553.3 164.6 L1593.3 163.3 L1440.0 164.5"/>
+      </svg>
+    </section>
+
+    <!-- ================= LATEST NEWS & MILESTONES ================= -->
     <section class="news ivory" id="news">
       <div class="wrap">
         <div class="news__head">
-          <h2><em>News &amp; Milestones</em></h2>
-          <a class="link link--dark" href="#">View all updates <i class="arr"></i></a>
+          <h2><em>Latest News &amp; Milestones</em></h2>
+          <a class="link link--dark" href="news/">View all updates <i class="arr"></i></a>
         </div>
-        <ul class="news__cards">
-          <li class="news__card">
-            <a href="#">
-              <div class="news__photo"><img src="public/images/news-1.jpg" alt="Terraced open-pit mine"></div>
-              <div class="news__body"><time datetime="2026-10-30">30 Oct 2026</time><h3>Guilgal Advances DRC Project Portfolio</h3><i class="arr"></i></div>
+        <ul class="news__cards"><li class="news__card" data-kind="news" data-project="">
+            <a href="news/">
+              <div class="news__photo"><img src="public/images/news-1.jpg" alt="Terraced open-pit mine" loading="lazy"></div>
+              <div class="news__body"><time datetime="2026-10-30">30 Oct 2026</time><h3>Guilgal International Advances DRC Project Portfolio</h3><i class="arr"></i></div>
             </a>
-          </li>
-          <li class="news__card">
-            <a href="#">
-              <div class="news__photo"><img src="public/images/news-2.jpg" alt="Forested hills above the mist"></div>
+          </li><li class="news__card" data-kind="news" data-project="tumfa">
+            <a href="news/">
+              <div class="news__photo"><img src="public/images/news-2.jpg" alt="Forested hills above the mist" loading="lazy"></div>
               <div class="news__body"><time datetime="2026-10-22">22 Oct 2026</time><h3>Strategic Partnership Discussions Underway in Ghana</h3><i class="arr"></i></div>
             </a>
-          </li>
-          <li class="news__card">
-            <a href="#">
-              <div class="news__photo"><img src="public/images/news-3.jpg" alt="Mountains at sunset"></div>
-              <div class="news__body"><time datetime="2026-10-14">14 Oct 2026</time><h3>Portfolio Update: Exploration Progress and Next Steps</h3><i class="arr"></i></div>
+          </li><li class="news__card" data-kind="news" data-project="">
+            <a href="news/">
+              <div class="news__photo"><img src="public/images/news-3.jpg" alt="Mountains at sunset" loading="lazy"></div>
+              <div class="news__body"><time datetime="2026-10-14">14 Oct 2026</time><h3>Portfolio Update: Progress and Next Steps</h3><i class="arr"></i></div>
             </a>
           </li>
         </ul>
       </div>
     </section>
 
-    <!-- ================= 5 · LANDSCAPE CLOSE: the panorama rises out of the ivory and settles into the footer ================= -->
-    <section class="approach" aria-hidden="true">
+    <!-- ================= PARTNER CALL TO ACTION ================= -->
+    <section class="approach partner">
       <div class="approach__bg"><img src="public/images/guilgal_approach_natural_mirrored.png" alt=""></div>
+      <div class="wrap partner__text">
+        <h2>Partner with<br><em>Guilgal International</em></h2>
+        <p>We welcome enquiries from mining companies, technical partners, investors and strategic collaborators.</p>
+        <div class="hero__actions">
+          <a class="btn btn--gold" href="investors/#enquiry">Investor Enquiries <i class="arr"></i></a>
+          <a class="btn btn--outline" href="contact/">Contact Us</a>
+        </div>
+      </div>
     </section>
 
-    </main>
+  </main>
 
   <footer class="footer">
-    <div class="wrap footer__grid">
-      <a class="logo logo--small" href="#top" aria-label="GUILGAL home">
-        <svg viewBox="0 0 80 24" aria-hidden="true"><path d="M2 22 L26 6 L34 12 L48 2 L78 22" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/></svg>
-        <span>GUILGAL</span>
-      </a>
-      <p><a href="https://www.guilgal.org/legal-notice/">Legal Notice</a> · <a href="https://www.guilgal.org/privacy-policy/">Privacy Policy</a> · © Copyright. All rights reserved.</p>
+    <div class="wrap footer__top">
+      <div class="footer__brand">
+        <a class="logo logo--small" href="" aria-label="Guilgal International home">
+      <svg class="logo__mark" viewBox="0 0 80 24" aria-hidden="true"><path d="M2 22 L26 6 L34 12 L48 2 L78 22" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/></svg>
+      <span class="logo__name">GUILGAL INTERNATIONAL</span>
+      <span class="logo__tag">EXPLORATION | DEVELOPMENT | PARTNERSHIPS</span>
+    </a>
+        <p class="footer__lines">Mining • Critical Minerals • Project Development • Strategic Partnerships</p>
+        <p class="footer__motto">Connecting Opportunities. Developing Partnerships.</p>
+      </div>
+      <nav class="footer__nav" aria-label="Footer"><a href="about/">About</a><a href="projects/">Projects</a><a href="investors/">Investors</a><a href="news/">News &amp; Milestones</a><a href="contact/">Contact</a><a href="mailto:john@guilgal.org">john@guilgal.org</a></nav>
+    </div>
+    <div class="wrap footer__bottom">
+      <p class="footer__disclaimer">Guilgal International does not provide investment, financial or legal advice. Nothing on this site is an offer or solicitation.</p>
+      <p class="footer__legal">Guilgal International Ltd, registered in England and Wales. <a href="privacy/">Privacy</a> · <a href="cookies/">Cookies</a> · <a href="terms/">Terms</a></p>
     </div>
   </footer>
 
