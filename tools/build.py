@@ -32,30 +32,30 @@ PROJECT_NAMES = {p[0]: p[1] for p in PROJECTS}
 # News & Milestones. The three news items are the sample posts from the approved
 # mock-up; replace or confirm them before launch. `project` links a post to a
 # project's milestone list (None = company news).
-NEWS = [
-    dict(date="2026-10-30", label="30 Oct 2026", kind="news", project=None, image="news-1.jpg",
+NEWS = [  # placeholders until the first posts are published
+    dict(date="", label="Coming soon", kind="news", project=None, image="news-1.jpg",
          alt="Terraced open-pit mine",
-         title="Guilgal International Advances DRC Project Portfolio",
-         summary="[Article summary to be supplied]"),
-    dict(date="2026-10-22", label="22 Oct 2026", kind="news", project="tumfa", image="news-2.jpg",
+         title="Our first update will be published here shortly",
+         summary=""),
+    dict(date="", label="Coming soon", kind="news", project=None, image="news-2.jpg",
          alt="Forested hills above the mist",
-         title="Strategic Partnership Discussions Underway in Ghana",
-         summary="[Article summary to be supplied]"),
-    dict(date="2026-10-14", label="14 Oct 2026", kind="news", project=None, image="news-3.jpg",
+         title="Partnership news to follow",
+         summary=""),
+    dict(date="", label="Coming soon", kind="news", project=None, image="news-3.jpg",
          alt="Mountains at sunset",
-         title="Portfolio Update: Progress and Next Steps",
-         summary="[Article summary to be supplied]"),
+         title="Milestones will be shared as they are reached",
+         summary=""),
     dict(date="", label="Insights", kind="insight", project=None, image="project-valley.jpg",
          alt="Misty forested hills",
-         title="[Insight guide title to be supplied]",
-         summary="Educational guides on mineral projects and partnerships in Africa will be published here."),
+         title="Guides and insights are in preparation",
+         summary=""),
 ]
 
-APPROACH = [  # John Boardman's wording (Week 1 structure, About page)
-    ("Identify", "Source and review promising project opportunities."),
-    ("Evaluate", "Coordinate geological, technical and commercial assessment."),
-    ("Partner", "Bring together project owners, specialists and strategic partners."),
-    ("Develop", "Support progress towards structured, responsible and commercially viable outcomes."),
+APPROACH = [  # placeholder test copy until the final wording is agreed
+    ("Lorem", "Lorem ipsum dolor sit amet, consectetur adipiscing elit."),
+    ("Ipsum", "Sed do eiusmod tempor incididunt ut labore et dolore."),
+    ("Dolor", "Ut enim ad minim veniam, quis nostrud exercitation."),
+    ("Amet", "Duis aute irure dolor in reprehenderit in voluptate velit."),
 ]
 
 NAV = [
@@ -225,7 +225,7 @@ def approach_section(p):
     return f'''    <section class="method" id="approach">
       <div class="wrap method__grid">
         <div class="method__head">
-          <h2><em>Identify.<br class="br-wide"> Evaluate.<br>Partner.<br class="br-wide"> Develop.</em></h2>
+          <h2><em>Lorem.<br class="br-wide"> Ipsum.<br>Dolor.<br class="br-wide"> Amet.</em></h2>
         </div>
         <ol class="method__steps">{steps}</ol>
       </div>

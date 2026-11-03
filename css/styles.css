@@ -585,8 +585,8 @@ p { margin: 0 0 1em; }
 @media (max-width: 640px) { .partner .partner__text { padding-top: 58vw; } .partner .approach__bg img { object-position: 30% 0%; } }
 
 /* ---------- home transitions: the hero photo dissolves into the cream ---------- */
-.hero--fade::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: clamp(160px, 24%, 300px); z-index: 5; pointer-events: none;
-  background: linear-gradient(180deg, rgba(246,243,235,0) 0%, rgba(246,243,235,.35) 40%, rgba(246,243,235,.85) 78%, var(--ivory) 100%); }
+.hero--fade::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: clamp(110px, 14%, 190px); z-index: 5; pointer-events: none;
+  background: linear-gradient(180deg, rgba(246,243,235,0) 0%, rgba(246,243,235,.25) 35%, rgba(246,243,235,.8) 75%, var(--ivory) 100%); }
 .hero--fade .contours--hero { display: none; }
 .hero--fade + .focus { padding-top: clamp(30px, 4vw, 60px); }
 
@@ -595,7 +595,7 @@ p { margin: 0 0 1em; }
 .partner .approach__bg { position: relative; inset: auto; height: clamp(260px, 30vw, 520px); }
 .partner .approach__bg img { object-position: 50% 0%; }
 .partner .approach__bg::after { background: linear-gradient(180deg, var(--ivory) 0%, rgba(246,243,235,.55) 8%, rgba(246,243,235,0) 26%), linear-gradient(180deg, rgba(19,37,29,0) 45%, rgba(19,37,29,.7) 78%, var(--teal-2) 100%); }
-.partner .partner__text { padding-top: clamp(10px, 2vw, 30px) !important; padding-bottom: clamp(60px, 7vw, 100px); margin-top: -2vw; }
+.partner .partner__text { padding-top: clamp(30px, 3.5vw, 60px) !important; padding-bottom: clamp(60px, 7vw, 100px); margin-top: 0; }
 @media (max-width: 640px) { .partner .approach__bg { height: 62vw; } .partner .approach__bg img { object-position: 40% 0%; } }
 
 /* ---------- hero map locked to the photo on every screen ----------

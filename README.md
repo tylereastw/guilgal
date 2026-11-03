@@ -41,8 +41,8 @@ python3 -m http.server 8000
   john@guilgal.org.
 - **John Boardman's photo** goes at `public/images/team/john-boardman.jpg` (portrait, 4:5). His
   biography, and Gedeon's and Didier's titles and biographies, are placeholders.
-- **News:** the three news posts are the sample posts from the approved mock-up and need
-  confirming or replacing; summaries and the Insights guide are placeholders.
+- **News:** the cards are "Coming soon" placeholders until the first posts are published.
+- **Our Approach:** the heading and four steps are placeholder test copy (Lorem ipsum) until the final wording is agreed; edit `APPROACH` and the heading in `tools/build.py`.
 - **Project pages:** overview, licence and location, geology, work completed and next steps are
   placeholders. The Download Project Brief button is disabled until a brief exists. The hydropower
   page states that Guilgal International's role is commercial facilitation and introductions only.
