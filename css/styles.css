@@ -457,3 +457,8 @@ body:has(.admin) .admin { padding-top: 40px; }
 .qrs code { font-size: .74rem; color: var(--ink-soft); word-break: break-all; }
 .qrs span { display: flex; flex-wrap: wrap; gap: 6px; }
 .qrs .btn { width: auto; }
+
+.setup-qr { width: 220px; margin: 4px 0 6px; }
+.setup-qr svg { width: 100%; height: auto; display: block; }
+.form code { font-size: .9rem; background: var(--cream-2); padding: 2px 6px; border-radius: 3px; letter-spacing: .04em; }
+[hidden] { display: none !important; }

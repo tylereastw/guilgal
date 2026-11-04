@@ -612,7 +612,25 @@ def admin():
     checks = "".join(f'<label class="check"><input type="checkbox" name="projects" value="{s}"><span>{e(n)}</span></label>' for s, n, _ in PROJECTS)
     body = f'''    <section class="section admin"><div class="wrap">
       <h1>Partner Access Admin</h1>
-      <div data-admin-login>
+      <div data-admin-setup hidden>
+        <div class="formcard" style="max-width:560px"><h3 class="formcard__head">First-time setup: authenticator</h3>
+          <form class="form" data-setup-start novalidate>
+            <p class="small">Admin sign-in uses the admin password plus a 6-digit code from an authenticator app on your phone (Google Authenticator, Microsoft Authenticator or 1Password). This is done once.</p>
+            <label class="field"><span>Admin password*</span><input type="password" name="password" autocomplete="current-password" required></label>
+            <p class="form__msg" role="alert" hidden></p>
+            <button class="btn btn--gold" type="submit">Continue {ico("arrow")}</button>
+          </form>
+          <form class="form" data-setup-confirm hidden novalidate>
+            <p class="small"><strong>1.</strong> In your authenticator app, tap + and scan this code.</p>
+            <div class="setup-qr" data-setup-qr></div>
+            <p class="small">Can't scan? Choose "Enter a setup key" and type: <code data-setup-key></code></p>
+            <p class="small"><strong>2.</strong> Enter the 6-digit code the app now shows for Guilgal International.</p>
+            <label class="field"><span>Authenticator code*</span><input name="code" inputmode="numeric" maxlength="6" autocomplete="one-time-code" required></label>
+            <p class="form__msg" role="alert" hidden></p>
+            <button class="btn btn--gold" type="submit">Finish setup {ico("arrow")}</button>
+          </form></div>
+      </div>
+      <div data-admin-login hidden>
         <div class="formcard" style="max-width:460px"><h3 class="formcard__head">Admin sign in</h3>
           <form class="form" data-admin-signin novalidate>
             <label class="field"><span>Admin password*</span><input type="password" name="password" autocomplete="current-password" required></label>

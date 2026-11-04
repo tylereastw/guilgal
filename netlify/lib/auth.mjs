@@ -1,15 +1,16 @@
 // Guilgal International partner logon: shared helpers for the edge gate and the
 // serverless functions. Web Crypto only, so it runs in Node and in Deno.
 //
-// Environment variables (Netlify > Site configuration > Environment variables):
-//   SESSION_SECRET     long random string used to sign login cookies (required)
-//   ADMIN_PASSWORD     password for the admin panel (required for /admin/)
-//   ADMIN_TOTP_SECRET  base32 secret for the authenticator app (required for /admin/);
-//                      create one with: python3 tools/admin_totp.py
+// Only one environment variable is required (Netlify > Site configuration > Environment variables):
+//   ADMIN_PASSWORD     password for the admin panel
+// Optional overrides (normally created automatically and kept in Netlify Blobs):
+//   SESSION_SECRET     signs login cookies; otherwise generated on first use (config/session-secret)
+//   ADMIN_TOTP_SECRET  authenticator key; otherwise set up on first visit to /admin/ (config/admin-totp)
 //
 // Data lives in Netlify Blobs:
 //   store "members": users/<email>  { email, name, salt, hash, projects: [slugs] | ["*"], ver, disabled, created }
 //                    attempts/<key> { n, until }  failed-login counters
+//                    config/session-secret, config/admin-totp, config/admin-totp-pending
 //   store "briefs":  <slug>          PDF project briefs uploaded from the admin panel
 
 export const PROJECTS = {
@@ -27,6 +28,33 @@ export const USER_DAYS = 30;
 export const ADMIN_HOURS = 2;
 
 const enc = new TextEncoder();
+
+// The members store is passed in by callers so this module has no hard dependency on Netlify Blobs.
+let secretCache = null;
+export async function sessionSecret(store) {
+  const fromEnv = env("SESSION_SECRET");
+  if (fromEnv && fromEnv.length >= 16) return fromEnv;
+  if (secretCache) return secretCache;
+  if (!store) throw new Error("No session secret");
+  let v = await store.get("config/session-secret");
+  if (!v) {
+    v = b64url(crypto.getRandomValues(new Uint8Array(32)));
+    await store.set("config/session-secret", v);
+    v = (await store.get("config/session-secret")) || v; // if two requests raced, keep the stored one
+  }
+  return (secretCache = v);
+}
+export async function adminTotpSecret(store) {
+  return env("ADMIN_TOTP_SECRET") || (store ? await store.get("config/admin-totp") : null);
+}
+export function newTotpSecret() {
+  const a = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
+  return [...crypto.getRandomValues(new Uint8Array(32))].map((x) => a[x % 32]).join("");
+}
+export function totpUri(secret) {
+  const label = encodeURIComponent("Guilgal International:admin");
+  return `otpauth://totp/${label}?secret=${secret}&issuer=${encodeURIComponent("Guilgal International")}&digits=6&period=30`;
+}
 
 export function env(name) {
   const v = globalThis.Netlify?.env?.get?.(name);
@@ -78,15 +106,15 @@ async function hmac(secret, data, algo = "SHA-256") {
   const key = await crypto.subtle.importKey("raw", typeof secret === "string" ? enc.encode(secret) : secret, { name: "HMAC", hash: algo }, false, ["sign"]);
   return new Uint8Array(await crypto.subtle.sign("HMAC", key, typeof data === "string" ? enc.encode(data) : data));
 }
-export async function sign(payload) {
-  const secret = env("SESSION_SECRET");
-  if (!secret || secret.length < 16) throw new Error("SESSION_SECRET is not set");
+export async function sign(payload, store) {
+  const secret = await sessionSecret(store);
   const body = b64url(enc.encode(JSON.stringify(payload)));
   return body + "." + b64url(await hmac(secret, body));
 }
-export async function verify(token) {
-  const secret = env("SESSION_SECRET");
-  if (!secret || !token || !token.includes(".")) return null;
+export async function verify(token, store) {
+  if (!token || !token.includes(".")) return null;
+  let secret;
+  try { secret = await sessionSecret(store); } catch { return null; }
   const [body, sig] = token.split(".");
   if (!safeEqual(sig, b64url(await hmac(secret, body)))) return null;
   try {
@@ -153,14 +181,14 @@ export function publicUser(u) {
 // Session payload: { e: email, v: user.ver, x: expiry ms }. Bumping user.ver (password
 // reset, disable) signs every existing session out.
 export async function userFromRequest(request, store) {
-  const s = await verify(readCookie(request, USER_COOKIE));
+  const s = await verify(readCookie(request, USER_COOKIE), store);
   if (!s?.e) return null;
   const user = await store.get("users/" + s.e, { type: "json" });
   if (!user || user.disabled || (user.ver || 0) !== s.v) return null;
   return user;
 }
-export async function isAdmin(request) {
-  const s = await verify(readCookie(request, ADMIN_COOKIE));
+export async function isAdmin(request, store) {
+  const s = await verify(readCookie(request, ADMIN_COOKIE), store);
   return !!(s && s.a === 1);
 }
 

@@ -40,7 +40,7 @@ export default async (request, context) => {
   await clearFailures(store, "u:" + email);
   user.lastLogin = new Date().toISOString();
   await store.setJSON("users/" + email, user);
-  const token = await sign({ e: email, v: user.ver || 0, x: Date.now() + USER_DAYS * 864e5 });
+  const token = await sign({ e: email, v: user.ver || 0, x: Date.now() + USER_DAYS * 864e5 }, store);
   return json({ ok: true }, 200, { "Set-Cookie": cookie(USER_COOKIE, token, { maxAge: USER_DAYS * 86400 }) });
 };
 

@@ -12,7 +12,8 @@
   const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   let PROJECTS = {};
 
-  const showApp = on => { $('[data-admin-login]').hidden = on; $('[data-admin-app]').hidden = !on; };
+  const show = which => ['setup', 'login', 'app'].forEach(k => { $('[data-admin-' + k + ']').hidden = k !== which; });
+  const showApp = on => show(on ? 'app' : 'login');
 
   async function loadUsers() {
     const { users, projects } = await api('users');
@@ -85,5 +86,32 @@
     navigator.clipboard.writeText(b.dataset.copy).then(() => { b.textContent = 'Copied'; setTimeout(() => { b.textContent = 'Copy link'; }, 1500); });
   }));
 
-  api('users').then(start).catch(() => showApp(false));
+  // First-time authenticator setup
+  let setupPassword = '';
+  $('[data-setup-start]').addEventListener('submit', async e => {
+    e.preventDefault();
+    const f = e.target;
+    try {
+      const r = await postJSON('setup', { password: f.password.value });
+      setupPassword = f.password.value;
+      $('[data-setup-qr]').innerHTML = r.qr;
+      $('[data-setup-key]').textContent = r.secret.replace(/(.{4})/g, '$1 ').trim();
+      f.hidden = true; $('[data-setup-confirm]').hidden = false;
+    } catch (err) { say(f, err.message); }
+  });
+  $('[data-setup-confirm]').addEventListener('submit', async e => {
+    e.preventDefault();
+    const f = e.target;
+    try { await postJSON('setup/confirm', { password: setupPassword, code: f.code.value }); setupPassword = ''; start(); }
+    catch (err) { say(f, err.message); }
+  });
+
+  api('users').then(start).catch(async () => {
+    const st = await api('status').catch(() => ({}));
+    if (st.needsSetup) show('setup');
+    else {
+      show('login');
+      if (st.configured === false) say($('[data-admin-signin]'), 'Admin access is not configured yet. Set ADMIN_PASSWORD in Netlify and redeploy.');
+    }
+  });
 })();

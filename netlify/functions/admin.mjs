@@ -1,4 +1,7 @@
 // Admin API for the partner logon (used by /admin/).
+//   GET    /api/admin/status                       { configured, needsSetup }
+//   POST   /api/admin/setup   { password }         first run only: new authenticator key + QR code
+//   POST   /api/admin/setup/confirm { password, code }  saves the key once a code from the app matches
 //   POST   /api/admin/login   { password, code }   password + authenticator code -> admin cookie (2 hours)
 //   POST   /api/admin/logout
 //   GET    /api/admin/users                        list partner accounts
@@ -9,8 +12,9 @@
 //   POST   /api/admin/briefs  multipart: slug, file (PDF, max 15 MB)
 //   DELETE /api/admin/briefs?slug=...
 import { getStore } from "@netlify/blobs";
+import QRCode from "qrcode";
 import { env, json, sign, cookie, isAdmin, checkTotp, safeEqual, hashPassword, randomPassword, normEmail, publicUser,
-         throttled, recordFailure, clearFailures, ADMIN_COOKIE, ADMIN_HOURS, PROJECTS } from "../lib/auth.mjs";
+         throttled, recordFailure, clearFailures, adminTotpSecret, newTotpSecret, totpUri, ADMIN_COOKIE, ADMIN_HOURS, PROJECTS } from "../lib/auth.mjs";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -26,21 +30,57 @@ export default async (request, context) => {
   }
   // Admin cookie is SameSite=Strict, so other sites cannot send DELETE or upload requests with it.
 
-  if (path === "/api/admin/login" && request.method === "POST") {
-    const pw = env("ADMIN_PASSWORD"), secret = env("ADMIN_TOTP_SECRET");
-    if (!pw || !secret || !env("SESSION_SECRET")) return json({ error: "Admin access is not configured. Set ADMIN_PASSWORD, ADMIN_TOTP_SECRET and SESSION_SECRET in Netlify." }, 503);
-    const key = "admin:" + (context.ip || "unknown");
-    if (await throttled(members, key)) return json({ error: "Too many attempts. Please wait 15 minutes." }, 429);
-    let b; try { b = await request.json(); } catch { return json({ error: "Invalid request" }, 400); }
-    const ok = safeEqual(String(b.password || ""), pw) && (await checkTotp(secret, String(b.code || "").trim()));
-    if (!ok) { await recordFailure(members, key); return json({ error: "Password or authenticator code is incorrect." }, 401); }
-    await clearFailures(members, key);
-    const token = await sign({ a: 1, x: Date.now() + ADMIN_HOURS * 36e5 });
+  const pw = env("ADMIN_PASSWORD");
+  const ipKey = "admin:" + (context.ip || "unknown");
+  const readBody = async () => { try { return await request.json(); } catch { return null; } };
+  const passwordOk = (b) => !!pw && safeEqual(String(b?.password || ""), pw);
+  const startSession = async () => {
+    const token = await sign({ a: 1, x: Date.now() + ADMIN_HOURS * 36e5 }, members);
     return json({ ok: true }, 200, { "Set-Cookie": cookie(ADMIN_COOKIE, token, { maxAge: ADMIN_HOURS * 3600, sameSite: "Strict" }) });
+  };
+
+  if (path === "/api/admin/status") {
+    return json({ configured: !!pw, needsSetup: !!pw && !(await adminTotpSecret(members)) });
+  }
+
+  if (path.startsWith("/api/admin/setup") && request.method === "POST") {
+    if (!pw) return json({ error: "Set ADMIN_PASSWORD in Netlify first." }, 503);
+    if (await adminTotpSecret(members)) return json({ error: "The authenticator is already set up." }, 403);
+    if (await throttled(members, ipKey)) return json({ error: "Too many attempts. Please wait 15 minutes." }, 429);
+    const b = await readBody();
+    if (!passwordOk(b)) { await recordFailure(members, ipKey); return json({ error: "Admin password is incorrect." }, 401); }
+    if (path === "/api/admin/setup") {
+      const secret = newTotpSecret();
+      await members.set("config/admin-totp-pending", secret);
+      const uri = totpUri(secret);
+      const svg = await QRCode.toString(uri, { type: "svg", margin: 2, color: { dark: "#10291F", light: "#FFFFFF" } });
+      return json({ secret, uri, qr: svg });
+    }
+    if (path === "/api/admin/setup/confirm") {
+      const pending = await members.get("config/admin-totp-pending");
+      if (!pending) return json({ error: "Start the setup again." }, 400);
+      if (!(await checkTotp(pending, String(b.code || "").trim()))) { await recordFailure(members, ipKey); return json({ error: "That code does not match. Check the time on your phone and try the newest code." }, 401); }
+      await members.set("config/admin-totp", pending);
+      await members.delete("config/admin-totp-pending");
+      await clearFailures(members, ipKey);
+      return startSession();
+    }
+  }
+
+  if (path === "/api/admin/login" && request.method === "POST") {
+    if (!pw) return json({ error: "Admin access is not configured. Set ADMIN_PASSWORD in Netlify." }, 503);
+    const secret = await adminTotpSecret(members);
+    if (!secret) return json({ error: "Set up the authenticator first.", needsSetup: true }, 409);
+    if (await throttled(members, ipKey)) return json({ error: "Too many attempts. Please wait 15 minutes." }, 429);
+    const b = await readBody();
+    const ok = passwordOk(b) && (await checkTotp(secret, String(b?.code || "").trim()));
+    if (!ok) { await recordFailure(members, ipKey); return json({ error: "Password or authenticator code is incorrect." }, 401); }
+    await clearFailures(members, ipKey);
+    return startSession();
   }
   if (path === "/api/admin/logout") return json({ ok: true }, 200, { "Set-Cookie": cookie(ADMIN_COOKIE, "", { maxAge: 0, sameSite: "Strict" }) });
 
-  if (!(await isAdmin(request))) return json({ error: "Not signed in" }, 401);
+  if (!(await isAdmin(request, members))) return json({ error: "Not signed in" }, 401);
 
   if (path === "/api/admin/users") {
     if (request.method === "GET") {

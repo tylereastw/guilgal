@@ -87,12 +87,19 @@ reached by direct link (or QR code); there is no public projects page.
 
 Data (partner accounts, uploaded briefs) is stored in Netlify Blobs; no database to run.
 
-**One-off setup in Netlify** (Site configuration > Environment variables, scope Functions):
-1. `SESSION_SECRET`: a long random string (at least 32 characters).
-2. `ADMIN_PASSWORD`: the admin panel password.
-3. `ADMIN_TOTP_SECRET`: run `python3 tools/admin_totp.py`, scan the QR code it writes with an
-   authenticator app, and paste the printed secret here. Delete the QR file afterwards.
-4. Redeploy. Go to `/admin/`, sign in with the password and the 6-digit code.
+**One-off setup**
+1. In Netlify, Site configuration > Environment variables, add `ADMIN_PASSWORD` (scope:
+   Functions) and redeploy. That is the only variable needed.
+2. Open `/admin/` on the site. The first visit shows a setup screen: enter the admin password,
+   scan the QR code with an authenticator app (Google Authenticator, Microsoft Authenticator,
+   1Password), and type the 6-digit code it shows. From then on, admin sign-in is the password
+   plus the current code.
+
+The cookie signing secret and the authenticator key are generated and stored automatically in
+Netlify Blobs. Optional overrides: `SESSION_SECRET` and `ADMIN_TOTP_SECRET` environment
+variables (`tools/admin_totp.py` can create a key). To reset the authenticator (for example a
+lost phone), delete the `config/admin-totp` entry in the `members` blob store from the Netlify
+dashboard (Blobs) and visit `/admin/` again.
 
 **In the admin panel** you can add a partner (email, name, projects; a password is generated
 and shown once), change their projects, reset their password (signs them out everywhere),
