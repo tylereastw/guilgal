@@ -1,5 +1,7 @@
 # Guilgal International website
 
+**Design v2** follows John Boardman's mock-ups (Website Design Handover, 30 October). The previous editorial design is archived in `archive/editorial-v1/` (open its `index.html` via a local server). Image list and sizes: `public/images/v2/IMAGES.md`.
+
 Static, multi-page corporate site for Guilgal International Ltd (registered in England and Wales).
 No framework. Pages are generated from one script so the header, footer and design system stay
 consistent:
@@ -63,7 +65,7 @@ along an open-pit rock cut. Gold is used for decoration and on dark backgrounds;
 uses dark green for contrast.
 
 ## Fonts
-Specified pairing: **Canela** (headings) and **Neue Haas Grotesk Text** (body, navigation, UI).
+Design v2 uses self-hosted Montserrat (headings, UI), Oswald (card labels), Open Sans (body) and Cinzel (wordmark), all SIL Open Font License, in `assets/fonts/v2/`. The earlier request for **Canela** (headings) and **Neue Haas Grotesk Text** (body, navigation, UI).
 Both are commercial typefaces that need a web licence and are not included. `css/fonts.css`
 declares them; they load once the WOFF2 files are placed in `assets/fonts/licensed/` (names in
 the README there). Until then the site uses the self-hosted DM Serif Display / DM Sans pair. No
