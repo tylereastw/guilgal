@@ -33,6 +33,7 @@ def e(s):
 # ---------------------------------------------------------------- icons (24px line icons)
 ICONS = {
     "arrow": '<path d="M5 12h14M13 6l6 6-6 6"/>',
+    "lock": '<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
     "back": '<path d="M19 12H5M11 6l-6 6 6 6"/>',
     "cubes": '<path d="M3 15l5-3 5 3-5 3zM3 15v4l5 3 5-3v-4M11 9l5-3 5 3-5 3zM11 9v4l5 3 5-3V9M7 6l5-3 5 3"/>',
     "crystal": '<path d="M12 2l-3 6 3 14 3-14zM9 8l-5 4 8 10M15 8l5 4-8 10M6 4l3 4M18 4l-3 4"/>',
@@ -77,7 +78,6 @@ NAV = [
     ("Home", ""),
     ("About", "about/", [("About Guilgal International", "about/"), ("Our Name", "about/#our-name"), ("Meet the Team", "about/team/")]),
     ("Investors", "investors/"),
-    ("News & Milestones", "news/"),
     ("Contact", "contact/"),
 ]
 
@@ -164,7 +164,8 @@ def footer(p):
         <p class="footer__lines">Mining • Critical Minerals • Project Development • Strategic Partnerships</p>
         <p class="footer__motto">Connecting Opportunities. Developing Partnerships.</p>
       </div>
-      <nav class="footer__nav" aria-label="Footer">{links}<a href="{p}login/">Partner login</a><a href="mailto:{EMAIL}">{EMAIL}</a></nav>
+      <nav class="footer__nav" aria-label="Footer">{links}<a href="mailto:{EMAIL}">{EMAIL}</a></nav>
+      <div class="footer__logins"><a class="footer__login" href="{p}login/">{ico("lock")} Partner login</a><a class="footer__login" href="{p}admin/">{ico("lock")} Admin login</a></div>
     </div>
     <div class="wrap footer__bottom">
       <p class="footer__disclaimer">{DISCLAIMER}</p>
@@ -511,29 +512,34 @@ def investors():
     inner = f'''<h1>Investor Centre &amp; Contact</h1>
           <p class="hero__meta">Partner with Guilgal International: Unlock the Value of Africa</p>
           <p class="hero__sub">Find out how we partner, request access to private project information and get in touch with our team.</p>
-          <ul class="pills"><li><a class="pill" href="#access">Partner access</a></li><li><a class="pill" href="#why">How we partner</a></li><li><a class="pill" href="{p}news/">News &amp; updates</a></li><li><a class="pill" href="#enquiry">Contact us</a></li></ul>'''
+          <ul class="pills"><li><a class="pill" href="#why">Why partner with us</a></li><li><a class="pill" href="#access">Partner access</a></li><li><a class="pill" href="#enquiry">Contact us</a></li></ul>'''
     why = [("diamond", "Vetted Opportunities", "Projects are reviewed before they are introduced to partners."),
            ("handshake", "Local Relationships", "Established working relationships with project owners and stakeholders."),
            ("people", "Technical Networks", "Access to geological, technical and commercial specialists."),
            ("leaf", "Responsible Development", "A focus on responsible, structured project progression."),
            ("chart", "Long-Term Partnerships", "Durable relationships rather than single transactions.")]
     body = hero(p, "investors-hero.jpg", inner) + f'''
-    <section class="section" id="portfolio">
-      <div class="wrap grid-2 why-wrap" style="grid-template-columns:1fr 1.15fr;align-items:start">
-        <div id="access"><div class="shead"><h2>Partner Access</h2></div>
-          <p class="lead">Project information, maps, technical summaries and milestones are private. Each project has its own password-protected page, shared directly with invited partners.</p>
-          <ol class="steps">
-            <li><b>1</b><strong>Make an enquiry</strong><span>Tell us about your organisation and the opportunities you are interested in.</span></li>
-            <li><b>2</b><strong>Confidentiality agreement</strong><span>We send a confidentiality agreement for signature.</span></li>
-            <li><b>3</b><strong>Approval</strong><span>Once signed and approved, we send the project link and access details.</span></li>
-          </ol>
-          <p style="margin-top:18px"><a class="btn btn--gold" href="#enquiry">Request access {ico("arrow")}</a></p></div>
-        <div id="why"><div class="shead"><h2>Why Partner with Guilgal International?</h2></div>
-          <div class="why-grid">
-            <ul class="why">{"".join(f"<li>{dot(i)}<div><strong>{t}</strong><span>{d}</span></div></li>" for i, t, d in why)}</ul>
-            <div class="quote-panel"><img src="{p}{IMG}africa-gold.jpg" alt=""><blockquote>"Together we can unlock Africa's mineral and energy potential."</blockquote></div>
-          </div>
+    <section class="section" id="why">
+      <div class="wrap">
+        <div class="shead"><h2>Why Partner with Guilgal International?</h2></div>
+        <p class="lead">Guilgal International brings together vetted opportunities, local relationships and technical expertise, so partners can engage with African projects in a structured, responsible way.</p>
+        <ul class="why-row">{"".join(f"<li>{dot(i, True)}<strong>{t}</strong><span class='why-row__text'>{d}</span></li>" for i, t, d in why)}</ul>
+        <div class="quote-band"><img src="{p}{IMG}africa-gold.jpg" alt=""><blockquote>"Together we can unlock Africa's mineral and energy potential."</blockquote></div>
+      </div>
+    </section>
+
+    <section class="section section--cream2" id="access">
+      <div class="wrap">
+        <div class="access-head">
+          <div><div class="shead"><h2>Partner Access</h2></div>
+            <p class="lead">Project information, maps, technical summaries and milestones are private. Each project has its own password-protected page, shared directly with invited partners.</p></div>
+          <a class="btn btn--gold" href="#enquiry">Request access {ico("arrow")}</a>
         </div>
+        <ol class="steps steps--row">
+          <li><b>1</b><strong>Make an enquiry</strong><span>Tell us about your organisation and the opportunities you are interested in.</span></li>
+          <li><b>2</b><strong>Confidentiality agreement</strong><span>We send a confidentiality agreement for signature.</span></li>
+          <li><b>3</b><strong>Approval</strong><span>Once signed and approved, we send the project link and access details.</span></li>
+        </ol>
       </div>
     </section>
 ''' + contact_block(p, "investor-enquiry").replace('id="contact-us"', 'id="enquiry"') + f'''
@@ -651,49 +657,91 @@ def admin():
           </form></div>
       </div>
       <div data-admin-app hidden>
-        <p><button class="btn btn--line-dark btn--sm" type="button" data-admin-logout>Sign out</button></p>
-        <div class="grid-2" style="align-items:start">
-          <div class="formcard"><h3 class="formcard__head" data-form-title>Add a partner</h3>
-            <form class="form pform" data-user-form novalidate>
-              <p class="pform__editing" data-edit-note hidden>Editing <b data-edit-email></b> <button type="button" class="linkbtn" data-cancel-edit>Add a new partner instead</button></p>
-              <div class="form__row">
-                <label class="field"><span>Email address*</span><input type="email" name="email" required></label>
-                <label class="field"><span>Name</span><input name="name" placeholder="Optional"></label>
-              </div>
-              <fieldset class="checks">
-                <legend>Project access</legend>
-                <p class="small">The partner only sees the projects ticked here.</p>
-                <label class="check check--all"><input type="checkbox" name="projects" value="*"><span>All projects, including any added later</span></label>
-                {checks}
-              </fieldset>
-              <fieldset class="checks">
-                <legend>Password</legend>
-                <label class="check" data-only-edit hidden><input type="radio" name="pwmode" value="keep"><span>Keep their current password</span></label>
-                <label class="check"><input type="radio" name="pwmode" value="generate" checked><span data-gen-label>Create a secure password for me</span></label>
-                <label class="check"><input type="radio" name="pwmode" value="choose"><span>Let me type a password</span></label>
-                <label class="field" data-choose hidden><span>Password (at least 10 characters)</span><input name="password" autocomplete="new-password"></label>
-                <p class="small" data-only-edit hidden>A new password signs the partner out on all their devices.</p>
-              </fieldset>
-              <label class="check switch" data-only-edit hidden><input type="checkbox" name="active" checked><span>Account active (untick to block access without deleting)</span></label>
-              <p class="form__msg" role="alert" hidden></p>
-              <div class="pform__actions"><button class="btn btn--gold" type="submit" data-submit-label>Add partner {ico("arrow")}</button></div>
-            </form>
-            <div class="details" data-details hidden>
-              <p><strong data-details-title>Partner added.</strong> Send them these login details. The password is shown only once.</p>
-              <pre data-details-text></pre>
-              <div class="pform__actions"><button class="btn btn--sm btn--gold" type="button" data-copy-details>Copy details</button><a class="btn btn--sm btn--line-dark" data-mail-details href="#">Open in email</a></div>
-            </div></div>
-          <div><h2>Project briefs</h2><p class="small">Briefs are generated automatically from each project page every time the site is built, so they always match the page. Preview them here.</p>
-            <ul class="briefs">{{BRIEFLIST}}</ul></div>
+        <div class="adm-bar">
+          <div class="adm-tabs" role="tablist">
+            <button type="button" role="tab" class="adm-tab is-on" data-tab="partners" aria-selected="true">{ico("people")} Partners</button>
+            <button type="button" role="tab" class="adm-tab" data-tab="links" aria-selected="false">{ico("map")} Project links &amp; QR codes</button>
+            <button type="button" role="tab" class="adm-tab" data-tab="briefs" aria-selected="false">{ico("doc")} Project briefs</button>
+          </div>
+          <button class="btn btn--line-dark btn--sm" type="button" data-admin-logout>Sign out</button>
         </div>
-        <h2 style="margin-top:40px">Project links and QR codes</h2>
-        <p class="small">Send these to partners with access. Each link opens the project page after the partner signs in; anyone without access is asked to log in.</p>
-        <ul class="qrs">{{QRLIST}}</ul>
-        <h2 style="margin-top:40px">Partners</h2>
-        <div class="table-scroll"><table class="dtable" data-users><thead><tr><th>Email</th><th>Name</th><th>Projects</th><th>Status</th><th>Last login</th><th></th></tr></thead><tbody></tbody></table></div>
+
+        <div class="adm-panel" data-panel="partners">
+          <div class="adm-head">
+            <div><h2>Partners</h2><p class="small">Everyone who can sign in to the partner portal, and the projects each one can see.</p></div>
+            <button class="btn btn--gold" type="button" data-add>+ Add partner</button>
+          </div>
+          <div class="adm-tools">
+            <p class="adm-stats" data-stats></p>
+            <label class="adm-search"><span class="sr-only">Search partners</span>{ico("search")}<input type="search" placeholder="Search by name, email or project" data-search></label>
+          </div>
+          <ul class="ulist" data-users></ul>
+          <details class="adm-help"><summary>How partner access works</summary>
+            <ol>
+              <li><b>Add partner</b>: enter their email and tick the projects they may see. A secure password is created for you.</li>
+              <li><b>Invitation</b>: create a ready-to-send invitation with the sign-in link, their login details, step-by-step instructions and a QR code for each project. Copy it into an email or save it as a PDF.</li>
+              <li><b>Edit</b> to change their projects or reset their password. <b>Pause</b> blocks access without deleting the account; <b>Delete</b> removes it.</li>
+            </ol></details>
+        </div>
+
+        <div class="adm-panel" data-panel="links" hidden>
+          <div class="adm-head"><div><h2>Project links &amp; QR codes</h2><p class="small">Each link opens the project page after the partner signs in. Anyone without access is taken to the login screen first. Invitations include these automatically.</p></div></div>
+          <ul class="qrs">{{QRLIST}}</ul>
+        </div>
+
+        <div class="adm-panel" data-panel="briefs" hidden>
+          <div class="adm-head"><div><h2>Project briefs</h2><p class="small">Briefs are generated automatically from each project page every time the site is built, so they always match the page. Nothing needs uploading.</p></div></div>
+          <ul class="briefs">{{BRIEFLIST}}</ul>
+        </div>
       </div>
+
+      <dialog class="adm-dialog" data-user-dialog aria-labelledby="udlg-title">
+        <div class="adm-dialog__head"><h3 id="udlg-title" data-form-title>Add a partner</h3><button type="button" class="adm-x" data-close aria-label="Close">&times;</button></div>
+        <form class="form pform" data-user-form novalidate>
+          <div class="form__row">
+            <label class="field"><span>Email address*</span><input type="email" name="email" required></label>
+            <label class="field"><span>Name</span><input name="name" placeholder="For example, Jane Smith"></label>
+          </div>
+          <fieldset class="checks">
+            <legend>Which projects can they see?</legend>
+            <label class="check check--all"><input type="checkbox" name="projects" value="*"><span>All projects, including any added later</span></label>
+            {checks}
+          </fieldset>
+          <fieldset class="checks">
+            <legend>Password</legend>
+            <label class="check" data-only-edit hidden><input type="radio" name="pwmode" value="keep"><span>Keep their current password</span></label>
+            <label class="check"><input type="radio" name="pwmode" value="generate" checked><span data-gen-label>Create a secure password for me</span></label>
+            <label class="check"><input type="radio" name="pwmode" value="choose"><span>Let me type a password</span></label>
+            <label class="field" data-choose hidden><span>Password (at least 10 characters)</span><input name="password" autocomplete="new-password"></label>
+            <p class="small" data-only-edit hidden>A new password signs the partner out on all their devices.</p>
+          </fieldset>
+          <label class="check switch" data-only-edit hidden><input type="checkbox" name="active" checked><span>Account active (untick to pause access without deleting)</span></label>
+          <p class="form__msg" role="alert" hidden></p>
+          <div class="pform__actions"><button class="btn btn--gold" type="submit" data-submit-label>Add partner {ico("arrow")}</button><button class="btn btn--line-dark" type="button" data-close>Cancel</button></div>
+        </form>
+        <div class="details" data-details hidden>
+          <p class="details__ok" data-details-title>Partner added</p>
+          <p class="small">Send them their invitation now. The password is shown only once.</p>
+          <pre data-details-text></pre>
+          <div class="pform__actions"><button class="btn btn--gold" type="button" data-details-invite>Create invitation {ico("arrow")}</button><button class="btn btn--sm btn--line-dark" type="button" data-copy-details>Copy details</button><button class="btn btn--sm btn--line-dark" type="button" data-close>Done</button></div>
+        </div>
+      </dialog>
+
+      <dialog class="adm-dialog adm-dialog--sm" data-invite-dialog aria-labelledby="idlg-title">
+        <div class="adm-dialog__head"><h3 id="idlg-title">Invitation for <span data-invite-who></span></h3><button type="button" class="adm-x" data-close aria-label="Close">&times;</button></div>
+        <div class="pform">
+          <p>For security, passwords are never stored in a readable form, so an invitation can only show a password that is created now.</p>
+          <div class="pform__actions pform__actions--stack">
+            <button class="btn btn--gold" type="button" data-invite-new>Create a new password and invitation {ico("arrow")}</button>
+            <button class="btn btn--line-dark" type="button" data-invite-nopw>Invitation without password (send it separately)</button>
+          </div>
+          <p class="small">A new password replaces their current one and signs them out on other devices.</p>
+          <p class="form__msg" role="alert" hidden></p>
+        </div>
+      </dialog>
     </div></section>
 '''
+    qr("login/", "login")
     qrs = []
     for slug, name, _ in PROJECTS:
         code = qr(f"members/projects/{slug}/", f"project-{slug}")
@@ -919,10 +967,7 @@ def project_page(slug, card_name):
       </div>
     </section>
 '''
-    rel = "".join(f'<li><a href="{p}members/projects/{s}/"><img src="{p}{IMG}card-{s}.jpg" alt=""><div><strong>{e(n)}</strong><span>{e(c)}</span></div></a></li>'
-                  for s, n, c in PROJECTS if s != slug)
-    body += f'''    <section class="related"><div class="wrap"><p class="label">Related projects</p><ul class="related__list">{rel}</ul>
-      <a class="related__more" href="{p}members/">Partner portal →</a></div></section>
+    body += f'''    <section class="section section--tight"><div class="wrap"><a class="backlink" href="{p}members/">{ico("back")} Back to the partner portal</a></div></section>
 '''
     page(path, f"{d['title']} | Partner Access | Guilgal International", "Private project page.", "Projects", body, p, noindex=True)
 
@@ -1103,14 +1148,15 @@ def cookie_policy():
 
 
 def seo():
-    pub = ["", "about/", "about/team/", "investors/", "news/", "contact/", "privacy/", "cookies/", "terms/"]
+    pub = ["", "about/", "about/team/", "investors/", "contact/", "privacy/", "cookies/", "terms/"]
     (ROOT / "sitemap.xml").write_text('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
                                       "".join(f"  <url><loc>{SITE}/{u}</loc></url>\n" for u in pub) + "</urlset>\n")
     (ROOT / "robots.txt").write_text(f"User-agent: *\nDisallow: /members/\nDisallow: /admin/\nDisallow: /login/\nDisallow: /archive/\n\nSitemap: {SITE}/sitemap.xml\n")
 
 
 if __name__ == "__main__":
-    home(); about(); team(); investors(); news(); contact(); members(); login(); admin(); thanks()
+    # news() is paused for now; /news/ redirects home (netlify.toml)
+    home(); about(); team(); investors(); contact(); members(); login(); admin(); thanks()
     for s, n, _ in PROJECTS:
         project_page(s, n)
         brief_page(s, n)
