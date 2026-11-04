@@ -79,7 +79,29 @@
   }));
 
   const adminHint = on => { try { on ? localStorage.setItem('gi_in_admin', '1') : localStorage.removeItem('gi_in_admin'); } catch {} window.giFooter && window.giFooter('admin', on); };
-  const start = () => { showApp(true); adminHint(true); loadUsers(); };
+  // Project names, QR codes and briefs come from a private file (behind the admin session),
+  // so the public admin page itself contains no project information.
+  let MANIFEST = {};
+  async function loadProjects() {
+    const r = await fetch('/members/media/projects.json', { credentials: 'same-origin', cache: 'no-store' });
+    if (!r.ok) return;
+    MANIFEST = await r.json();
+    const qrSrc = (s, ext) => '/public/images/v2/' + MANIFEST[s].qr + '.' + ext;
+    $('[data-project-checks]').innerHTML = Object.entries(MANIFEST).map(([s, m]) =>
+      `<label class="check"><input type="checkbox" name="projects" value="${esc(s)}"><span>${esc(m.name)}</span></label>`).join('');
+    $('[data-qrs]').innerHTML = Object.entries(MANIFEST).map(([s, m]) => `<li><img src="${qrSrc(s, 'svg')}" alt="QR code for ${esc(m.name)}" width="120" height="120"><div><strong>${esc(m.name)}</strong>
+      <code>${esc(m.url)}</code><span><a class="btn btn--sm btn--gold" href="${qrSrc(s, 'png')}" download="Guilgal-International-${esc(s)}-QR.png">Download PNG</a>
+      <a class="btn btn--sm btn--line-dark" href="${qrSrc(s, 'svg')}" download="Guilgal-International-${esc(s)}-QR.svg">SVG</a>
+      <button class="btn btn--sm btn--line-dark" type="button" data-copy="${esc(m.url)}">Copy link</button></span></div></li>`).join('');
+    $('[data-briefs]').innerHTML = Object.entries(MANIFEST).map(([s, m]) =>
+      `<li><strong>${esc(m.name)}</strong><span><a class="btn btn--sm btn--gold" href="/members/projects/${esc(s)}/brief.pdf" target="_blank" rel="noopener">Open PDF</a></span></li>`).join('');
+    syncAll();
+  }
+  document.addEventListener('click', e => {
+    const b = e.target.closest('[data-qrs] [data-copy]'); if (!b) return;
+    navigator.clipboard.writeText(b.dataset.copy).then(() => { b.textContent = 'Copied'; setTimeout(() => { b.textContent = 'Copy link'; }, 1500); });
+  });
+  const start = () => { showApp(true); adminHint(true); loadProjects().then(loadUsers); };
 
   $('[data-admin-signin]').addEventListener('submit', async e => {
     e.preventDefault();
@@ -87,7 +109,7 @@
     try { await postJSON('login', { password: f.password.value, code: f.code.value }); f.reset(); start(); }
     catch (err) { say(f, err.message); }
   });
-  $('[data-admin-logout]').addEventListener('click', async () => { await postJSON('logout', {}); adminHint(false); showApp(false); });
+  $('[data-admin-logout]').addEventListener('click', async () => { await postJSON('logout', {}); adminHint(false); ['[data-project-checks]', '[data-qrs]', '[data-briefs]', '[data-users]'].forEach(x => { $(x).innerHTML = ''; }); showApp(false); });
 
   // dialogs
   const dlg = $('[data-user-dialog]'), idlg = $('[data-invite-dialog]');
@@ -189,13 +211,13 @@
   function inviteHTML(u, password) {
     const o = location.origin;
     const img = n => `${o}/public/images/v2/${n}`;
-    const slugs = u.projects.includes('*') ? Object.keys(PROJECTS) : u.projects.filter(s => PROJECTS[s]);
+    const slugs = (u.projects.includes('*') ? Object.keys(PROJECTS) : u.projects.filter(s => PROJECTS[s])).filter(s => MANIFEST[s]);
     const hello = u.name ? `Dear ${esc(u.name.split(' ')[0])},` : 'Hello,';
     const F = 'font-family:Arial,Helvetica,sans-serif;';
     const step = (n, t, d) => `<tr><td style="vertical-align:top;padding:0 12px 12px 0;width:30px"><div style="width:28px;height:28px;border-radius:14px;background:#D7B46E;color:#10291F;${F}font-weight:bold;font-size:14px;line-height:28px;text-align:center">${n}</div></td>
       <td style="${F}font-size:14px;line-height:1.45;color:#13251D;padding-bottom:12px"><b>${t}</b><br>${d}</td></tr>`;
     const qrs = slugs.map(s => `<td style="padding:8px;text-align:center;vertical-align:top;width:150px">
-        <img src="${img('qr/project-' + s + '.png')}" width="120" height="120" alt="QR code for ${esc(PROJECTS[s])}" style="display:block;margin:0 auto 6px;border:1px solid #E4DED0">
+        <img src="${img(MANIFEST[s].qr + '.png')}" width="120" height="120" alt="QR code for ${esc(PROJECTS[s])}" style="display:block;margin:0 auto 6px;border:1px solid #E4DED0">
         <div style="${F}font-size:13px;font-weight:bold;color:#13251D">${esc(PROJECTS[s])}</div>
         <div style="${F}font-size:11px;color:#5C6B63;word-break:break-all"><a href="${o}/members/projects/${s}/" style="color:#9A7A3A">Open project page</a></div></td>`);
     const rows = []; for (let i = 0; i < qrs.length; i += 3) rows.push('<tr>' + qrs.slice(i, i + 3).join('') + '</tr>');
@@ -228,7 +250,7 @@
     <div style="${F}font-size:12px;color:#5C6B63;margin:0 8px 6px">Each code opens the project page. You will be asked to sign in first if you are not already.</div>
     <table role="presentation" cellpadding="0" cellspacing="0">${rows.join('')}</table></td></tr>` : `<tr><td style="padding:8px 28px;text-align:center"><img src="${img('qr/login.png')}" width="120" height="120" alt="QR code for the sign-in page" style="border:1px solid #E4DED0"><div style="${F}font-size:12px;color:#5C6B63">Scan to sign in</div></td></tr>`}
   <tr><td style="padding:16px 28px 26px;${F}font-size:12px;line-height:1.55;color:#5C6B63;border-top:1px solid #E4DED0">
-    Please keep these details private; the information in the portal is confidential and shared under your confidentiality agreement. If you need help or forget your password, reply to this email or contact <a href="mailto:john@guilgal.org" style="color:#9A7A3A">john@guilgal.org</a>.<br><br>Guilgal International Ltd, registered in England and Wales. Guilgal International does not provide investment, financial or legal advice. Nothing in this invitation is an offer or solicitation.
+    Please keep these details private; the information in the portal is confidential and shared under your confidentiality agreement. If you need help or forget your password, reply to this email or contact <a href="mailto:john@guilgal.org" style="color:#9A7A3A">john@guilgal.org</a>.<br><br>Guilgal International is a trading name of Britcom Trading Limited, registered in England and Wales, company number 15625520. Guilgal International does not provide investment, financial or legal advice. Nothing in this invitation is an offer or solicitation.
   </td></tr>
 </table>`;
   }

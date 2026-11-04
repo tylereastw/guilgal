@@ -15,11 +15,17 @@ from html import escape
 import shutil
 import subprocess
 from pathlib import Path
+import re
 import segno
+import hashlib
+import json
 
 ROOT = Path(__file__).resolve().parent.parent
 SITE = "https://www.guilgal.org"
 EMAIL = "john@guilgal.org"
+MEDIA = "members/media/"   # project-only images, served behind the partner login
+QR_SALT = "gi-qr-7f3c9a1e"  # QR image names are hashed so they do not reveal project names
+LEGAL = "Guilgal International is a trading name of Britcom Trading Limited, registered in England and Wales, company number 15625520."
 IMG = "public/images/v2/"
 DISCLAIMER = ("Guilgal International does not provide investment, financial or legal advice. "
               "Nothing on this site is an offer or solicitation.")
@@ -174,7 +180,7 @@ def footer(p):
     </div>
     <div class="wrap footer__bottom">
       <p class="footer__disclaimer">{DISCLAIMER}</p>
-      <p>Guilgal International Ltd, registered in England and Wales. <a href="{p}privacy/">Privacy</a> · <a href="{p}cookies/">Cookies</a> · <a href="{p}terms/">Terms</a> · <a href="{p}cookies/" data-cookie-settings>Cookie settings</a></p>
+      <p>{LEGAL} <a href="{p}privacy/">Privacy</a> · <a href="{p}cookies/">Cookies</a> · <a href="{p}terms/">Terms</a> · <a href="{p}cookies/" data-cookie-settings>Cookie settings</a></p>
     </div>
   </footer>'''
 
@@ -230,7 +236,7 @@ def strip(items, n=3):
 
 def project_cards(p):
     return '<ul class="pcards">' + "".join(
-        f'''<li class="pcard"><a href="{p}members/projects/{s}/" rel="nofollow">
+        f'''<li class="pcard" data-slug="{s}"><a href="{p}members/projects/{s}/" rel="nofollow">
           <div class="pcard__photo"><img src="{p}{IMG}card-{s}.jpg" alt="" loading="lazy"></div>
           <div class="pcard__body"><strong>{e(n)}</strong><span>{e(c)}</span><i class="arrow-circle">{ico("arrow")}</i></div>
           </a></li>''' for s, n, c in PROJECTS) + "</ul>"
@@ -283,7 +289,7 @@ def contact_block(p, form="contact"):
           <div class="shead"><h2>Get in Touch</h2></div>
           <p class="lead">We welcome enquiries from investors, partners and strategic collaborators worldwide.</p>
           <ul class="contact-list"><li>{dot("mail")}<div><strong>Email us</strong><a href="mailto:{EMAIL}">{EMAIL}</a></div></li></ul>
-          <p class="small" style="margin-top:18px">Guilgal International Ltd, registered in England and Wales.</p>
+          <p class="small" style="margin-top:18px">{LEGAL}</p>
         </div>
         {enquiry_form(p, name=form)}
       </div>
@@ -631,7 +637,6 @@ def login():
 
 def admin():
     p = "../"
-    checks = "".join(f'<label class="check"><input type="checkbox" name="projects" value="{s}"><span>{e(n)}</span></label>' for s, n, _ in PROJECTS)
     body = f'''    <section class="section admin"><div class="wrap">
       <h1>Partner Access Admin</h1>
       <div data-admin-setup hidden>
@@ -691,12 +696,12 @@ def admin():
 
         <div class="adm-panel" data-panel="links" hidden>
           <div class="adm-head"><div><h2>Project links &amp; QR codes</h2><p class="small">Each link opens the project page after the partner signs in. Anyone without access is taken to the login screen first. Invitations include these automatically.</p></div></div>
-          <ul class="qrs">{{QRLIST}}</ul>
+          <ul class="qrs" data-qrs></ul>
         </div>
 
         <div class="adm-panel" data-panel="briefs" hidden>
           <div class="adm-head"><div><h2>Project briefs</h2><p class="small">Briefs are generated automatically from each project page every time the site is built, so they always match the page. Nothing needs uploading.</p></div></div>
-          <ul class="briefs">{{BRIEFLIST}}</ul>
+          <ul class="briefs" data-briefs></ul>
         </div>
       </div>
 
@@ -710,7 +715,7 @@ def admin():
           <fieldset class="checks">
             <legend>Which projects can they see?</legend>
             <label class="check check--all"><input type="checkbox" name="projects" value="*"><span>All projects, including any added later</span></label>
-            {checks}
+            <div class="checks__list" data-project-checks></div>
           </fieldset>
           <fieldset class="checks">
             <legend>Password</legend>
@@ -746,20 +751,6 @@ def admin():
       </dialog>
     </div></section>
 '''
-    qr("login/", "login")
-    qrs = []
-    for slug, name, _ in PROJECTS:
-        code = qr(f"members/projects/{slug}/", f"project-{slug}")
-        url = f"{SITE}/members/projects/{slug}/"
-        png = code.replace(".svg", ".png")
-        qrs.append(f'''<li><img src="{p}{IMG}{code}" alt="QR code for {e(name)}" width="120" height="120"><div><strong>{e(name)}</strong>
-          <code>{url}</code><span><a class="btn btn--sm btn--gold" href="{p}{IMG}{png}" download="Guilgal-International-{slug}-QR.png">Download PNG</a>
-          <a class="btn btn--sm btn--line-dark" href="{p}{IMG}{code}" download="Guilgal-International-{slug}-QR.svg">SVG</a>
-          <button class="btn btn--sm btn--line-dark" type="button" data-copy="{url}">Copy link</button></span></div></li>''')
-    body = body.replace("{QRLIST}", "".join(qrs))
-    body = body.replace("{BRIEFLIST}", "".join(
-        f'<li><strong>{e(n)}</strong><span><a class="btn btn--sm btn--gold" href="{p}members/projects/{s}/brief.pdf" target="_blank" rel="noopener">Open PDF</a></span></li>'
-        for s, n, _ in PROJECTS))
     page("admin/", "Admin | Guilgal International", "Admin.", "", body, p, noindex=True, scripts=["js/admin.js"])
 
 
@@ -977,12 +968,13 @@ def project_page(slug, card_name):
 
 
 BRIEF_CSS = """
-@page { size: A4; margin: 0; }
+@page { size: A4; margin: 12mm 0 10mm; }
+@page :first { margin: 0 0 10mm; }
 * { box-sizing: border-box; }
 html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 body { margin: 0; font: 9.6pt/1.5 "Open Sans", Arial, sans-serif; color: #13251D; background: #fff; }
 h1, h2, h3 { font-family: "Montserrat", Arial, sans-serif; margin: 0; }
-.cover { position: relative; height: 98mm; color: #fff; background: #10291F; overflow: hidden; }
+.cover { position: relative; height: 90mm; color: #fff; background: #10291F; overflow: hidden; }
 .cover img.bg { position: absolute; right: 0; top: 0; width: 70%; height: 100%; object-fit: cover; }
 .cover::before { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(90deg, #10291F 28%, rgba(16,41,31,.85) 45%, rgba(16,41,31,.2) 80%); }
 .cover .in { position: relative; z-index: 2; padding: 12mm 14mm; height: 100%; display: flex; flex-direction: column; }
@@ -1033,7 +1025,7 @@ td:first-child { font-weight: 700; }
 .tl b { font: 700 8pt "Montserrat", Arial, sans-serif; }
 .small { font-size: 7.4pt; color: #3F4A44; }
 .keep { break-inside: avoid; }
-.foot { margin-top: 6mm; background: #13251D; color: rgba(255,255,255,.85); padding: 6mm 14mm; font-size: 7.6pt; break-inside: avoid; }
+.foot { margin-top: 4mm; background: #13251D; color: rgba(255,255,255,.85); padding: 4mm 14mm; font-size: 7.2pt; break-inside: avoid; }
 .foot b { color: #D7B46E; font-family: "Montserrat", Arial, sans-serif; }
 .foot p { margin: 0 0 1.5mm; }
 """
@@ -1090,7 +1082,6 @@ def brief_page(slug, card_name):
   <p class="lead">{e(d['lead'])}</p><ul class="pills">{pills}</ul>
 </div></section>
 <main class="page">
-  <p class="note"><b>Confidential. For invited partners only.</b> {INDICATIVE} Facts and figures are draft and require competent technical review.</p>
   {role}{note}{facts}
   <div class="cols"><div><p class="label">Project overview</p>{''.join(f'<p>{e(x)}</p>' for x in d['overview'])}</div>
     <div><p class="label">Key highlights</p><ul class="hl">{''.join(f'<li>{e(t)}</li>' for _, t in d['highlights'])}</ul></div></div>
@@ -1103,7 +1094,7 @@ def brief_page(slug, card_name):
 <footer class="foot">
   <p><b>Contact Guilgal International</b> · John Boardman, Director · {EMAIL} · {SITE}</p>
   <p>{DISCLAIMER} {INDICATIVE}</p>
-  <p>Guilgal International Ltd, registered in England and Wales. Generated from the project page on {generated}.</p>
+  <p>{LEGAL} Generated from the project page on {generated}.</p>
 </footer></body></html>"""
     assert "—" not in html, f"em dash in brief {slug}"
     out = ROOT / f"members/projects/{slug}/brief.html"
@@ -1115,7 +1106,7 @@ def legal(slug, title):
     body = hero(p, "about-river.jpg", f'<h1>{e(title)}</h1>') + f'''
     <section class="section"><div class="wrap" style="max-width:860px">
       <p class="placeholder">[{e(title)} to be supplied before launch.]</p>
-      <p>Guilgal International Ltd, registered in England and Wales. Contact: <a href="mailto:{EMAIL}">{EMAIL}</a>.</p>
+      <p>{LEGAL} Contact: <a href="mailto:{EMAIL}">{EMAIL}</a>.</p>
       <p class="small">{DISCLAIMER}</p></div></section>
 '''
     page(f"{slug}/", f"{title} | Guilgal International", f"{title} for Guilgal International.", "", body, p)
@@ -1132,7 +1123,7 @@ def cookie_policy():
     table = "".join(f"<tr><td>{e(a)}</td><td>{e(b)}</td><td>{e(c)}</td><td>{e(d)}</td><td>{e(x)}</td></tr>" for a, b, c, d, x in rows)
     body = hero(p, "about-river.jpg", "<h1>Cookie Policy</h1>") + f'''
     <section class="section"><div class="wrap legal">
-      <p class="lead">This policy explains how Guilgal International Ltd uses cookies and similar technologies on {SITE}.</p>
+      <p class="lead">This policy explains how Britcom Trading Limited, trading as Guilgal International ("we"), uses cookies and similar technologies on {SITE}.</p>
       <h2>What cookies are</h2>
       <p>Cookies are small files stored on your device by websites you visit. Some are essential for a site to work; others help the site owner understand how it is used.</p>
       <h2>Cookies we use</h2>
@@ -1144,7 +1135,7 @@ def cookie_policy():
       <h2>Changing your choice</h2>
       <p>You can change your choice at any time using <a href="#" data-cookie-settings>Cookie settings</a> (also in the footer of every page), or by clearing cookies in your browser.</p>
       <h2>Contact</h2>
-      <p>Questions about this policy: <a href="mailto:{EMAIL}">{EMAIL}</a>. Guilgal International Ltd, registered in England and Wales.</p>
+      <p>Questions about this policy: <a href="mailto:{EMAIL}">{EMAIL}</a>. {LEGAL}</p>
       <p class="small">Last updated {date.today().strftime("%-d %B %Y")}.</p>
     </div></section>
 '''
@@ -1158,6 +1149,28 @@ def seo():
     (ROOT / "robots.txt").write_text(f"User-agent: *\nDisallow: /members/\nDisallow: /admin/\nDisallow: /login/\nDisallow: /archive/\n\nSitemap: {SITE}/sitemap.xml\n")
 
 
+def qr_name(slug):
+    return "p" + hashlib.sha256((QR_SALT + slug).encode()).hexdigest()[:16]
+
+
+def private_media():
+    """Point private pages at members/media/ for project-only images, write the QR codes
+    under hashed names and a private manifest the admin panel reads after sign-in."""
+    media = ROOT / MEDIA
+    names = {f.name for f in media.iterdir() if f.is_file()}
+    for f in (ROOT / "members").rglob("*.html"):
+        h = f.read_text()
+        h2 = re.sub(r"public/images/v2/([\w.-]+)", lambda m: (MEDIA + m.group(1)) if m.group(1) in names else m.group(0), h)
+        if h2 != h:
+            f.write_text(h2)
+    qr("login/", "login")
+    manifest = {}
+    for slug, name, _ in PROJECTS:
+        code = qr(f"members/projects/{slug}/", qr_name(slug))
+        manifest[slug] = {"name": name, "qr": code[:-4], "url": f"{SITE}/members/projects/{slug}/"}
+    (media / "projects.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=1))
+
+
 if __name__ == "__main__":
     # news() is paused for now; /news/ redirects home (netlify.toml)
     home(); about(); team(); investors(); contact(); members(); login(); admin(); thanks()
@@ -1168,6 +1181,7 @@ if __name__ == "__main__":
         legal(s, t)
     cookie_policy()
     seo()
+    private_media()
     if shutil.which("node"):
         subprocess.run(["node", str(ROOT / "tools" / "briefs.mjs")], check=True)
     else:

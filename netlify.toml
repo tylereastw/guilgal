@@ -1,5 +1,8 @@
 [build]
-  publish = "."
+  # Publish only the website files (tools/stage.mjs copies them into dist/), so source,
+  # tooling and notes are never served.
+  command = "node tools/stage.mjs"
+  publish = "dist"
 
 # Projects are private. Old /projects/ links go to the partner area, where the gate
 # sends anyone not signed in to the login screen and returns them here afterwards.
