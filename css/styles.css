@@ -642,3 +642,10 @@ body:has(.admin) .admin { padding-top: 40px; }
 
 /* mineral photos: fade the edges so the photo background melts into the section */
 .minerals img { -webkit-mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 62%, transparent 100%); mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 62%, transparent 100%); }
+
+/* 404 page */
+.nf-links { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+.nf-links a { display: flex; align-items: center; gap: 14px; height: 100%; padding: 18px; background: var(--white); border: 1px solid var(--line); border-radius: 6px; text-decoration: none; color: var(--ink); transition: transform .2s, box-shadow .2s; }
+.nf-links a:hover { transform: translateY(-2px); box-shadow: 0 14px 28px -20px rgba(0,0,0,.45); }
+.nf-links strong { display: block; color: var(--green); font-size: 1rem; }
+.nf-links span span, .nf-links a > span:last-child { font-size: .88rem; color: var(--ink-soft); }

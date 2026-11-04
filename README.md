@@ -106,6 +106,16 @@ and shown once), change their projects, reset their password (signs them out eve
 disable or delete them, preview each project's generated brief, and download each project's QR
 code and link to send on. After adding a partner the panel shows their login details to copy or email.
 
+
+### More admins
+
+Sign in to `/admin/` and open the **Admins** tab. Enter the person's email and name and click
+**Create set-up link**, then send them the link (Copy link or Open email draft). It works once and
+expires in 7 days. They choose their own password (at least 12 characters) and scan their own
+authenticator QR code. Afterwards they sign in with email, password and code. The main admin
+(ADMIN_PASSWORD, email left blank) always keeps access. From the Admins tab you can pause,
+resume, reset (new set-up link) or remove any other admin.
+
 ## Forms
 The contact and investor enquiry forms are Netlify Forms (`data-netlify`, with a honeypot).
 Submissions appear in Netlify under Forms; turn on email notifications there
