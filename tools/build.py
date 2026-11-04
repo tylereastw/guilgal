@@ -511,29 +511,34 @@ def investors():
     inner = f'''<h1>Investor Centre &amp; Contact</h1>
           <p class="hero__meta">Partner with Guilgal International: Unlock the Value of Africa</p>
           <p class="hero__sub">Find out how we partner, request access to private project information and get in touch with our team.</p>
-          <ul class="pills"><li><a class="pill" href="#access">Partner access</a></li><li><a class="pill" href="#why">How we partner</a></li><li><a class="pill" href="{p}news/">News &amp; updates</a></li><li><a class="pill" href="#enquiry">Contact us</a></li></ul>'''
+          <ul class="pills"><li><a class="pill" href="#why">Why partner with us</a></li><li><a class="pill" href="#access">Partner access</a></li><li><a class="pill" href="{p}news/">News &amp; updates</a></li><li><a class="pill" href="#enquiry">Contact us</a></li></ul>'''
     why = [("diamond", "Vetted Opportunities", "Projects are reviewed before they are introduced to partners."),
            ("handshake", "Local Relationships", "Established working relationships with project owners and stakeholders."),
            ("people", "Technical Networks", "Access to geological, technical and commercial specialists."),
            ("leaf", "Responsible Development", "A focus on responsible, structured project progression."),
            ("chart", "Long-Term Partnerships", "Durable relationships rather than single transactions.")]
     body = hero(p, "investors-hero.jpg", inner) + f'''
-    <section class="section" id="portfolio">
-      <div class="wrap grid-2 why-wrap" style="grid-template-columns:1fr 1.15fr;align-items:start">
-        <div id="access"><div class="shead"><h2>Partner Access</h2></div>
-          <p class="lead">Project information, maps, technical summaries and milestones are private. Each project has its own password-protected page, shared directly with invited partners.</p>
-          <ol class="steps">
-            <li><b>1</b><strong>Make an enquiry</strong><span>Tell us about your organisation and the opportunities you are interested in.</span></li>
-            <li><b>2</b><strong>Confidentiality agreement</strong><span>We send a confidentiality agreement for signature.</span></li>
-            <li><b>3</b><strong>Approval</strong><span>Once signed and approved, we send the project link and access details.</span></li>
-          </ol>
-          <p style="margin-top:18px"><a class="btn btn--gold" href="#enquiry">Request access {ico("arrow")}</a></p></div>
-        <div id="why"><div class="shead"><h2>Why Partner with Guilgal International?</h2></div>
-          <div class="why-grid">
-            <ul class="why">{"".join(f"<li>{dot(i)}<div><strong>{t}</strong><span>{d}</span></div></li>" for i, t, d in why)}</ul>
-            <div class="quote-panel"><img src="{p}{IMG}africa-gold.jpg" alt=""><blockquote>"Together we can unlock Africa's mineral and energy potential."</blockquote></div>
-          </div>
+    <section class="section" id="why">
+      <div class="wrap">
+        <div class="shead"><h2>Why Partner with Guilgal International?</h2></div>
+        <p class="lead">Guilgal International brings together vetted opportunities, local relationships and technical expertise, so partners can engage with African projects in a structured, responsible way.</p>
+        <ul class="why-row">{"".join(f"<li>{dot(i, True)}<strong>{t}</strong><span class='why-row__text'>{d}</span></li>" for i, t, d in why)}</ul>
+        <div class="quote-band"><img src="{p}{IMG}africa-gold.jpg" alt=""><blockquote>"Together we can unlock Africa's mineral and energy potential."</blockquote></div>
+      </div>
+    </section>
+
+    <section class="section section--cream2" id="access">
+      <div class="wrap">
+        <div class="access-head">
+          <div><div class="shead"><h2>Partner Access</h2></div>
+            <p class="lead">Project information, maps, technical summaries and milestones are private. Each project has its own password-protected page, shared directly with invited partners.</p></div>
+          <a class="btn btn--gold" href="#enquiry">Request access {ico("arrow")}</a>
         </div>
+        <ol class="steps steps--row">
+          <li><b>1</b><strong>Make an enquiry</strong><span>Tell us about your organisation and the opportunities you are interested in.</span></li>
+          <li><b>2</b><strong>Confidentiality agreement</strong><span>We send a confidentiality agreement for signature.</span></li>
+          <li><b>3</b><strong>Approval</strong><span>Once signed and approved, we send the project link and access details.</span></li>
+        </ol>
       </div>
     </section>
 ''' + contact_block(p, "investor-enquiry").replace('id="contact-us"', 'id="enquiry"') + f'''
