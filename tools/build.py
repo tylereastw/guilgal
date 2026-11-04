@@ -1315,8 +1315,8 @@ def cookie_policy():
 def seo():
     pub = ["", "about/", "about/team/", "investors/", "contact/", "privacy/", "cookies/", "terms/"]
     (ROOT / "sitemap.xml").write_text('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
-                                      "".join(f"  <url><loc>{SITE}/{u}</loc></url>\n" for u in pub) + "</urlset>\n")
-    (ROOT / "robots.txt").write_text(f"User-agent: *\nDisallow: /members/\nDisallow: /admin/\nDisallow: /login/\nDisallow: /archive/\n\nSitemap: {SITE}/sitemap.xml\n")
+                                      "".join(f"  <url><loc>{SITE}/{u}</loc><lastmod>{date.today().isoformat()}</lastmod></url>\n" for u in pub) + "</urlset>\n")
+    (ROOT / "robots.txt").write_text(f"User-agent: *\nDisallow: /members/\nDisallow: /admin/\nDisallow: /login/\nDisallow: /archive/\nDisallow: /api/\nDisallow: /thanks/\n\nSitemap: {SITE}/sitemap.xml\n")
 
 
 def qr_name(slug):
