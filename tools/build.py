@@ -33,8 +33,6 @@ MEDIA = "members/media/"   # project-only images, served behind the partner logi
 QR_SALT = "gi-qr-7f3c9a1e"  # QR image names are hashed so they do not reveal project names
 LEGAL = "Guilgal International is a trading name of Britcom Trading Limited, registered in England and Wales, company number 15625520."
 IMG = "public/images/v2/"
-DISCLAIMER = ("Guilgal International does not provide investment, financial or legal advice. "
-              "Nothing on this site is an offer or solicitation.")
 INDICATIVE = "Information is indicative and subject to technical review and agreement."
 
 
@@ -185,7 +183,6 @@ def footer(p):
       </div>
     </div>
     <div class="wrap footer__bottom">
-      <p class="footer__disclaimer">{DISCLAIMER}</p>
       <p>{LEGAL} <a href="{p}privacy/">Privacy</a> · <a href="{p}cookies/">Cookies</a> · <a href="{p}terms/">Terms</a> · <a href="{p}cookies/" data-cookie-settings>Cookie settings</a></p>
     </div>
   </footer>'''
@@ -1159,7 +1156,7 @@ def brief_page(slug, card_name):
 </main>
 <footer class="foot">
   <p><b>Contact Guilgal International</b> · John Boardman, Director · {EMAIL} · {SITE}</p>
-  <p>{DISCLAIMER} {INDICATIVE}</p>
+  <p>{INDICATIVE}</p>
   <p>{LEGAL} Generated from the project page on {generated}.</p>
 </footer></body></html>"""
     assert "—" not in html, f"em dash in brief {slug}"
