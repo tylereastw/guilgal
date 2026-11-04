@@ -8,6 +8,7 @@
   <link rel="canonical" href="https://www.guilgal.org/news/">
   <link rel="preload" href="../assets/fonts/v2/Montserrat-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="../assets/fonts/v2/OpenSans-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="icon" href="../public/images/Guilgal_Favicon.ico" sizes="any">
   <link rel="stylesheet" href="../css/fonts.css">
   <link rel="stylesheet" href="../css/styles.css">
 </head>
@@ -19,7 +20,7 @@
       <span class="brand__text"><span class="brand__name">GUILGAL</span><span class="brand__intl">INTERNATIONAL</span><span class="brand__tag">EXPLORATION | DEVELOPMENT | PARTNERSHIPS</span></span>
     </a>
     <nav class="nav__links" id="menu" aria-label="Main">
-      <ul class="nav__list"><li class="nav__item"><a href="../">Home</a></li><li class="nav__item nav__item--has-sub"><a href="../about/">About</a><button class="nav__subtoggle" aria-expanded="false" aria-label="Show About pages"><i></i></button><ul class="nav__sub"><li><a href="../about/">About Guilgal International</a></li><li><a href="../about/#our-name">Our Name</a></li><li><a href="../about/team/">Meet the Team</a></li></ul></li><li class="nav__item"><a href="../projects/">Projects</a></li><li class="nav__item"><a href="../investors/">Investors</a></li><li class="nav__item"><a href="../news/" aria-current="page">News &amp; Milestones</a></li><li class="nav__item"><a href="../contact/">Contact</a></li></ul>
+      <ul class="nav__list"><li class="nav__item"><a href="../">Home</a></li><li class="nav__item nav__item--has-sub"><a href="../about/">About</a><button class="nav__subtoggle" aria-expanded="false" aria-label="Show About pages"><i></i></button><ul class="nav__sub"><li><a href="../about/">About Guilgal International</a></li><li><a href="../about/#our-name">Our Name</a></li><li><a href="../about/team/">Meet the Team</a></li></ul></li><li class="nav__item"><a href="../investors/">Investors</a></li><li class="nav__item"><a href="../news/" aria-current="page">News &amp; Milestones</a></li><li class="nav__item"><a href="../contact/">Contact</a></li></ul>
       <a class="btn btn--gold nav__cta" href="../investors/#enquiry">Investor Enquiries</a>
     </nav>
     <button class="burger" aria-expanded="false" aria-controls="menu" aria-label="Menu"><span></span><span></span><span></span></button>
@@ -38,7 +39,6 @@
       <div class="wrap">
         <div class="filters" role="group" aria-label="Filter updates">
           <div class="chips"><button type="button" class="chip is-on" data-kind="all" aria-pressed="true">All</button><button type="button" class="chip" data-kind="news" aria-pressed="false">News</button><button type="button" class="chip" data-kind="insight" aria-pressed="false">Insights</button></div>
-          <label>Project <select data-project-filter><option value="">All projects</option><option value="pumba">Pumba Copper &amp; Gold</option><option value="alpha">Alpha Tantalum &amp; Tin</option><option value="nizi-baluma">Nizi–Baluma Gold</option><option value="ndela-mpaza">Ndela–Mpaza</option><option value="hydropower">Hydropower Projects</option><option value="tumfa">Ghana Tumfa Gold</option></select></label>
         </div>
         <ul class="ncards" data-feed><li class="ncard" data-kind="news" data-project=""><a href="../news/">
           <div class="ncard__photo"><img src="../public/images/v2/about-who.jpg" alt="" loading="lazy"></div>
@@ -57,7 +57,7 @@
       </div>
     </section>
     <section class="section" id="contact-us">
-      <div class="wrap contact3">
+      <div class="wrap contact2">
         <div>
           <div class="shead"><h2>Get in Touch</h2></div>
           <p class="lead">We welcome enquiries from investors, partners and strategic collaborators worldwide.</p>
@@ -65,25 +65,17 @@
           <p class="small" style="margin-top:18px">Guilgal International Ltd, registered in England and Wales.</p>
         </div>
         <div class="formcard"><h3 class="formcard__head">Send Us a Message</h3>
-        <form class="form" novalidate data-form>
+        <form class="form" name="contact" method="POST" action="../thanks/" data-netlify="true" netlify-honeypot="company_website" novalidate data-form>
+          <input type="hidden" name="form-name" value="contact">
+          <p class="sr"><label>Leave this empty <input name="company_website" tabindex="-1" autocomplete="off"></label></p>
           <div class="form__row"><label class="field"><span>Name*</span><input name="name" autocomplete="name" required></label>
           <label class="field"><span>Email*</span><input type="email" name="email" autocomplete="email" required></label></div>
-          <div class="form__row"><label class="field"><span>Organisation</span><input name="organisation" autocomplete="organization"></label><label class="field"><span>Country</span><input name="country" autocomplete="country-name"></label></div><label class="field"><span>Area of interest*</span><select name="interest" required><option value="">Select a project</option><option value="pumba">Pumba Copper &amp; Gold</option><option value="alpha">Alpha Tantalum &amp; Tin</option><option value="nizi-baluma">Nizi–Baluma Gold</option><option value="ndela-mpaza">Ndela–Mpaza</option><option value="hydropower">Hydropower Projects</option><option value="tumfa">Ghana Tumfa Gold</option><option value="general">General partnership enquiry</option></select></label>
+          <div class="form__row"><label class="field"><span>Organisation</span><input name="organisation" autocomplete="organization"></label><label class="field"><span>Country</span><input name="country" autocomplete="country-name"></label></div><label class="field"><span>Area of interest*</span><select name="interest" required><option value="">Select an area</option><option>Copper and gold</option><option>Tantalum, tin and critical minerals</option><option>Gold</option><option>Energy and infrastructure</option><option>Partner access request</option><option>General partnership enquiry</option></select></label>
           <label class="field"><span>Your enquiry*</span><textarea name="message" rows="4" required></textarea></label>
           <label class="consent"><input type="checkbox" name="consent" required><span>I agree that Guilgal International may store and process these details to respond to my enquiry. See the <a href="../privacy/">Privacy Policy</a>.*</span></label>
           <p class="form__msg" role="alert" hidden></p>
           <button class="btn btn--gold" type="submit">Submit enquiry <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
         </form></div>
-        <div class="stay">
-          <div>
-            <div class="shead"><h2>Stay Informed</h2></div>
-            <p class="small">Subscribe for project updates, news and milestones.</p>
-            <form class="subscribe" novalidate data-form><label class="sr" for="sub-email">Email address</label>
-              <input id="sub-email" type="email" name="email" placeholder="Your email address" required><button class="btn btn--gold" type="submit">Subscribe</button></form>
-            <p class="form__msg small" role="alert" hidden></p>
-          </div>
-          <figure class="qr qr--stack"><img class="qr__code" src="../public/images/v2/qr/news.svg" alt="QR code linking to https://www.guilgal.org/news/" width="112" height="112"><figcaption class="qr__title">Scan for updates</figcaption></figure>
-        </div>
       </div>
     </section>
 
@@ -98,7 +90,7 @@
         <p class="footer__lines">Mining • Critical Minerals • Project Development • Strategic Partnerships</p>
         <p class="footer__motto">Connecting Opportunities. Developing Partnerships.</p>
       </div>
-      <nav class="footer__nav" aria-label="Footer"><a href="../about/">About</a><a href="../projects/">Projects</a><a href="../investors/">Investors</a><a href="../news/">News &amp; Milestones</a><a href="../contact/">Contact</a><a href="mailto:john@guilgal.org">john@guilgal.org</a></nav>
+      <nav class="footer__nav" aria-label="Footer"><a href="../about/">About</a><a href="../investors/">Investors</a><a href="../news/">News &amp; Milestones</a><a href="../contact/">Contact</a><a href="../login/">Partner login</a><a href="mailto:john@guilgal.org">john@guilgal.org</a></nav>
     </div>
     <div class="wrap footer__bottom">
       <p class="footer__disclaimer">Guilgal International does not provide investment, financial or legal advice. Nothing on this site is an offer or solicitation.</p>

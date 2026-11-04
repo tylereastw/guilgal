@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin | Guilgal International</title>
+  <meta name="description" content="Admin.">
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <link rel="preload" href="../assets/fonts/v2/Montserrat-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../assets/fonts/v2/OpenSans-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="icon" href="../public/images/Guilgal_Favicon.ico" sizes="any">
+  <link rel="stylesheet" href="../css/fonts.css">
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to main content</a>
+  <header class="nav" id="top">
+    <a class="brand" href="../" aria-label="Guilgal International home">
+      <img class="brand__emblem" src="../public/images/v2/logo-emblem.jpg" alt="" width="74" height="74">
+      <span class="brand__text"><span class="brand__name">GUILGAL</span><span class="brand__intl">INTERNATIONAL</span><span class="brand__tag">EXPLORATION | DEVELOPMENT | PARTNERSHIPS</span></span>
+    </a>
+    <nav class="nav__links" id="menu" aria-label="Main">
+      <ul class="nav__list"><li class="nav__item"><a href="../">Home</a></li><li class="nav__item nav__item--has-sub"><a href="../about/">About</a><button class="nav__subtoggle" aria-expanded="false" aria-label="Show About pages"><i></i></button><ul class="nav__sub"><li><a href="../about/">About Guilgal International</a></li><li><a href="../about/#our-name">Our Name</a></li><li><a href="../about/team/">Meet the Team</a></li></ul></li><li class="nav__item"><a href="../investors/">Investors</a></li><li class="nav__item"><a href="../news/">News &amp; Milestones</a></li><li class="nav__item"><a href="../contact/">Contact</a></li></ul>
+      <a class="btn btn--gold nav__cta" href="../investors/#enquiry">Investor Enquiries</a>
+    </nav>
+    <button class="burger" aria-expanded="false" aria-controls="menu" aria-label="Menu"><span></span><span></span><span></span></button>
+  </header>
+  <main id="main">
+    <section class="section admin"><div class="wrap">
+      <h1>Partner Access Admin</h1>
+      <div data-admin-setup hidden>
+        <div class="formcard" style="max-width:560px"><h3 class="formcard__head">First-time setup: authenticator</h3>
+          <form class="form" data-setup-start novalidate>
+            <p class="small">Admin sign-in uses the admin password plus a 6-digit code from an authenticator app on your phone (Google Authenticator, Microsoft Authenticator or 1Password). This is done once.</p>
+            <label class="field"><span>Admin password*</span><input type="password" name="password" autocomplete="current-password" required></label>
+            <p class="form__msg" role="alert" hidden></p>
+            <button class="btn btn--gold" type="submit">Continue <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+          </form>
+          <form class="form" data-setup-confirm hidden novalidate>
+            <p class="small"><strong>1.</strong> In your authenticator app, tap + and scan this code.</p>
+            <div class="setup-qr" data-setup-qr></div>
+            <p class="small">Can't scan? Choose "Enter a setup key" and type: <code data-setup-key></code></p>
+            <p class="small"><strong>2.</strong> Enter the 6-digit code the app now shows for Guilgal International.</p>
+            <label class="field"><span>Authenticator code*</span><input name="code" inputmode="numeric" maxlength="6" autocomplete="one-time-code" required></label>
+            <p class="form__msg" role="alert" hidden></p>
+            <button class="btn btn--gold" type="submit">Finish setup <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+          </form></div>
+      </div>
+      <div data-admin-login hidden>
+        <div class="formcard" style="max-width:460px"><h3 class="formcard__head">Admin sign in</h3>
+          <form class="form" data-admin-signin novalidate>
+            <label class="field"><span>Admin password*</span><input type="password" name="password" autocomplete="current-password" required></label>
+            <label class="field"><span>Authenticator code*</span><input name="code" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="one-time-code" required></label>
+            <p class="form__msg" role="alert" hidden></p>
+            <button class="btn btn--gold" type="submit">Sign in <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+          </form></div>
+      </div>
+      <div data-admin-app hidden>
+        <p><button class="btn btn--line-dark btn--sm" type="button" data-admin-logout>Sign out</button></p>
+        <div class="grid-2" style="align-items:start">
+          <div class="formcard"><h3 class="formcard__head">Add or update a partner</h3>
+            <form class="form" data-user-form novalidate>
+              <div class="form__row"><label class="field"><span>Email*</span><input type="email" name="email" required></label>
+              <label class="field"><span>Name</span><input name="name"></label></div>
+              <fieldset class="checks"><legend>Projects</legend><label class="check"><input type="checkbox" name="projects" value="*"><span>All projects</span></label><label class="check"><input type="checkbox" name="projects" value="pumba"><span>Pumba Copper &amp; Gold</span></label><label class="check"><input type="checkbox" name="projects" value="alpha"><span>Alpha Tantalum &amp; Tin</span></label><label class="check"><input type="checkbox" name="projects" value="nizi-baluma"><span>Nizi–Baluma Gold</span></label><label class="check"><input type="checkbox" name="projects" value="ndela-mpaza"><span>Ndela–Mpaza</span></label><label class="check"><input type="checkbox" name="projects" value="hydropower"><span>Hydropower Projects</span></label><label class="check"><input type="checkbox" name="projects" value="tumfa"><span>Ghana Tumfa Gold</span></label></fieldset>
+              <label class="field"><span>Password (leave blank to generate one for new partners, or keep the current one)</span><input name="password" autocomplete="new-password"></label>
+              <label class="check"><input type="checkbox" name="resetPassword"><span>Generate a new password (signs the partner out everywhere)</span></label>
+              <label class="check"><input type="checkbox" name="disabled"><span>Disable this account</span></label>
+              <p class="form__msg" role="alert" hidden></p>
+              <button class="btn btn--gold" type="submit">Save partner <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+            </form></div>
+          <div><h2>Project briefs</h2><p class="small">Upload a PDF for each project. Partners with access download it from the project page.</p>
+            <ul class="briefs" data-briefs></ul></div>
+        </div>
+        <h2 style="margin-top:40px">Project links and QR codes</h2>
+        <p class="small">Send these to partners with access. Each link opens the project page after the partner signs in; anyone without access is asked to log in.</p>
+        <ul class="qrs"><li><img src="../public/images/v2/qr/project-pumba.svg" alt="QR code for Pumba Copper &amp; Gold" width="120" height="120"><div><strong>Pumba Copper &amp; Gold</strong>
+          <code>https://www.guilgal.org/members/projects/pumba/</code><span><a class="btn btn--sm btn--gold" href="../public/images/v2/qr/project-pumba.png" download="Guilgal-International-pumba-QR.png">Download PNG</a>
+          <a class="btn btn--sm btn--line-dark" href="../public/images/v2/qr/project-pumba.svg" download="Guilgal-International-pumba-QR.svg">SVG</a>
+          <button class="btn btn--sm btn--line-dark" type="button" data-copy="https://www.guilgal.org/members/projects/pumba/">Copy link</button></span></div></li><li><img src="../public/images/v2/qr/project-alpha.svg" alt="QR code for Alpha Tantalum &amp; Tin" width="120" height="120"><div><strong>Alpha Tantalum &amp; Tin</strong>
+          <code>https://www.guilgal.org/members/projects/alpha/</code><span><a class="btn btn--sm btn--gold" href="../public/images/v2/qr/project-alpha.png" download="Guilgal-International-alpha-QR.png">Download PNG</a>
+          <a class="btn btn--sm btn--line-dark" href="../public/images/v2/qr/project-alpha.svg" download="Guilgal-International-alpha-QR.svg">SVG</a>
+          <button class="btn btn--sm btn--line-dark" type="button" data-copy="https://www.guilgal.org/members/projects/alpha/">Copy link</button></span></div></li><li><img src="../public/images/v2/qr/project-nizi-baluma.svg" alt="QR code for Nizi–Baluma Gold" width="120" height="120"><div><strong>Nizi–Baluma Gold</strong>
+          <code>https://www.guilgal.org/members/projects/nizi-baluma/</code><span><a class="btn btn--sm btn--gold" href="../public/images/v2/qr/project-nizi-baluma.png" download="Guilgal-International-nizi-baluma-QR.png">Download PNG</a>
+          <a class="btn btn--sm btn--line-dark" href="../public/images/v2/qr/project-nizi-baluma.svg" download="Guilgal-International-nizi-baluma-QR.svg">SVG</a>
+          <button class="btn btn--sm btn--line-dark" type="button" data-copy="https://www.guilgal.org/members/projects/nizi-baluma/">Copy link</button></span></div></li><li><img src="../public/images/v2/qr/project-ndela-mpaza.svg" alt="QR code for Ndela–Mpaza" width="120" height="120"><div><strong>Ndela–Mpaza</strong>
+          <code>https://www.guilgal.org/members/projects/ndela-mpaza/</code><span><a class="btn btn--sm btn--gold" href="../public/images/v2/qr/project-ndela-mpaza.png" download="Guilgal-International-ndela-mpaza-QR.png">Download PNG</a>
+          <a class="btn btn--sm btn--line-dark" href="../public/images/v2/qr/project-ndela-mpaza.svg" download="Guilgal-International-ndela-mpaza-QR.svg">SVG</a>
+          <button class="btn btn--sm btn--line-dark" type="button" data-copy="https://www.guilgal.org/members/projects/ndela-mpaza/">Copy link</button></span></div></li><li><img src="../public/images/v2/qr/project-hydropower.svg" alt="QR code for Hydropower Projects" width="120" height="120"><div><strong>Hydropower Projects</strong>
+          <code>https://www.guilgal.org/members/projects/hydropower/</code><span><a class="btn btn--sm btn--gold" href="../public/images/v2/qr/project-hydropower.png" download="Guilgal-International-hydropower-QR.png">Download PNG</a>
+          <a class="btn btn--sm btn--line-dark" href="../public/images/v2/qr/project-hydropower.svg" download="Guilgal-International-hydropower-QR.svg">SVG</a>
+          <button class="btn btn--sm btn--line-dark" type="button" data-copy="https://www.guilgal.org/members/projects/hydropower/">Copy link</button></span></div></li><li><img src="../public/images/v2/qr/project-tumfa.svg" alt="QR code for Ghana Tumfa Gold" width="120" height="120"><div><strong>Ghana Tumfa Gold</strong>
+          <code>https://www.guilgal.org/members/projects/tumfa/</code><span><a class="btn btn--sm btn--gold" href="../public/images/v2/qr/project-tumfa.png" download="Guilgal-International-tumfa-QR.png">Download PNG</a>
+          <a class="btn btn--sm btn--line-dark" href="../public/images/v2/qr/project-tumfa.svg" download="Guilgal-International-tumfa-QR.svg">SVG</a>
+          <button class="btn btn--sm btn--line-dark" type="button" data-copy="https://www.guilgal.org/members/projects/tumfa/">Copy link</button></span></div></li></ul>
+        <h2 style="margin-top:40px">Partners</h2>
+        <div class="table-scroll"><table class="dtable" data-users><thead><tr><th>Email</th><th>Name</th><th>Projects</th><th>Status</th><th>Last login</th><th></th></tr></thead><tbody></tbody></table></div>
+      </div>
+    </div></section>
+
+  </main>
+  <footer class="footer">
+    <div class="wrap footer__top">
+      <div>
+        <a class="brand" href="../" aria-label="Guilgal International home">
+      <img class="brand__emblem" src="../public/images/v2/logo-emblem.jpg" alt="" width="74" height="74">
+      <span class="brand__text"><span class="brand__name">GUILGAL</span><span class="brand__intl">INTERNATIONAL</span><span class="brand__tag">EXPLORATION | DEVELOPMENT | PARTNERSHIPS</span></span>
+    </a>
+        <p class="footer__lines">Mining • Critical Minerals • Project Development • Strategic Partnerships</p>
+        <p class="footer__motto">Connecting Opportunities. Developing Partnerships.</p>
+      </div>
+      <nav class="footer__nav" aria-label="Footer"><a href="../about/">About</a><a href="../investors/">Investors</a><a href="../news/">News &amp; Milestones</a><a href="../contact/">Contact</a><a href="../login/">Partner login</a><a href="mailto:john@guilgal.org">john@guilgal.org</a></nav>
+    </div>
+    <div class="wrap footer__bottom">
+      <p class="footer__disclaimer">Guilgal International does not provide investment, financial or legal advice. Nothing on this site is an offer or solicitation.</p>
+      <p>Guilgal International Ltd, registered in England and Wales. <a href="../privacy/">Privacy</a> · <a href="../cookies/">Cookies</a> · <a href="../terms/">Terms</a></p>
+    </div>
+  </footer>
+  <script src="../js/main.js"></script><script src="../js/admin.js"></script>
+</body>
+</html>

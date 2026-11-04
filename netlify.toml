@@ -1,0 +1,13 @@
+[build]
+  publish = "."
+
+# The old public projects page is gone; send anyone with an old link to the Investor Centre.
+[[redirects]]
+  from = "/projects/*"
+  to = "/investors/#enquiry"
+  status = 301
+
+[[headers]]
+  for = "/archive/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"

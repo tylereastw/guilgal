@@ -73,7 +73,6 @@ def dot(name, lg=False):
 NAV = [
     ("Home", ""),
     ("About", "about/", [("About Guilgal International", "about/"), ("Our Name", "about/#our-name"), ("Meet the Team", "about/team/")]),
-    ("Projects", "projects/"),
     ("Investors", "investors/"),
     ("News & Milestones", "news/"),
     ("Contact", "contact/"),
@@ -109,7 +108,9 @@ def qr(path, name):
     """Real, scannable QR code for SITE/path, saved as SVG; returns the file name."""
     out = ROOT / IMG / "qr" / f"{name}.svg"
     out.parent.mkdir(parents=True, exist_ok=True)
-    segno.make(SITE + "/" + path, error="m").save(str(out), scale=6, dark="#10291F", light=None, border=0)
+    q = segno.make(SITE + "/" + path, error="m")
+    q.save(str(out), scale=6, dark="#10291F", light=None, border=0)
+    q.save(str(out.with_suffix(".png")), scale=12, dark="#10291F", light="#FFFFFF", border=3)
     return f"qr/{name}.svg"
 
 
@@ -160,7 +161,7 @@ def footer(p):
         <p class="footer__lines">Mining • Critical Minerals • Project Development • Strategic Partnerships</p>
         <p class="footer__motto">Connecting Opportunities. Developing Partnerships.</p>
       </div>
-      <nav class="footer__nav" aria-label="Footer">{links}<a href="mailto:{EMAIL}">{EMAIL}</a></nav>
+      <nav class="footer__nav" aria-label="Footer">{links}<a href="{p}login/">Partner login</a><a href="mailto:{EMAIL}">{EMAIL}</a></nav>
     </div>
     <div class="wrap footer__bottom">
       <p class="footer__disclaimer">{DISCLAIMER}</p>
@@ -169,7 +170,7 @@ def footer(p):
   </footer>'''
 
 
-def page(path, title, desc, active, body, p, noindex=False):
+def page(path, title, desc, active, body, p, noindex=False, scripts=()):
     robots = '\n  <meta name="robots" content="noindex, nofollow, noarchive">' if noindex else ""
     canon = "" if noindex else f'\n  <link rel="canonical" href="{SITE}/{path}">'
     html = f'''<!doctype html>
@@ -181,6 +182,7 @@ def page(path, title, desc, active, body, p, noindex=False):
   <meta name="description" content="{e(desc)}">{robots}{canon}
   <link rel="preload" href="{p}assets/fonts/v2/Montserrat-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="{p}assets/fonts/v2/OpenSans-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="icon" href="{p}public/images/Guilgal_Favicon.ico" sizes="any">
   <link rel="stylesheet" href="{p}css/fonts.css">
   <link rel="stylesheet" href="{p}css/styles.css">
 </head>
@@ -191,7 +193,7 @@ def page(path, title, desc, active, body, p, noindex=False):
 {body}
   </main>
   {footer(p)}
-  <script src="{p}js/main.js"></script>
+  <script src="{p}js/main.js"></script>{"".join(f'<script src="{p}{x}"></script>' for x in scripts)}
 </body>
 </html>
 '''
@@ -222,7 +224,7 @@ def project_cards(p):
         f'''<li class="pcard"><a href="{p}members/projects/{s}/" rel="nofollow">
           <div class="pcard__photo"><img src="{p}{IMG}card-{s}.jpg" alt="" loading="lazy"></div>
           <div class="pcard__body"><strong>{e(n)}</strong><span>{e(c)}</span><i class="arrow-circle">{ico("arrow")}</i></div>
-          <span class="pcard__access">Partner access</span></a></li>''' for s, n, c in PROJECTS) + "</ul>"
+          </a></li>''' for s, n, c in PROJECTS) + "</ul>"
 
 
 def approach_row():
@@ -244,14 +246,17 @@ def consent(p):
             f'these details to respond to my enquiry. See the <a href="{p}privacy/">Privacy Policy</a>.*</span></label>')
 
 
-def enquiry_form(p, title="Send Us a Message", projects=True):
-    opts = "".join(f'<option value="{s}">{e(n)}</option>' for s, n, _ in PROJECTS)
-    area = (f'<label class="field"><span>Area of interest*</span><select name="interest" required><option value="">Select a project</option>'
-            f'{opts}<option value="general">General partnership enquiry</option></select></label>') if projects else ""
+def enquiry_form(p, title="Send Us a Message", projects=True, name="contact"):
+    areas = ["Copper and gold", "Tantalum, tin and critical minerals", "Gold", "Energy and infrastructure", "Partner access request", "General partnership enquiry"]
+    opts = "".join(f'<option>{e(a)}</option>' for a in areas)
+    area = (f'<label class="field"><span>Area of interest*</span><select name="interest" required><option value="">Select an area</option>'
+            f'{opts}</select></label>') if projects else ""
     org = ('<div class="form__row"><label class="field"><span>Organisation</span><input name="organisation" autocomplete="organization"></label>'
            '<label class="field"><span>Country</span><input name="country" autocomplete="country-name"></label></div>') if projects else ""
     return f'''<div class="formcard"><h3 class="formcard__head">{title}</h3>
-        <form class="form" novalidate data-form>
+        <form class="form" name="{name}" method="POST" action="{p}thanks/" data-netlify="true" netlify-honeypot="company_website" novalidate data-form>
+          <input type="hidden" name="form-name" value="{name}">
+          <p class="sr"><label>Leave this empty <input name="company_website" tabindex="-1" autocomplete="off"></label></p>
           <div class="form__row"><label class="field"><span>Name*</span><input name="name" autocomplete="name" required></label>
           <label class="field"><span>Email*</span><input type="email" name="email" autocomplete="email" required></label></div>
           {org}{area}
@@ -262,26 +267,16 @@ def enquiry_form(p, title="Send Us a Message", projects=True):
         </form></div>'''
 
 
-def contact_block(p):
+def contact_block(p, form="contact"):
     return f'''    <section class="section" id="contact-us">
-      <div class="wrap contact3">
+      <div class="wrap contact2">
         <div>
           <div class="shead"><h2>Get in Touch</h2></div>
           <p class="lead">We welcome enquiries from investors, partners and strategic collaborators worldwide.</p>
           <ul class="contact-list"><li>{dot("mail")}<div><strong>Email us</strong><a href="mailto:{EMAIL}">{EMAIL}</a></div></li></ul>
           <p class="small" style="margin-top:18px">Guilgal International Ltd, registered in England and Wales.</p>
         </div>
-        {enquiry_form(p)}
-        <div class="stay">
-          <div>
-            <div class="shead"><h2>Stay Informed</h2></div>
-            <p class="small">Subscribe for project updates, news and milestones.</p>
-            <form class="subscribe" novalidate data-form><label class="sr" for="sub-email">Email address</label>
-              <input id="sub-email" type="email" name="email" placeholder="Your email address" required><button class="btn btn--gold" type="submit">Subscribe</button></form>
-            <p class="form__msg small" role="alert" hidden></p>
-          </div>
-          {qr_panel(p, "news/", "news", "Scan for updates", "", stack=True)}
-        </div>
+        {enquiry_form(p, name=form)}
       </div>
     </section>
 '''
@@ -369,7 +364,7 @@ def about():
     inner = f'''<p class="label label--light">About Guilgal International</p>
           <h1>People. Projects.<br>Partnerships.</h1>
           <p class="hero__sub">Connecting mineral opportunity with technical expertise, strategic relationships and responsible development across Africa.</p>
-          <a class="btn btn--gold" href="{p}projects/">Explore Our Projects {ico("arrow")}</a>'''
+          <a class="btn btn--gold" href="{p}about/team/">Meet the Team {ico("arrow")}</a>'''
     whatwedo = [("search", "Project Identification", "We help identify and assess high-potential mineral opportunities with commercial and geological upside."),
                 ("gear", "Technical Coordination", "We support the planning and coordination of geological review, exploration activity and technical work programmes."),
                 ("handshake", "Strategic Partnerships", "We connect project owners with investors, mining companies, contractors and commercial partners."),
@@ -413,7 +408,6 @@ def about():
           <h2>Democratic Republic of the Congo and Beyond</h2>
           <p class="lead">Guilgal International's primary focus is on opportunities in the Democratic Republic of the Congo, with broader interest in selected mineral prospects and strategic partnerships elsewhere in Africa.</p>
           <p class="lead">Our approach is grounded in local engagement, international connectivity and a practical understanding of what is required to move opportunities forward.</p>
-          <a class="btn btn--gold btn--sm" href="{p}projects/">Our Projects {ico("arrow")}</a>
         </div>
         <img src="{p}{IMG}africa-drc.jpg" alt="Map of Africa with the Democratic Republic of the Congo highlighted" loading="lazy">
         <ul class="places"><li><h4>Selected areas of interest</h4></li>
@@ -445,7 +439,6 @@ def about():
         <div><p class="label">Why work with Guilgal International?</p><h2>A Trusted Partner for Sustainable Growth</h2>
           <p>Guilgal International offers a practical bridge between mineral opportunity and commercial advancement. We combine project visibility, strategic relationships and development-focused thinking to help unlock value for project owners, partners and investors.</p>
           <div class="hero__actions"><a class="btn btn--gold" href="{p}investors/#enquiry">Investor Enquiries {ico("arrow")}</a><a class="btn btn--line" href="{p}contact/">Contact Guilgal International {ico("arrow")}</a></div></div>
-        {qr_panel(p, "projects/", "projects", "Explore Guilgal International's opportunities", "Scan to view our mineral projects and partnership opportunities.", "Scan to explore")}
       </div>
     </section>
 '''
@@ -461,13 +454,15 @@ TEAM = [
               "He has extensive experience in the mining sector, including his previous role as Chief Executive Officer of 1620 Capital in Perth, Western Australia, where he was involved in identifying, structuring and advancing mineral resource opportunities with ASX- and AIM-listed companies.",
               "John focuses on connecting African mineral opportunities with international partners, technical expertise and development capital."],
          keys=[("handshake", "Strategic partnerships"), ("people", "Investor engagement"), ("chart", "Corporate development"), ("target", "Project origination and transaction support")]),
-    dict(name="Gedeon Ngoy Makonga Pelesa", role="Title to be confirmed", sub="Geological coordination | Project development", photo=None,
+    dict(name="Gedeon Ngoy Makonga Pelesa", role="DRC Project Partner", sub="Geological Coordination | Project Development", photo="team-gedeon.jpg",
          bio=["Gedeon Ngoy Makonga Pelesa supports Guilgal International's project activities in the Democratic Republic of the Congo, contributing extensive local knowledge, project coordination and geological engagement across key mineral opportunities.",
+              "He has significant experience in exploration, project identification and liaison with local authorities, technical teams and community stakeholders, with a focus on responsible and sustainable development.",
               "Gedeon plays a key role in advancing Guilgal International's mineral projects, including copper, gold, tantalum, tin and critical minerals, and coordinates field activities, technical studies and local partnerships."],
          keys=[("pick", "Geological coordination"), ("map", "Project identification and evaluation"), ("people", "Local partnerships and stakeholder engagement"), ("leaf", "Field activities and technical support")]),
-    dict(name="Didier", role="Title to be confirmed", sub="Business development | Strategic relationships", photo=None,
+    dict(name="Didier", role="Project Partner", sub="Business Development | Strategic Relationships", photo="team-didier.jpg",
          bio=["Didier contributes to Guilgal International's in-country relationships, commercial coordination and project development support in the Democratic Republic of the Congo.",
-              "He plays an important role in business development, government and stakeholder engagement, and the facilitation of strategic partnerships across Guilgal International's project portfolio."],
+              "He plays an important role in business development, government and stakeholder engagement, and the facilitation of strategic partnerships across Guilgal International's project portfolio.",
+              "Didier's local expertise and extensive network support the advancement of mineral and infrastructure opportunities, helping to create long-term value through collaboration and responsible development."],
          keys=[("handshake", "Business development"), ("people", "Government and stakeholder engagement"), ("chart", "Strategic partnerships"), ("gear", "Project coordination and commercial support")]),
 ]
 
@@ -485,64 +480,27 @@ def team():
           <div class="person__head"><h2>{e(t["name"])}</h2><p class="person__role">{e(t["role"])}</p><p class="person__sub">{e(t["sub"])}</p></div>
           <div class="person__body">{"".join(f"<p>{e(b)}</p>" for b in t["bio"])}<h3>Key areas</h3><ul class="keys">{keys}</ul></div>
         </li>''')
-    body = hero(p, "team-hero.jpg", inner) + strip([
-        ("globe", "International experience", ""), ("africa", "Local knowledge", ""), ("handshake", "Strategic partnerships", ""),
-        ("chart", "Project development", ""), ("leaf", "Responsible growth", "")], 5) + f'''
+    values = [("people", "International experience"), ("africa", "Local knowledge"), ("handshake", "Strategic partnerships"), ("chart", "Project development"), ("leaf", "Responsible growth")]
+    body = hero(p, "team-hero.jpg", inner) + f'''    <section class="strip"><ul class="values">{"".join(f"<li>{ico(i)}<span>{t}</span></li>" for i, t in values)}</ul></section>
+''' + f'''
     <section class="section"><div class="wrap"><ul class="people">{"".join(cards)}</ul>
-      <p class="small" style="margin-top:16px">Portraits of Gedeon and Didier, and their titles, will be added once supplied and approved.</p></div></section>
+</div></section>
 
     <section class="band">
       <div class="band__bg"><img src="{p}{IMG}about-river.jpg" alt=""></div>
-      <div class="wrap band__grid"><blockquote class="band__quote">"International connections, local expertise and shared commitment to responsible development."</blockquote></div>
+      <div class="wrap band__grid"><div><blockquote class="band__quote">"International connections, local expertise and shared commitment to responsible development."</blockquote>
+        <ul class="trow trow--band">{"".join(f"<li>{ico(i)}<span>{t}</span></li>" for i, t in [("leaf", "Partnerships that create value"), ("people", "Projects that support local communities"), ("globe", "Responsible development for a sustainable future")])}</ul></div></div>
     </section>
 '''
     page("about/team/", "Meet the Team | Guilgal International", "The people behind Guilgal International.", "About", body, p)
 
 
-def projects():
-    p = "../"
-    inner = f'''<p class="label label--light">Our projects</p><h1>A Portfolio Across<br>the DRC and Ghana</h1>
-          <p class="hero__sub">Guilgal International works on six projects in the Democratic Republic of the Congo and Ghana, from early-stage exploration to the reprocessing of historical gold tailings. Full project information, maps, technical summaries and milestones are available to registered partners.</p>
-          <div class="hero__actions"><a class="btn btn--gold" href="{p}members/">Partner login {ico("arrow")}</a><a class="btn btn--line" href="{p}investors/#enquiry">Request access {ico("arrow")}</a></div>'''
-    body = hero(p, "home-hero.jpg", inner) + f'''
-    <section class="section">
-      <div class="wrap">
-        <div class="shead"><h2>Our Portfolio at a Glance</h2></div>
-        {project_cards(p)}
-      </div>
-    </section>
-
-    <section class="section section--cream2">
-      <div class="wrap grid-2">
-        <div>
-          <p class="label">How partner access works</p>
-          <ol class="steps">
-            <li><b>1</b><strong>Make an enquiry</strong><span>Tell us about your organisation and the projects you are interested in.</span></li>
-            <li><b>2</b><strong>Confidentiality agreement</strong><span>We send a confidentiality agreement for signature.</span></li>
-            <li><b>3</b><strong>Approval</strong><span>Once signed and approved, we send your login details.</span></li>
-            <li><b>4</b><strong>Project pages</strong><span>Signed-in partners can view project pages, briefs and milestones.</span></li>
-          </ol>
-        </div>
-        <div>
-          <p class="label">Our role</p>
-          <p class="lead">Guilgal International originates and facilitates projects and brings in partners. On the hydropower and infrastructure projects, our role is limited to commercial facilitation and introductions; we are not the financier, engineer, builder or operator.</p>
-          <div class="hero__actions"><a class="btn btn--gold" href="{p}investors/#enquiry">Request access {ico("arrow")}</a><a class="btn btn--line-dark" href="{p}contact/">Contact Guilgal International</a></div>
-        </div>
-      </div>
-    </section>
-'''
-    page("projects/", "Our Projects | Guilgal International",
-         "Guilgal International's portfolio: copper and gold, tantalum and tin, critical minerals, gold tailings, Ghana gold and hydropower facilitation.",
-         "Projects", body, p)
-
-
 def investors():
     p = "../"
-    inner = f'''<a class="back" href="{p}projects/">{ico("back")} Back to projects</a>
-          <h1>Investor Centre &amp; Contact</h1>
+    inner = f'''<h1>Investor Centre &amp; Contact</h1>
           <p class="hero__meta">Partner with Guilgal International: Unlock the Value of Africa</p>
-          <p class="hero__sub">Find out about our project portfolio, request access to project information and get in touch with our team.</p>
-          <ul class="pills"><li><a class="pill" href="#portfolio">Project summaries</a></li><li><a class="pill" href="#why">How we partner</a></li><li><a class="pill" href="{p}news/">News &amp; updates</a></li><li><a class="pill" href="#enquiry">Contact us</a></li></ul>'''
+          <p class="hero__sub">Find out how we partner, request access to private project information and get in touch with our team.</p>
+          <ul class="pills"><li><a class="pill" href="#access">Partner access</a></li><li><a class="pill" href="#why">How we partner</a></li><li><a class="pill" href="{p}news/">News &amp; updates</a></li><li><a class="pill" href="#enquiry">Contact us</a></li></ul>'''
     why = [("diamond", "Vetted Opportunities", "Projects are reviewed before they are introduced to partners."),
            ("handshake", "Local Relationships", "Established working relationships with project owners and stakeholders."),
            ("people", "Technical Networks", "Access to geological, technical and commercial specialists."),
@@ -550,8 +508,15 @@ def investors():
            ("chart", "Long-Term Partnerships", "Durable relationships rather than single transactions.")]
     body = hero(p, "investors-hero.jpg", inner) + f'''
     <section class="section" id="portfolio">
-      <div class="wrap grid-2 why-wrap" style="grid-template-columns:1.55fr 1fr;align-items:start">
-        <div><div class="shead"><h2>Our Projects at a Glance</h2></div>{project_cards(p)}</div>
+      <div class="wrap grid-2 why-wrap" style="grid-template-columns:1fr 1.15fr;align-items:start">
+        <div id="access"><div class="shead"><h2>Partner Access</h2></div>
+          <p class="lead">Project information, maps, technical summaries and milestones are private. Each project has its own password-protected page, shared directly with invited partners.</p>
+          <ol class="steps">
+            <li><b>1</b><strong>Make an enquiry</strong><span>Tell us about your organisation and the opportunities you are interested in.</span></li>
+            <li><b>2</b><strong>Confidentiality agreement</strong><span>We send a confidentiality agreement for signature.</span></li>
+            <li><b>3</b><strong>Approval</strong><span>Once signed and approved, we send the project link and access details.</span></li>
+          </ol>
+          <p style="margin-top:18px"><a class="btn btn--gold" href="#enquiry">Request access {ico("arrow")}</a></p></div>
         <div id="why"><div class="shead"><h2>Why Partner with Guilgal International?</h2></div>
           <div class="why-grid">
             <ul class="why">{"".join(f"<li>{dot(i)}<div><strong>{t}</strong><span>{d}</span></div></li>" for i, t, d in why)}</ul>
@@ -560,12 +525,12 @@ def investors():
         </div>
       </div>
     </section>
-''' + contact_block(p).replace('id="contact-us"', 'id="enquiry"') + f'''
+''' + contact_block(p, "investor-enquiry").replace('id="contact-us"', 'id="enquiry"') + f'''
     <section class="band">
       <div class="band__bg"><img src="{p}{IMG}about-hero.jpg" alt=""></div>
       <div class="wrap band__grid">
         <div><h2 class="band__quote">Building a Sustainable Future with Guilgal International</h2>
-          <p>Next steps: explore our projects, discuss partnering with us and join us as we grow in Africa.</p></div>
+          <p>Next steps: discuss partnering with us and join us as we grow in Africa.</p></div>
         <a class="btn btn--gold" href="#enquiry">Contact us today {ico("arrow")}</a>
       </div>
     </section>
@@ -579,13 +544,11 @@ def news():
     p = "../"
     inner = '''<p class="label label--light">News &amp; milestones</p><h1>News &amp; Project Milestones</h1>
           <p class="hero__sub">Dated company news, project milestones and insights from Guilgal International.</p>'''
-    opts = "".join(f'<option value="{s}">{e(n)}</option>' for s, n, _ in PROJECTS)
     body = hero(p, "about-river.jpg", inner) + f'''
     <section class="section">
       <div class="wrap">
         <div class="filters" role="group" aria-label="Filter updates">
           <div class="chips"><button type="button" class="chip is-on" data-kind="all" aria-pressed="true">All</button><button type="button" class="chip" data-kind="news" aria-pressed="false">News</button><button type="button" class="chip" data-kind="insight" aria-pressed="false">Insights</button></div>
-          <label>Project <select data-project-filter><option value="">All projects</option>{opts}</select></label>
         </div>
         {news_cards(p, NEWS)}
         <p class="feed__empty" hidden>No updates for this selection yet.</p>
@@ -607,21 +570,118 @@ def contact():
 
 def members():
     p = "../"
-    inner = '''<p class="label label--light">Partner access</p><h1>Partner Login</h1>
-          <p class="hero__sub">Project pages are private and available to invited partners only.</p>'''
+    inner = '''<p class="label label--light">Partner access</p><h1>Partner Portal</h1>
+          <p class="hero__sub">Private project information for invited partners. Please do not share these pages or their links.</p>
+          <p class="portal__who" data-me hidden></p>
+          <div class="hero__actions"><button class="btn btn--line" type="button" data-logout>Sign out</button></div>'''
     body = hero(p, "home-hero.jpg", inner) + f'''
-    <section class="section"><div class="wrap grid-2" style="align-items:start">
-      <div><h2>Sign in</h2><p class="lead">Access is by invitation. If you have not received an invitation, please make an investor enquiry.</p>
-        <a class="btn btn--line-dark" href="{p}investors/#enquiry">Request access {ico("arrow")}</a></div>
-      <!-- MEMBERS: replace with the hosting platform's members login before launch -->
-      <div class="formcard"><h3 class="formcard__head">Partner login</h3><form class="form" novalidate data-form>
-        <label class="field"><span>Email*</span><input type="email" name="email" autocomplete="username" required></label>
-        <label class="field"><span>Password*</span><input type="password" name="password" autocomplete="current-password" required></label>
-        <p class="form__msg" role="alert" hidden></p><button class="btn btn--gold" type="submit">Sign in {ico("arrow")}</button></form></div>
+    <section class="section"><div class="wrap">
+      <div class="shead"><h2>Your Projects</h2></div>
+      <p class="lead">{INDICATIVE}</p>
+      <div data-portal>{project_cards(p)}</div>
+      <p class="small" data-none hidden>No projects have been assigned to your account yet. Please contact <a href="mailto:{EMAIL}">{EMAIL}</a>.</p>
     </div></section>
 '''
-    page("members/", "Partner Login | Guilgal International", "Partner sign in.", "Projects", body, p, noindex=True)
+    page("members/", "Partner Portal | Guilgal International", "Private partner portal.", "", body, p, noindex=True)
 
+
+def login():
+    p = "../"
+    inner = '''<p class="label label--light">Partner access</p><h1>Partner Login</h1>
+          <p class="hero__sub">Sign in to view the projects shared with you.</p>'''
+    body = hero(p, "home-hero.jpg", inner) + f'''
+    <section class="section"><div class="wrap grid-2" style="align-items:start">
+      <div><h2>Sign in</h2><p class="lead">Use the email address and password sent to you by Guilgal International. You stay signed in on this device for 30 days.</p>
+        <p class="lead">No account yet? Access is by invitation after a confidentiality agreement.</p>
+        <a class="btn btn--line-dark" href="{p}investors/#enquiry">Request access {ico("arrow")}</a></div>
+      <div class="formcard"><h3 class="formcard__head">Partner login</h3>
+        <form class="form" data-login novalidate>
+          <label class="field"><span>Email*</span><input type="email" name="email" autocomplete="username" required></label>
+          <label class="field"><span>Password*</span><input type="password" name="password" autocomplete="current-password" required></label>
+          <p class="form__msg" role="alert" hidden></p>
+          <button class="btn btn--gold" type="submit">Sign in {ico("arrow")}</button>
+          <p class="small">Forgotten your password? Email <a href="mailto:{EMAIL}?subject=Partner%20login">{EMAIL}</a> and we will reset it.</p>
+        </form></div>
+    </div></section>
+'''
+    page("login/", "Partner Login | Guilgal International", "Partner sign in.", "", body, p, noindex=True)
+
+
+def admin():
+    p = "../"
+    checks = "".join(f'<label class="check"><input type="checkbox" name="projects" value="{s}"><span>{e(n)}</span></label>' for s, n, _ in PROJECTS)
+    body = f'''    <section class="section admin"><div class="wrap">
+      <h1>Partner Access Admin</h1>
+      <div data-admin-setup hidden>
+        <div class="formcard" style="max-width:560px"><h3 class="formcard__head">First-time setup: authenticator</h3>
+          <form class="form" data-setup-start novalidate>
+            <p class="small">Admin sign-in uses the admin password plus a 6-digit code from an authenticator app on your phone (Google Authenticator, Microsoft Authenticator or 1Password). This is done once.</p>
+            <label class="field"><span>Admin password*</span><input type="password" name="password" autocomplete="current-password" required></label>
+            <p class="form__msg" role="alert" hidden></p>
+            <button class="btn btn--gold" type="submit">Continue {ico("arrow")}</button>
+          </form>
+          <form class="form" data-setup-confirm hidden novalidate>
+            <p class="small"><strong>1.</strong> In your authenticator app, tap + and scan this code.</p>
+            <div class="setup-qr" data-setup-qr></div>
+            <p class="small">Can't scan? Choose "Enter a setup key" and type: <code data-setup-key></code></p>
+            <p class="small"><strong>2.</strong> Enter the 6-digit code the app now shows for Guilgal International.</p>
+            <label class="field"><span>Authenticator code*</span><input name="code" inputmode="numeric" maxlength="6" autocomplete="one-time-code" required></label>
+            <p class="form__msg" role="alert" hidden></p>
+            <button class="btn btn--gold" type="submit">Finish setup {ico("arrow")}</button>
+          </form></div>
+      </div>
+      <div data-admin-login hidden>
+        <div class="formcard" style="max-width:460px"><h3 class="formcard__head">Admin sign in</h3>
+          <form class="form" data-admin-signin novalidate>
+            <label class="field"><span>Admin password*</span><input type="password" name="password" autocomplete="current-password" required></label>
+            <label class="field"><span>Authenticator code*</span><input name="code" inputmode="numeric" pattern="[0-9]{{6}}" maxlength="6" autocomplete="one-time-code" required></label>
+            <p class="form__msg" role="alert" hidden></p>
+            <button class="btn btn--gold" type="submit">Sign in {ico("arrow")}</button>
+          </form></div>
+      </div>
+      <div data-admin-app hidden>
+        <p><button class="btn btn--line-dark btn--sm" type="button" data-admin-logout>Sign out</button></p>
+        <div class="grid-2" style="align-items:start">
+          <div class="formcard"><h3 class="formcard__head">Add or update a partner</h3>
+            <form class="form" data-user-form novalidate>
+              <div class="form__row"><label class="field"><span>Email*</span><input type="email" name="email" required></label>
+              <label class="field"><span>Name</span><input name="name"></label></div>
+              <fieldset class="checks"><legend>Projects</legend><label class="check"><input type="checkbox" name="projects" value="*"><span>All projects</span></label>{checks}</fieldset>
+              <label class="field"><span>Password (leave blank to generate one for new partners, or keep the current one)</span><input name="password" autocomplete="new-password"></label>
+              <label class="check"><input type="checkbox" name="resetPassword"><span>Generate a new password (signs the partner out everywhere)</span></label>
+              <label class="check"><input type="checkbox" name="disabled"><span>Disable this account</span></label>
+              <p class="form__msg" role="alert" hidden></p>
+              <button class="btn btn--gold" type="submit">Save partner {ico("arrow")}</button>
+            </form></div>
+          <div><h2>Project briefs</h2><p class="small">Upload a PDF for each project. Partners with access download it from the project page.</p>
+            <ul class="briefs" data-briefs></ul></div>
+        </div>
+        <h2 style="margin-top:40px">Project links and QR codes</h2>
+        <p class="small">Send these to partners with access. Each link opens the project page after the partner signs in; anyone without access is asked to log in.</p>
+        <ul class="qrs">{{QRLIST}}</ul>
+        <h2 style="margin-top:40px">Partners</h2>
+        <div class="table-scroll"><table class="dtable" data-users><thead><tr><th>Email</th><th>Name</th><th>Projects</th><th>Status</th><th>Last login</th><th></th></tr></thead><tbody></tbody></table></div>
+      </div>
+    </div></section>
+'''
+    qrs = []
+    for slug, name, _ in PROJECTS:
+        code = qr(f"members/projects/{slug}/", f"project-{slug}")
+        url = f"{SITE}/members/projects/{slug}/"
+        png = code.replace(".svg", ".png")
+        qrs.append(f'''<li><img src="{p}{IMG}{code}" alt="QR code for {e(name)}" width="120" height="120"><div><strong>{e(name)}</strong>
+          <code>{url}</code><span><a class="btn btn--sm btn--gold" href="{p}{IMG}{png}" download="Guilgal-International-{slug}-QR.png">Download PNG</a>
+          <a class="btn btn--sm btn--line-dark" href="{p}{IMG}{code}" download="Guilgal-International-{slug}-QR.svg">SVG</a>
+          <button class="btn btn--sm btn--line-dark" type="button" data-copy="{url}">Copy link</button></span></div></li>''')
+    body = body.replace("{QRLIST}", "".join(qrs))
+    page("admin/", "Admin | Guilgal International", "Admin.", "", body, p, noindex=True, scripts=["js/admin.js"])
+
+
+def thanks():
+    p = "../"
+    body = hero(p, "about-hero.jpg", '''<h1>Thank you</h1><p class="hero__sub">Your message has been sent. We will be in touch.</p>
+          <a class="btn btn--gold" href="../">Back to home</a>''')
+    page("thanks/", "Thank you | Guilgal International", "Message sent.", "", body, p, noindex=True)
 
 # ---------------------------------------------------------------- project pages (members only)
 # Copy and figures below come from John Boardman's project mock-ups. They are
@@ -755,12 +815,12 @@ def project_page(slug, card_name):
     path = f"members/projects/{slug}/"
     meta = ' <span>|</span> '.join(e(m) for m in d["meta"])
     sub = f'<p class="hero__meta">{e(d["sub"])}</p>' if d.get("sub") else ""
-    inner = f'''<a class="back" href="{p}projects/">{ico("back")} Back to projects</a>
+    inner = f'''<a class="back" href="{p}members/">{ico("back")} Partner portal</a>
           <h1>{e(d["title"])}</h1>{sub}
           <p class="hero__meta">{meta}</p>
           <p class="hero__lead">{e(d["lead"])}</p>
           <ul class="pills">{"".join(f'<li><span class="pill">{e(x)}</span></li>' for x in d["pills"])}</ul>
-          <div class="hero__actions"><a class="btn btn--gold" href="#" aria-disabled="true">{ico("doc")} Download project brief</a><a class="btn btn--line" href="mailto:{EMAIL}?subject={e(card_name)}">Contact us {ico("arrow")}</a></div>'''
+          <div class="hero__actions"><a class="btn btn--gold" href="brief">{ico("doc")} Download project brief</a><a class="btn btn--line" href="mailto:{EMAIL}?subject={e(card_name)}">Contact us {ico("arrow")}</a></div>'''
     side = qr_panel(p, path, f"project-{slug}", f"Scan for {e(card_name)} updates", "View project information, technical summaries and latest milestones.")
     body = hero(p, f"{slug}-hero.jpg", inner, "hero--page", side)
     if d.get("facts"):
@@ -822,7 +882,7 @@ def project_page(slug, card_name):
         {tl}
         <div class="opp"><p class="label">Partnership opportunity</p><div class="opp__text">{dot("handshake", True)}<p class="small">{e(d["opportunity"])}</p></div>
           <a class="btn btn--gold" href="{p}investors/#enquiry">Investor enquiries {ico("arrow")}</a>
-          <a class="btn btn--dark" href="#" aria-disabled="true">Download project brief {ico("arrow")}</a>
+          <a class="btn btn--dark" href="brief">Download project brief {ico("arrow")}</a>
           <p class="small">{INDICATIVE}</p></div>
       </div>
     </section>
@@ -830,7 +890,7 @@ def project_page(slug, card_name):
     rel = "".join(f'<li><a href="{p}members/projects/{s}/"><img src="{p}{IMG}card-{s}.jpg" alt=""><div><strong>{e(n)}</strong><span>{e(c)}</span></div></a></li>'
                   for s, n, c in PROJECTS if s != slug)
     body += f'''    <section class="related"><div class="wrap"><p class="label">Related projects</p><ul class="related__list">{rel}</ul>
-      <a class="related__more" href="{p}projects/">View all projects →</a></div></section>
+      <a class="related__more" href="{p}members/">Partner portal →</a></div></section>
 '''
     page(path, f"{d['title']} | Partner Access | Guilgal International", "Private project page.", "Projects", body, p, noindex=True)
 
@@ -847,14 +907,14 @@ def legal(slug, title):
 
 
 def seo():
-    pub = ["", "about/", "about/team/", "projects/", "investors/", "news/", "contact/", "privacy/", "cookies/", "terms/"]
+    pub = ["", "about/", "about/team/", "investors/", "news/", "contact/", "privacy/", "cookies/", "terms/"]
     (ROOT / "sitemap.xml").write_text('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
                                       "".join(f"  <url><loc>{SITE}/{u}</loc></url>\n" for u in pub) + "</urlset>\n")
-    (ROOT / "robots.txt").write_text(f"User-agent: *\nDisallow: /members/\nDisallow: /archive/\n\nSitemap: {SITE}/sitemap.xml\n")
+    (ROOT / "robots.txt").write_text(f"User-agent: *\nDisallow: /members/\nDisallow: /admin/\nDisallow: /login/\nDisallow: /archive/\n\nSitemap: {SITE}/sitemap.xml\n")
 
 
 if __name__ == "__main__":
-    home(); about(); team(); projects(); investors(); news(); contact(); members()
+    home(); about(); team(); investors(); news(); contact(); members(); login(); admin(); thanks()
     for s, n, _ in PROJECTS:
         project_page(s, n)
     for s, t in [("privacy", "Privacy Policy"), ("cookies", "Cookie Policy"), ("terms", "Terms of Use")]:

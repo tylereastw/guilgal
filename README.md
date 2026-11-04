@@ -24,7 +24,6 @@ python3 -m http.server 8000
 | `/` | Home: hero with QR code, highlight strip, Advancing Africa's Mineral Opportunities, Our Projects, Our Approach, Latest News & Milestones, partner call to action |
 | `/about/` | About, including What We Do, Focus Minerals, geographic focus, Our Approach, Our Name, closing banner |
 | `/about/team/` | Meet the Team |
-| `/projects/` | Six public project cards (name, country, mineral only) with Partner Access |
 | `/investors/` | Why Partner with Guilgal International, enquiry form |
 | `/news/` | News & Milestones feed, filterable by type (News, Insights) and by project; subscribe box |
 | `/contact/` | Enquiry form and john@guilgal.org |
@@ -70,3 +69,48 @@ Both are commercial typefaces that need a web licence and are not included. `css
 declares them; they load once the WOFF2 files are placed in `assets/fonts/licensed/` (names in
 the README there). Until then the site uses the self-hosted DM Serif Display / DM Sans pair. No
 fonts are loaded from third parties.
+
+## Partner logon and admin (Netlify)
+
+Project pages live under `/members/` and are private. Each partner has their own email and
+password and sees only the projects assigned to them. Sessions last 30 days. Project pages are
+reached by direct link (or QR code); there is no public projects page.
+
+| Piece | File |
+|---|---|
+| Gate on every `/members/` request (redirects to `/login/`, blocks unassigned projects) | `netlify/edge-functions/members-gate.mjs` |
+| Partner sign in / sign out / who am I | `netlify/functions/login.mjs` (`/api/login`, `/api/logout`, `/api/me`) |
+| Admin API: partners, project access, briefs | `netlify/functions/admin.mjs` (`/api/admin/*`) |
+| Brief downloads (`/members/projects/<slug>/brief`) | `netlify/functions/brief.mjs` |
+| Shared crypto and session helpers | `netlify/lib/auth.mjs` |
+| Pages | `/login/`, `/members/` (portal), `/admin/` |
+
+Data (partner accounts, uploaded briefs) is stored in Netlify Blobs; no database to run.
+
+**One-off setup**
+1. In Netlify, Site configuration > Environment variables, add `ADMIN_PASSWORD` (scope:
+   Functions) and redeploy. That is the only variable needed.
+2. Open `/admin/` on the site. The first visit shows a setup screen: enter the admin password,
+   scan the QR code with an authenticator app (Google Authenticator, Microsoft Authenticator,
+   1Password), and type the 6-digit code it shows. From then on, admin sign-in is the password
+   plus the current code.
+
+The cookie signing secret and the authenticator key are generated and stored automatically in
+Netlify Blobs. Optional overrides: `SESSION_SECRET` and `ADMIN_TOTP_SECRET` environment
+variables (`tools/admin_totp.py` can create a key). To reset the authenticator (for example a
+lost phone), delete the `config/admin-totp` entry in the `members` blob store from the Netlify
+dashboard (Blobs) and visit `/admin/` again.
+
+**In the admin panel** you can add a partner (email, name, projects; a password is generated
+and shown once), change their projects, reset their password (signs them out everywhere),
+disable or delete them, upload a PDF brief for each project, and download each project's QR
+code and link to send on.
+
+## Forms
+The contact and investor enquiry forms are Netlify Forms (`data-netlify`, with a honeypot).
+Submissions appear in Netlify under Forms; turn on email notifications there
+(Forms > Form notifications) so they reach john@guilgal.org.
+
+## Images
+`public/images/v2/IMAGES.md` lists every image; `public/images/v2/IMAGE_PROMPTS.md` lists the
+blurry ones with prompts to regenerate them.
