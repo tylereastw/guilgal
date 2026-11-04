@@ -47,21 +47,54 @@
     if (fromUrl) { select.value = fromUrl; project = fromUrl; apply(); }
   }
 
-  // Forms: client-side validation. FORMS: set data-endpoint to the site's form handler.
-  $$('[data-form]').forEach(form => form.addEventListener('submit', e => {
-    e.preventDefault();
+  // Forms: validate, then submit. Netlify Forms picks up every form with data-netlify.
+  const say = (form, text) => { const m = $('.form__msg', form); if (m) { m.hidden = false; m.textContent = text; } };
+  const valid = form => {
     let ok = true;
     $$('[required]', form).forEach(f => {
       const v = f.type === 'checkbox' ? f.checked : f.value.trim() !== '' && (f.type !== 'email' || /.+@.+\..+/.test(f.value));
       (f.closest('label') || f).classList.toggle('invalid', !v);
       ok = ok && v;
     });
-    const msg = $('.form__msg', form) || form.nextElementSibling;
-    msg.hidden = false;
-    if (!ok) { msg.textContent = 'Please complete the required fields.'; return; }
-    if (!form.dataset.endpoint) { msg.textContent = 'Thank you. This form is not yet connected; please email john@guilgal.org.'; return; }
-    fetch(form.dataset.endpoint, { method: 'POST', body: new FormData(form) })
-      .then(r => { msg.textContent = r.ok ? 'Thank you. We will be in touch.' : 'Sorry, something went wrong. Please email john@guilgal.org.'; if (r.ok) form.reset(); })
-      .catch(() => { msg.textContent = 'Sorry, something went wrong. Please email john@guilgal.org.'; });
+    if (!ok) say(form, 'Please complete the required fields.');
+    return ok;
+  };
+  $$('form[data-netlify]').forEach(form => form.addEventListener('submit', e => {
+    e.preventDefault();
+    if (!valid(form)) return;
+    const btn = $('button[type=submit]', form); btn.disabled = true;
+    fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: new URLSearchParams(new FormData(form)).toString() })
+      .then(r => { if (!r.ok) throw r; form.reset(); say(form, 'Thank you. Your message has been sent and we will be in touch.'); })
+      .catch(() => say(form, 'Sorry, something went wrong. Please email john@guilgal.org.'))
+      .finally(() => { btn.disabled = false; });
   }));
+
+  // Partner login
+  const login = $('form[data-login]');
+  if (login) login.addEventListener('submit', async e => {
+    e.preventDefault();
+    if (!valid(login)) return;
+    const data = Object.fromEntries(new FormData(login));
+    const r = await fetch('/api/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) }).catch(() => null);
+    if (r && r.ok) {
+      const next = new URLSearchParams(location.search).get('next');
+      location.href = next && next.startsWith('/members') ? next : '/members/';
+    } else {
+      const j = r ? await r.json().catch(() => ({})) : {};
+      say(login, j.error || 'Sign in failed. Please try again.');
+    }
+  });
+
+  // Partner portal: show only the projects on this account
+  const portal = $('[data-portal]');
+  if (portal) fetch('/api/me').then(r => (r.ok ? r.json() : Promise.reject(r))).then(me => {
+    const who = $('[data-me]'); who.hidden = false; who.textContent = 'Signed in as ' + (me.name || me.email);
+    let shown = 0;
+    $$('.pcard', portal).forEach(c => {
+      const slug = $('a', c).getAttribute('href').split('/').filter(Boolean).pop();
+      const ok = me.projects.includes(slug); c.hidden = !ok; if (ok) shown++;
+    });
+    $('[data-none]').hidden = shown > 0;
+  }).catch(() => {});
+  $$('[data-logout]').forEach(b => b.addEventListener('click', () => fetch('/api/logout', { method: 'POST' }).finally(() => { location.href = '/login/'; })));
 })();
