@@ -165,7 +165,12 @@ def footer(p):
         <p class="footer__motto">Connecting Opportunities. Developing Partnerships.</p>
       </div>
       <nav class="footer__nav" aria-label="Footer">{links}<a href="mailto:{EMAIL}">{EMAIL}</a></nav>
-      <div class="footer__logins"><a class="footer__login" href="{p}login/">{ico("lock")} Partner login</a><a class="footer__login" href="{p}admin/">{ico("lock")} Admin login</a></div>
+      <div class="footer__logins">
+        <a class="footer__login" href="{p}login/" data-when="partner-out">{ico("lock")} Partner login</a>
+        <span class="footer__signed" data-when="partner-in" hidden><a class="footer__login footer__login--on" href="{p}members/">{ico("people")} Partner portal</a><button type="button" class="footer__login" data-footer-logout="partner">Log out</button></span>
+        <a class="footer__login" href="{p}admin/" data-when="admin-out">{ico("lock")} Admin login</a>
+        <span class="footer__signed" data-when="admin-in" hidden><a class="footer__login footer__login--on" href="{p}admin/">{ico("gear")} Admin panel</a><button type="button" class="footer__login" data-footer-logout="admin">Log out</button></span>
+      </div>
     </div>
     <div class="wrap footer__bottom">
       <p class="footer__disclaimer">{DISCLAIMER}</p>
@@ -458,7 +463,7 @@ def about():
 
 TEAM = [
     dict(name="John Boardman", role="Director, Guilgal International",
-         sub="Former CEO, 1620 Capital | International Mining Investment & Corporate Development", photo="team-john.jpg", pos="50% 6%",
+         sub="Former CEO, 1620 Capital | International Mining Investment & Corporate Development", photo="team-john.jpg", pos="50% 17%",
          short="Corporate strategy, international partnerships, investor relations and commercial project development.",
          bio=["John Boardman is responsible for Guilgal International's corporate strategy, international partnerships, investor relations and commercial project development.",
               "He has extensive experience in the mining sector, including his previous role as Chief Executive Officer of 1620 Capital in Perth, Western Australia, where he was involved in identifying, structuring and advancing mineral resource opportunities with ASX- and AIM-listed companies.",

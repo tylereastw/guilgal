@@ -2,6 +2,11 @@
 (() => {
   const $ = (s, c = document) => c.querySelector(s);
   const $$ = (s, c = document) => [...c.querySelectorAll(s)];
+  const hint = {
+    has: k => { try { return localStorage.getItem('gi_in_' + k) === '1'; } catch { return false; } },
+    set: k => { try { localStorage.setItem('gi_in_' + k, '1'); } catch {} },
+    clear: k => { try { localStorage.removeItem('gi_in_' + k); } catch {} },
+  };
 
   // header background after scrolling
   const nav = $('.nav');
@@ -77,6 +82,7 @@
     const data = Object.fromEntries(new FormData(login));
     const r = await fetch('/api/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) }).catch(() => null);
     if (r && r.ok) {
+      hint.set('partner');
       const next = new URLSearchParams(location.search).get('next');
       location.href = next && next.startsWith('/members') ? next : '/members/';
     } else {
@@ -96,5 +102,29 @@
     });
     $('[data-none]').hidden = shown > 0;
   }).catch(() => {});
-  $$('[data-logout]').forEach(b => b.addEventListener('click', () => fetch('/api/logout', { method: 'POST' }).finally(() => { location.href = '/login/'; })));
+  $$('[data-logout]').forEach(b => b.addEventListener('click', () => fetch('/api/logout', { method: 'POST' }).finally(() => { hint.clear('partner'); location.href = '/login/'; })));
+
+  // Footer: show "Log out" when signed in. A local hint avoids calling the server for
+  // visitors who have never signed in; the server then confirms the session is still valid.
+  const setFooter = (who, on) => {
+    $$(`[data-when="${who}-in"]`).forEach(el => { el.hidden = !on; });
+    $$(`[data-when="${who}-out"]`).forEach(el => { el.hidden = on; });
+  };
+  window.giFooter = setFooter;
+  if (hint.has('partner')) {
+    setFooter('partner', true);
+    fetch('/api/me', { credentials: 'same-origin' }).then(r => { if (!r.ok) { hint.clear('partner'); setFooter('partner', false); } }).catch(() => {});
+  }
+  if (hint.has('admin')) {
+    setFooter('admin', true);
+    fetch('/api/admin/status', { credentials: 'same-origin' }).then(r => r.json()).then(s => { if (!s.signedIn) { hint.clear('admin'); setFooter('admin', false); } }).catch(() => {});
+  }
+  $$('[data-footer-logout]').forEach(b => b.addEventListener('click', () => {
+    const who = b.dataset.footerLogout;
+    const url = who === 'admin' ? '/api/admin/logout' : '/api/logout';
+    fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}', credentials: 'same-origin' }).finally(() => {
+      hint.clear(who);
+      location.href = location.pathname.startsWith(who === 'admin' ? '/admin' : '/members') ? (who === 'admin' ? '/admin/' : '/login/') : location.href;
+    });
+  }));
 })();

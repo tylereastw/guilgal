@@ -595,3 +595,14 @@ body:has(.admin) .admin { padding-top: 40px; }
   .urow__actions { grid-column: 1 / -1; justify-content: flex-start; }
   .badge { grid-row: 1; grid-column: 3; }
 }
+
+.footer__signed { display: flex; gap: 8px; }
+.footer__signed[hidden] { display: none; }
+.footer__signed .footer__login { flex: 1 1 auto; }
+.footer button.footer__login { background: none; cursor: pointer; }
+.footer .footer__login--on { background: var(--gold); color: var(--green); }
+.footer .footer__login--on:hover { background: #E4C886; }
+
+/* team photos: fill the 4:3 frame so object-position actually applies */
+.person__photo { position: relative; }
+.person__photo img { position: absolute; inset: 0; }

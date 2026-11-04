@@ -37,7 +37,7 @@ export default async (request, context) => {
   };
 
   if (path === "/api/admin/status") {
-    return json({ configured: !!pw, needsSetup: !!pw && !(await adminTotpSecret(members)) });
+    return json({ configured: !!pw, needsSetup: !!pw && !(await adminTotpSecret(members)), signedIn: await isAdmin(request, members) });
   }
 
   if (path.startsWith("/api/admin/setup") && request.method === "POST") {
