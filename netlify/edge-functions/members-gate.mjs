@@ -1,14 +1,23 @@
-// Gate for the private partner area. Every request under /members/ needs a valid
-// partner session; project pages also need access to that project. Anyone else is
-// sent to /login/.
+// Gate for private content.
+// - /members/: needs a valid partner session; project pages also need access to that
+//   project. Anyone else is sent to /login/.
+// - /archive/: the saved previous design, which contains copies of the project pages.
+//   Admins only; anyone else is sent to /admin/.
 import { getStore } from "@netlify/blobs";
-import { userFromRequest, canSee } from "../lib/auth.mjs";
+import { userFromRequest, canSee, isAdmin } from "../lib/auth.mjs";
 
 const NOINDEX = "noindex, nofollow, noarchive";
 
 export default async (request, context) => {
   const url = new URL(request.url);
   const store = getStore({ name: "members", consistency: "strong" });
+  if (/^\/archive(\/|$)/i.test(url.pathname)) {
+    if (!(await isAdmin(request, store))) return Response.redirect(new URL("/admin/", url), 302);
+    const res = await context.next();
+    res.headers.set("Cache-Control", "private, no-store");
+    res.headers.set("X-Robots-Tag", NOINDEX);
+    return res;
+  }
   const user = await userFromRequest(request, store);
   const toLogin = () => Response.redirect(new URL("/login/?next=" + encodeURIComponent(url.pathname), url), 302);
   if (!user) return toLogin();
@@ -27,4 +36,4 @@ export default async (request, context) => {
   return res;
 };
 
-export const config = { path: ["/members", "/members/*"] };
+export const config = { path: ["/members", "/members/*", "/archive", "/archive/*"] };
