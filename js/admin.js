@@ -78,7 +78,8 @@
     $$('[data-panel]').forEach(p => { p.hidden = p.dataset.panel !== t.dataset.tab; });
   }));
 
-  const start = () => { showApp(true); loadUsers(); };
+  const adminHint = on => { try { on ? localStorage.setItem('gi_in_admin', '1') : localStorage.removeItem('gi_in_admin'); } catch {} window.giFooter && window.giFooter('admin', on); };
+  const start = () => { showApp(true); adminHint(true); loadUsers(); };
 
   $('[data-admin-signin]').addEventListener('submit', async e => {
     e.preventDefault();
@@ -86,7 +87,7 @@
     try { await postJSON('login', { password: f.password.value, code: f.code.value }); f.reset(); start(); }
     catch (err) { say(f, err.message); }
   });
-  $('[data-admin-logout]').addEventListener('click', async () => { await postJSON('logout', {}); showApp(false); });
+  $('[data-admin-logout]').addEventListener('click', async () => { await postJSON('logout', {}); adminHint(false); showApp(false); });
 
   // dialogs
   const dlg = $('[data-user-dialog]'), idlg = $('[data-invite-dialog]');
