@@ -290,11 +290,15 @@ def contact_block(p):
 # ---------------------------------------------------------------- pages
 def home():
     p = ""
-    side = qr_panel(p, "projects/", "projects", "Scan to explore our projects", "", stack=True)
     inner = f'''<p class="hero__eyebrow">Mineral Exploration &amp; Strategic Development</p>
           <h1>Unlocking Africa's<br>Mineral Potential</h1>
           <p class="hero__sub">Connecting high-potential mineral projects with technical expertise, development partners and international partnerships.</p>
-          <div class="hero__actions"><a class="btn btn--gold" href="projects/">Explore Our Projects {ico("arrow")}</a><a class="btn btn--line" href="investors/#enquiry">Investor Enquiries {ico("arrow")}</a></div>'''
+          <div class="hero__actions"><a class="btn btn--gold" href="about/">Discover More {ico("arrow")}</a><a class="btn btn--line" href="investors/#enquiry">Investor Enquiries {ico("arrow")}</a></div>'''
+    side = qr_panel(p, "investors/", "investors", "Scan to visit the Investor Centre", "", stack=True)
+    strengths = [("doc", "Extensive Geological Data Analysis", "Detailed review of existing geological records to guide exploration."),
+                 ("pick", "Field Reconnaissance and Sampling", "Direct field investigations to verify mineral prospects."),
+                 ("handshake", "Strategic Connections", "Introductions between project owners, technical specialists and international partners.")]
+    minerals = ["Copper", "Lithium", "Tantalum", "Tin", "Niobium", "Wolframite"]
     body = hero(p, "home-hero.jpg", inner, "hero--home", side) + strip([
         ("cubes", "Copper & Gold", "Exploration opportunities"),
         ("crystal", "Critical Minerals", "Strategic resources"),
@@ -303,21 +307,31 @@ def home():
       <div class="wrap grid-2">
         <div>
           <p class="label">Who we are</p>
-          <h2>Advancing Africa's Mineral Opportunities</h2>
-          <p class="lead">Guilgal International is a project development and strategic facilitation business focused on advancing mineral opportunities in the Democratic Republic of the Congo, Ghana and across Africa.</p>
-          <p class="lead">We work alongside local project owners, geological specialists, technical consultants and international partners.</p>
-          <a class="btn btn--dark" href="about/">About us {ico("arrow")}</a>
+          <h2>Combining Data and Fieldwork with Expert Insight</h2>
+          <p class="lead">By bringing together extensive historic geological records with targeted field reconnaissance, sampling and small-scale drilling, Guilgal International helps develop the evidence needed to unlock the potential of mineral projects in the Democratic Republic of the Congo, Ghana and across Africa.</p>
+          <p class="lead">We work with a network of engineers, geologists and field-based staff in the DRC, alongside local project owners and international partners.</p>
+          <a class="btn btn--dark" href="about/">Learn More {ico("arrow")}</a>
         </div>
         <div class="photo"><img src="{IMG}about-who.jpg" alt="Rocky outcrop above a wide green valley and table mountains" loading="lazy"></div>
       </div>
     </section>
 
+    <section class="section section--dark on-dark">
+      <div class="wrap">
+        <p class="label">Track record</p>
+        <ul class="stats">
+          <li><b>10+</b><strong>Years Experience</strong><span>More than ten years in mining project identification, development and geological consulting across the Democratic Republic of the Congo.</span></li>
+          <li><b>10+</b><strong>Projects Advanced</strong><span>More than ten mining projects advanced by linking evidence-based exploration with capable partners, including listed companies in Australia and London.</span></li>
+          <li><b>ASX · AIM</b><strong>Listed-Company Partners</strong><span>Projects identified for companies listed in Australia and London.</span></li>
+        </ul>
+      </div>
+    </section>
+
     <section class="section section--cream2">
       <div class="wrap">
-        <div class="shead"><h2>Our Projects</h2></div>
-        <p class="lead">Six projects across copper and gold, tantalum and tin, critical minerals, gold tailings, Ghana gold and hydropower facilitation. Project details are available to registered partners.</p>
-        {project_cards(p)}
-        <p style="margin-top:22px"><a class="btn btn--line-dark" href="projects/">Explore Our Projects {ico("arrow")}</a></p>
+        <div class="shead"><h2>Key Strengths Driving Successful Mining Ventures</h2></div>
+        <p class="lead">Our expertise spans data analysis, fieldwork and strategic connections to advance mining opportunities with clear evidence and trusted partnerships.</p>
+        <ul class="cols4 cols3">{"".join(f"<li>{dot(i, True)}<h3>{t}</h3><p>{d}</p></li>" for i, t, d in strengths)}</ul>
       </div>
     </section>
 
@@ -338,10 +352,11 @@ def home():
     <section class="band">
       <div class="band__bg"><img src="{IMG}about-hero.jpg" alt=""></div>
       <div class="wrap band__grid">
-        <div><p class="label">Partner with us</p><h2>Partner with Guilgal International</h2>
-          <p>We welcome enquiries from mining companies, technical partners, investors and strategic collaborators worldwide.</p>
-          <div class="hero__actions"><a class="btn btn--gold" href="investors/#enquiry">Investor Enquiries {ico("arrow")}</a><a class="btn btn--line" href="contact/">Contact Guilgal International {ico("arrow")}</a></div></div>
-        {qr_panel(p, "investors/", "investors", "Investor Centre", "Scan to visit the Investor Centre.", "Investor Centre")}
+        <div><p class="label">Start a conversation</p><h2>Start Developing Your Mining Project with Guilgal International</h2>
+          <p>Engage with Guilgal International's experienced team to investigate, develop and advance promising mineral projects with confidence and precision.</p>
+          <ul class="pills">{"".join(f'<li><span class="pill">{m}</span></li>' for m in minerals)}</ul>
+          <div class="hero__actions"><a class="btn btn--gold" href="contact/">Contact Us {ico("arrow")}</a><a class="btn btn--line" href="investors/#enquiry">Investor Enquiries {ico("arrow")}</a></div></div>
+        <aside class="qr"><div><p class="qr__title">Talk to John Boardman</p><p>Director, Guilgal International. Discuss mining services and project development needs in the DRC.</p><a class="btn btn--gold btn--sm" href="mailto:{EMAIL}">{EMAIL}</a></div></aside>
       </div>
     </section>
 '''
@@ -715,12 +730,23 @@ PDATA = {
               "These projects aim to deliver clean, renewable energy to support economic growth, industrial development and improved living standards in the region.",
               "Guilgal International's role is limited to commercial facilitation, introductions and partnership development. We are not providing finance, construction, engineering or operation services."],
     highlights=[("bolt", "Four hydropower projects (1 in Haut-Lomami, 3 in Haut-Katanga)"), ("shield", "Government engagement with the Ministry of Energy and Hydropower"), ("gear", "SHE-QMS leading technical and financing discussions"),
-                ("handshake", "Guilgal International role: commercial facilitation and introductions"), ("chart", "Opportunity for regional power supply, mining and industrial growth")],
-    figures=[("Kilubi hydropower project", "kilubi", "Haut-Lomami Province", ["Located in Haut-Lomami Province.", "Supports local communities and regional economic development."]),
-             ("Haut-Katanga hydropower projects", "katanga", "Three dams, Haut-Katanga Province", ["Three hydropower projects in Haut-Katanga.", "Early-stage development and feasibility discussions."])],
-    programme=[("Government engagement", "In progress."), ("Feasibility studies", "Planned."), ("Financing discussions", "Planned, led by SHE-QMS."), ("Approvals and permits", "Planned."), ("Construction and development", "Subject to funding.")],
+                ("handshake", "Guilgal International role: commercial facilitation and introductions"), ("chart", "Opportunity for regional power supply, mining and industrial growth"),
+                ("leaf", "Positive environmental and social impact"), ("globe", "Potential for long-term partnerships and investment")],
+    sites=[("Kilubi Hydropower Project", "Haut-Lomami Province", "kilubi",
+            ["Located in Haut-Lomami Province", "Significant renewable energy potential", "Government and Ministry engagement", "Supports local communities and regional development", "Positive environmental and social impact"],
+            [("Government engagement", "In progress"), ("Feasibility studies", "Planned"), ("Financing discussions", "Planned"), ("Approvals and permits", "Planned"), ("Construction and development", "Subject to funding")]),
+           ("Haut-Katanga Hydropower Projects", "Three dams | Haut-Katanga Province", "katanga",
+            ["Three hydropower projects in Haut-Katanga", "Early-stage development and feasibility discussions", "Ministry of Energy and Hydropower engagement", "Opportunity to supply power to mining and industrial operations", "Open to international infrastructure partners"],
+            [("Project identification and validation", ""), ("Feasibility studies", "Planned"), ("Financing discussions", "Planned"), ("Approvals and permits", "Planned"), ("Construction and development", "Subject to funding")])],
+    figures=[], gallery_title="Typical hydropower infrastructure",
+    gallery=[("dam", "Dam and spillway (infrastructure)"), ("turbine", "Turbine and generator (power generation)"), ("transmission", "Transmission infrastructure (regional supply)")],
+    timeline=[("Q4 2026", "Government agreements and mandates"), ("Q1 2027", "Detailed studies and feasibility support"), ("Q2 to Q3 2027", "Financing discussions and partner development"), ("2028+", "Construction (subject to approvals and funding)"), ("2030+", "Operational power supply")],
+    timeline_note="Timeline is indicative and subject to government approvals, partner commitments, financing and regulatory processes.",
+    benefits=[("leaf", "Clean and renewable energy supply"), ("chart", "Supports mining and industrial development"), ("people", "Local employment and skills development"),
+              ("gear", "Improved infrastructure and living standards"), ("leaf", "Reduced carbon emissions"), ("globe", "Long-term economic growth in the region")],
+    programme=[],
     role=True,
-    opportunity="We welcome discussions with infrastructure investors, development partners and energy offtakers interested in the Kilubi and Haut-Katanga projects."),
+    opportunity="We welcome discussions with infrastructure investors, development partners and energy offtakers interested in the Kilubi and Haut-Katanga projects, working alongside SHE-QMS and government."),
 }
 
 
@@ -768,22 +794,32 @@ def project_page(slug, card_name):
           <div class="note">{ico("drill")}<span>{e(tnote)}</span></div>
           <figure style="margin-top:12px"><img src="{p}{IMG}{slug}-section.jpg" alt="Conceptual section (not to scale)" loading="lazy"><figcaption>Conceptual section (not to scale)</figcaption></figure></div>''')
     cols = "grid-3" if len(figs) >= 3 else "grid-2"
-    body += f'    <section class="section section--tight section--cream2"><div class="wrap {cols}" style="align-items:start">{"".join(figs)}</div></section>\n'
+    if figs:
+        body += f'    <section class="section section--tight section--cream2"><div class="wrap {cols}" style="align-items:start">{"".join(figs)}</div></section>\n'
+    for st, sub_, img, bl, status in d.get("sites", []):
+        body += f'''    <section class="section section--tight section--cream2"><div class="wrap site">
+      <div><p class="label">{e(st)}</p><p class="site__sub">{e(sub_)}</p><img class="photo" src="{p}{IMG}{slug}-{img}.jpg" alt="{e(st)}" loading="lazy">
+        <ul class="bullets">{"".join(f"<li>{e(x)}</li>" for x in bl)}</ul></div>
+      <div><p class="label">Project status (indicative)</p><ol class="steps">{"".join(f"<li><b>{i}</b><strong>{e(a)}</strong><span>{e(b)}</span></li>" for i, (a, b) in enumerate(status, 1))}</ol></div>
+    </div></section>
+'''
     gal = d.get("gallery", [])
     if gal:
-        body += ('    <section class="section section--tight"><div class="wrap"><div class="gallery" style="grid-template-columns:repeat(' + str(len(gal)) + ',1fr)">' +
+        gt = f'<p class="label">{e(d["gallery_title"])}</p>' if d.get("gallery_title") else ""
+        body += ('    <section class="section section--tight"><div class="wrap">' + gt + '<div class="gallery" style="grid-template-columns:repeat(' + str(len(gal)) + ',1fr)">' +
                  "".join(f'<figure><img src="{p}{IMG}{slug}-{g}.jpg" alt="{e(c)}" loading="lazy"><figcaption>{e(c)}</figcaption></figure>' for g, c in gal) + "</div></div></section>\n")
     prog = "".join(f'<li><b>{i}</b><strong>{e(t)}</strong><span>{e(s)}</span></li>' for i, (t, s) in enumerate(d["programme"], 1))
     tl = ""
     if d.get("timeline"):
         tl = (f'<div><p class="label">Indicative timeline</p><ol class="timeline" style="--n:{len(d["timeline"])}">' +
               "".join(f"<li><strong>{e(a)}</strong>{e(b)}</li>" for a, b in d["timeline"]) +
-              '</ol><p class="disclaim">Timeline is indicative and subject to funding, access, seasonal conditions and regulatory approvals.</p></div>')
+              f'</ol><p class="disclaim">{e(d.get("timeline_note", "Timeline is indicative and subject to funding, access, seasonal conditions and regulatory approvals."))}</p></div>')
     else:
         tl = '<div><p class="label">Indicative timeline</p><p class="disclaim">An indicative timeline will be added once it has been reviewed and approved.</p></div>'
     body += f'''    <section class="section section--tight">
       <div class="wrap grid-3" style="align-items:start">
-        <div><p class="label">{"Development pathway" if slug == "alpha" else "Project status" if slug == "hydropower" else "Next steps" if slug == "nizi-baluma" else "Exploration programme"}</p><ol class="steps">{prog}</ol></div>
+        {f'<div><p class="label">{"Development pathway" if slug == "alpha" else "Next steps" if slug == "nizi-baluma" else "Exploration programme"}</p><ol class="steps">{prog}</ol></div>' if prog else ""}
+        {f'<div><p class="label">Strategic benefits</p><ul class="benefits">' + "".join(f"<li>{dot(i)}<span>{e(t)}</span></li>" for i, t in d["benefits"]) + "</ul></div>" if d.get("benefits") else ""}
         {tl}
         <div class="opp"><p class="label">Partnership opportunity</p><div class="opp__text">{dot("handshake", True)}<p class="small">{e(d["opportunity"])}</p></div>
           <a class="btn btn--gold" href="{p}investors/#enquiry">Investor enquiries {ico("arrow")}</a>
