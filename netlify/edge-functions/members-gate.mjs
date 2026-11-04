@@ -34,7 +34,11 @@ export default async (request, context) => {
   const low = norm.toLowerCase();
   const members = /^\/members(\/|$)/.test(low);
   const archive = /^\/archive(\/|$)/.test(low);
-  if (!members && !archive) return; // public page: carry on as normal
+  if (!members && !archive) {
+    // Public pages: tidy doubled slashes (//contact/) so relative links stay clean.
+    if (request.method === "GET" && /\/\/|\\/.test(url.pathname)) return Response.redirect(new URL(norm + url.search, url), 301);
+    return; // carry on as normal
+  }
 
   // Send odd spellings to the one canonical address, which is then checked below.
   // Partner files are all lower case; archive files keep their case (the check above is case-blind).
