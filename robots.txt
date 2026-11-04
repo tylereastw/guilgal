@@ -1,4 +1,5 @@
 User-agent: *
 Disallow: /members/
+Disallow: /archive/
 
 Sitemap: https://www.guilgal.org/sitemap.xml

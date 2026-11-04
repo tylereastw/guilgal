@@ -5,7 +5,7 @@
 
   // header background after scrolling
   const nav = $('.nav');
-  const onScroll = () => nav.classList.toggle('is-scrolled', scrollY > 30);
+  const onScroll = () => nav.classList.toggle('is-scrolled', scrollY > 160);
   addEventListener('scroll', onScroll, { passive: true });
   onScroll();
 
@@ -26,7 +26,7 @@
 
   // News & Milestones: filter by kind and by project
   const feed = $('[data-feed]');
-  if (feed) {
+  if (feed && $('[data-project-filter]')) {
     let kind = 'all', project = '';
     const chips = $$('.chip[data-kind]'), select = $('[data-project-filter]'), empty = $('.feed__empty');
     const apply = () => {
@@ -53,10 +53,10 @@
     let ok = true;
     $$('[required]', form).forEach(f => {
       const v = f.type === 'checkbox' ? f.checked : f.value.trim() !== '' && (f.type !== 'email' || /.+@.+\..+/.test(f.value));
-      f.closest('label').classList.toggle('invalid', !v);
+      (f.closest('label') || f).classList.toggle('invalid', !v);
       ok = ok && v;
     });
-    const msg = $('.form__msg', form);
+    const msg = $('.form__msg', form) || form.nextElementSibling;
     msg.hidden = false;
     if (!ok) { msg.textContent = 'Please complete the required fields.'; return; }
     if (!form.dataset.endpoint) { msg.textContent = 'Thank you. This form is not yet connected; please email john@guilgal.org.'; return; }
