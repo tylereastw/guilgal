@@ -20,6 +20,7 @@ import segno
 ROOT = Path(__file__).resolve().parent.parent
 SITE = "https://www.guilgal.org"
 EMAIL = "john@guilgal.org"
+LEGAL = "Guilgal International is a trading name of Britcom Trading Limited, registered in England and Wales, company number 15625520."
 IMG = "public/images/v2/"
 DISCLAIMER = ("Guilgal International does not provide investment, financial or legal advice. "
               "Nothing on this site is an offer or solicitation.")
@@ -174,7 +175,7 @@ def footer(p):
     </div>
     <div class="wrap footer__bottom">
       <p class="footer__disclaimer">{DISCLAIMER}</p>
-      <p>Guilgal International Ltd, registered in England and Wales. <a href="{p}privacy/">Privacy</a> · <a href="{p}cookies/">Cookies</a> · <a href="{p}terms/">Terms</a> · <a href="{p}cookies/" data-cookie-settings>Cookie settings</a></p>
+      <p>{LEGAL} <a href="{p}privacy/">Privacy</a> · <a href="{p}cookies/">Cookies</a> · <a href="{p}terms/">Terms</a> · <a href="{p}cookies/" data-cookie-settings>Cookie settings</a></p>
     </div>
   </footer>'''
 
@@ -283,7 +284,7 @@ def contact_block(p, form="contact"):
           <div class="shead"><h2>Get in Touch</h2></div>
           <p class="lead">We welcome enquiries from investors, partners and strategic collaborators worldwide.</p>
           <ul class="contact-list"><li>{dot("mail")}<div><strong>Email us</strong><a href="mailto:{EMAIL}">{EMAIL}</a></div></li></ul>
-          <p class="small" style="margin-top:18px">Guilgal International Ltd, registered in England and Wales.</p>
+          <p class="small" style="margin-top:18px">{LEGAL}</p>
         </div>
         {enquiry_form(p, name=form)}
       </div>
@@ -977,12 +978,13 @@ def project_page(slug, card_name):
 
 
 BRIEF_CSS = """
-@page { size: A4; margin: 0; }
+@page { size: A4; margin: 12mm 0 10mm; }
+@page :first { margin: 0 0 10mm; }
 * { box-sizing: border-box; }
 html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 body { margin: 0; font: 9.6pt/1.5 "Open Sans", Arial, sans-serif; color: #13251D; background: #fff; }
 h1, h2, h3 { font-family: "Montserrat", Arial, sans-serif; margin: 0; }
-.cover { position: relative; height: 98mm; color: #fff; background: #10291F; overflow: hidden; }
+.cover { position: relative; height: 90mm; color: #fff; background: #10291F; overflow: hidden; }
 .cover img.bg { position: absolute; right: 0; top: 0; width: 70%; height: 100%; object-fit: cover; }
 .cover::before { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(90deg, #10291F 28%, rgba(16,41,31,.85) 45%, rgba(16,41,31,.2) 80%); }
 .cover .in { position: relative; z-index: 2; padding: 12mm 14mm; height: 100%; display: flex; flex-direction: column; }
@@ -1033,7 +1035,7 @@ td:first-child { font-weight: 700; }
 .tl b { font: 700 8pt "Montserrat", Arial, sans-serif; }
 .small { font-size: 7.4pt; color: #3F4A44; }
 .keep { break-inside: avoid; }
-.foot { margin-top: 6mm; background: #13251D; color: rgba(255,255,255,.85); padding: 6mm 14mm; font-size: 7.6pt; break-inside: avoid; }
+.foot { margin-top: 4mm; background: #13251D; color: rgba(255,255,255,.85); padding: 4mm 14mm; font-size: 7.2pt; break-inside: avoid; }
 .foot b { color: #D7B46E; font-family: "Montserrat", Arial, sans-serif; }
 .foot p { margin: 0 0 1.5mm; }
 """
@@ -1090,7 +1092,6 @@ def brief_page(slug, card_name):
   <p class="lead">{e(d['lead'])}</p><ul class="pills">{pills}</ul>
 </div></section>
 <main class="page">
-  <p class="note"><b>Confidential. For invited partners only.</b> {INDICATIVE} Facts and figures are draft and require competent technical review.</p>
   {role}{note}{facts}
   <div class="cols"><div><p class="label">Project overview</p>{''.join(f'<p>{e(x)}</p>' for x in d['overview'])}</div>
     <div><p class="label">Key highlights</p><ul class="hl">{''.join(f'<li>{e(t)}</li>' for _, t in d['highlights'])}</ul></div></div>
@@ -1103,7 +1104,7 @@ def brief_page(slug, card_name):
 <footer class="foot">
   <p><b>Contact Guilgal International</b> · John Boardman, Director · {EMAIL} · {SITE}</p>
   <p>{DISCLAIMER} {INDICATIVE}</p>
-  <p>Guilgal International Ltd, registered in England and Wales. Generated from the project page on {generated}.</p>
+  <p>{LEGAL} Generated from the project page on {generated}.</p>
 </footer></body></html>"""
     assert "—" not in html, f"em dash in brief {slug}"
     out = ROOT / f"members/projects/{slug}/brief.html"
@@ -1115,7 +1116,7 @@ def legal(slug, title):
     body = hero(p, "about-river.jpg", f'<h1>{e(title)}</h1>') + f'''
     <section class="section"><div class="wrap" style="max-width:860px">
       <p class="placeholder">[{e(title)} to be supplied before launch.]</p>
-      <p>Guilgal International Ltd, registered in England and Wales. Contact: <a href="mailto:{EMAIL}">{EMAIL}</a>.</p>
+      <p>{LEGAL} Contact: <a href="mailto:{EMAIL}">{EMAIL}</a>.</p>
       <p class="small">{DISCLAIMER}</p></div></section>
 '''
     page(f"{slug}/", f"{title} | Guilgal International", f"{title} for Guilgal International.", "", body, p)
@@ -1132,7 +1133,7 @@ def cookie_policy():
     table = "".join(f"<tr><td>{e(a)}</td><td>{e(b)}</td><td>{e(c)}</td><td>{e(d)}</td><td>{e(x)}</td></tr>" for a, b, c, d, x in rows)
     body = hero(p, "about-river.jpg", "<h1>Cookie Policy</h1>") + f'''
     <section class="section"><div class="wrap legal">
-      <p class="lead">This policy explains how Guilgal International Ltd uses cookies and similar technologies on {SITE}.</p>
+      <p class="lead">This policy explains how Britcom Trading Limited, trading as Guilgal International ("we"), uses cookies and similar technologies on {SITE}.</p>
       <h2>What cookies are</h2>
       <p>Cookies are small files stored on your device by websites you visit. Some are essential for a site to work; others help the site owner understand how it is used.</p>
       <h2>Cookies we use</h2>
@@ -1144,7 +1145,7 @@ def cookie_policy():
       <h2>Changing your choice</h2>
       <p>You can change your choice at any time using <a href="#" data-cookie-settings>Cookie settings</a> (also in the footer of every page), or by clearing cookies in your browser.</p>
       <h2>Contact</h2>
-      <p>Questions about this policy: <a href="mailto:{EMAIL}">{EMAIL}</a>. Guilgal International Ltd, registered in England and Wales.</p>
+      <p>Questions about this policy: <a href="mailto:{EMAIL}">{EMAIL}</a>. {LEGAL}</p>
       <p class="small">Last updated {date.today().strftime("%-d %B %Y")}.</p>
     </div></section>
 '''
