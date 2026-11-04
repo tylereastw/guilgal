@@ -916,7 +916,6 @@ def project_page(slug, card_name):
     body += f'''
     <section class="section section--tight">
       <div class="wrap">
-        <p class="draft"><strong>Members only. Draft content from the design mock-up.</strong> {INDICATIVE} Facts and figures require competent technical review before release.</p>
         {role}{note}
         <div class="dgrid">
           <div><p class="label">Project overview</p>{"".join(f"<p>{e(x)}</p>" for x in d["overview"])}</div>
