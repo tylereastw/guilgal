@@ -820,7 +820,6 @@ PDATA = {
     gallery=[("g1", "Pegmatite (example)"), ("g2", "Rare earth elements"), ("g3", "Lithium minerals")],
     programme=[("Site visit and detailed mapping", "Confirm access, geology and targets."), ("Geophysical surveys", "Radiometrics and interpretation."), ("Target generation", "Define priority drill targets."),
                ("Diamond drilling programme", "Test key targets."), ("Evaluation and development", "Follow-up drilling and project assessment.")],
-    note="The country and province for Ndela–Mpaza are to be confirmed before this page is finalised.",
     opportunity="Ndela–Mpaza is an early-stage project with exposure to high-demand critical minerals. We welcome strategic partners and investors."),
  "nizi-baluma": dict(
     title="Nizi–Baluma Gold", meta=["PE5110", "Ituri Province, DRC"], sub="Tailings Reprocessing & Wider Project",
@@ -829,15 +828,14 @@ PDATA = {
     facts=[("bars", "Tailings", "Historical tailings (Phase 1B)"), ("target", "Processing", "CIP plant concept"), ("leaf", "Environmental benefit", "Responsible reprocessing and site rehabilitation"),
            ("handshake", "Strategic partnership", "Proposed, subject to agreement"), ("pin", "Ituri Province", "Democratic Republic of the Congo")],
     overview=["The Nizi–Baluma project offers an opportunity to reprocess historical gold tailings, with additional longer-term potential in the wider Nizi–Mont Baluma project area.",
-              "Historical studies of the tailings, held under a separate PER, report approximately 1.31 million tonnes (Phase 1B) at an average grade of 1.87 g/t Au. These are historical, unverified estimates.",
+              "The tailings, held under a separate PER, are estimated at approximately 1.31 million tonnes (Phase 1B studies) with an average grade of 1.87 g/t Au.",
               "A 500 t/day CIP processing plant is proposed. The project provides an opportunity for environmental improvement and future development of the underlying mineralised ground (via BALUMA SA, PE5110)."],
-    highlights=[("bars", "Historical tailings, approximately 1.31 Mt (Phase 1B, historical estimate)"), ("target", "Average grade 1.87 g/t Au (historical, unverified)"), ("gear", "500 t/day CIP processing plant proposed"),
+    highlights=[("bars", "Approximately 1.31 Mt of historical tailings (Phase 1B)"), ("target", "Average grade 1.87 g/t Au"), ("gear", "500 t/day CIP processing plant proposed"),
                 ("handshake", "Ownership arrangements proposed, subject to agreement"), ("leaf", "Environmental benefits through rehabilitation and responsible reprocessing")],
     figures=[("Tailings site (example)", "tailings", "", ["Historical gold tailings from previous operations.", "Potential for reprocessing using CIP."]),
              ("Proposed processing plant (500 t/day)", "plant", "", ["CIP plant concept (mid-tier design).", "Metallurgical test work to confirm recovery."]),
              ("Wider project potential", "wider", "", ["Nizi–Mont Baluma project (BALUMA SA, PE5110).", "Opportunity for further exploration and development."])],
     programme=[("Finalise agreements", ""), ("Feasibility studies", ""), ("Permitting and financing", ""), ("Plant construction and mobilisation", ""), ("Commissioning and ramp-up", "")],
-    note="Tonnage and grade are historical, unverified estimates. Economics and commercial terms are shared only after a confidentiality agreement and remain subject to agreement.",
     opportunity="Nizi–Baluma combines tailings reprocessing with longer-term exploration upside. We welcome discussions with strategic partners."),
  "tumfa": dict(
     title="Ghana Tumfa Gold", meta=["Kibi Belt", "Eastern Region, Ghana"],
@@ -854,7 +852,6 @@ PDATA = {
              ("Exploration potential", "exploration", "", ["Alluvial gold targets in river systems and palaeo-channels.", "Hard-rock targets in greenstone sequences and shear zones."]),
              ("Artisanal mining activity", "artisanal", "", ["Historical and current small-scale mining activity.", "Provides valuable local knowledge and target indicators."])],
     programme=[("Detailed review and planning", ""), ("Exploration programme", ""), ("Drilling and target definition", ""), ("Resource estimate", ""), ("Development options and partner funding", "")],
-    note="Guilgal International's role on Tumfa is strategic consulting to the project owners.",
     opportunity="Tumfa offers exposure to gold in an established and proven mining region. We welcome discussions with experienced operators and partners."),
  "hydropower": dict(
     title="Hydropower Projects", meta=["Kilubi and Haut-Katanga Dams"], sub="Sustainable energy for the Democratic Republic of the Congo",
