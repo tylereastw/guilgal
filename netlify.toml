@@ -1,10 +1,26 @@
 [build]
   publish = "."
 
-# The old public projects page is gone; send anyone with an old link to the Investor Centre.
+# Projects are private. Old /projects/ links go to the partner area, where the gate
+# sends anyone not signed in to the login screen and returns them here afterwards.
 [[redirects]]
-  from = "/projects/*"
-  to = "/investors/#enquiry"
+  from = "/projects/hydropower-projects/*"
+  to = "/members/projects/hydropower/"
+  status = 301
+
+[[redirects]]
+  from = "/projects/:slug/*"
+  to = "/members/projects/:slug/"
+  status = 301
+
+[[redirects]]
+  from = "/projects"
+  to = "/members/"
+  status = 301
+
+[[redirects]]
+  from = "/projects/"
+  to = "/members/"
   status = 301
 
 [[headers]]
