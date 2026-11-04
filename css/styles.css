@@ -630,3 +630,12 @@ body:has(.admin) .admin { padding-top: 40px; }
     mask-image: linear-gradient(90deg, transparent 0%, #000 18%, #000 60%, transparent 100%), linear-gradient(180deg, transparent 0%, #000 12%, #000 88%, transparent 100%);
   }
 }
+
+/* legal pages */
+.legal ul { padding-left: 20px; display: grid; gap: 6px; }
+.legal h2 { scroll-margin-top: 100px; }
+.legal__toc { margin: 22px 0 10px; padding: 16px 20px; background: var(--cream-2); border-radius: 6px; }
+.legal__toc .label { margin-bottom: 8px; }
+.legal__toc ol { margin: 0; padding-left: 20px; columns: 2 240px; column-gap: 30px; }
+.legal__toc li { margin-bottom: 4px; break-inside: avoid; }
+.legal__toc a { color: var(--green); }

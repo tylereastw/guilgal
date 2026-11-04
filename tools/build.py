@@ -1101,15 +1101,119 @@ def brief_page(slug, card_name):
     out.write_text(html)
 
 
-def legal(slug, title):
+CH_URL = "https://find-and-update.company-information.service.gov.uk/company/15625520"
+
+
+def legal_page(slug, title, desc, intro, sections):
     p = "../"
-    body = hero(p, "about-river.jpg", f'<h1>{e(title)}</h1>') + f'''
-    <section class="section"><div class="wrap" style="max-width:860px">
-      <p class="placeholder">[{e(title)} to be supplied before launch.]</p>
-      <p>{LEGAL} Contact: <a href="mailto:{EMAIL}">{EMAIL}</a>.</p>
-      <p class="small">{DISCLAIMER}</p></div></section>
-'''
-    page(f"{slug}/", f"{title} | Guilgal International", f"{title} for Guilgal International.", "", body, p)
+    toc = "".join(f'<li><a href="#{sid}">{e(h)}</a></li>' for sid, h, _ in sections)
+    secs = "".join(f'<h2 id="{sid}">{e(h)}</h2>{html}' for sid, h, html in sections)
+    body = hero(p, "about-river.jpg", f"<h1>{e(title)}</h1>") + f"""
+    <section class="section"><div class="wrap legal">
+      <p class="lead">{intro}</p>
+      <nav class="legal__toc" aria-label="Contents"><p class="label">Contents</p><ol>{toc}</ol></nav>
+      {secs}
+      <p class="small">Last updated {date.today().strftime("%-d %B %Y")}.</p>
+    </div></section>
+"""
+    page(f"{slug}/", f"{title} | Guilgal International", desc, "", body, p)
+
+
+def privacy_policy():
+    who = f"""<p>Guilgal International is a trading name of <strong>Britcom Trading Limited</strong>, a company registered in England and Wales with company number 15625520. Our registered office address is shown on the <a href="{CH_URL}" rel="noopener">Companies House register</a>. In this policy "we", "us" and "our" mean Britcom Trading Limited, trading as Guilgal International.</p>
+      <p>We are the controller of the personal data described in this policy. For any question about it, or to exercise your rights, email <a href="mailto:{EMAIL}">{EMAIL}</a>.</p>"""
+    collect = """<p>We collect only the information needed for the purposes below.</p>
+      <ul>
+        <li><strong>Enquiries.</strong> When you use a contact or investor enquiry form we receive your name, email address and message, and, where you give them, your organisation, country and area of interest. We also record that you ticked the consent box.</li>
+        <li><strong>Partner portal accounts.</strong> If you are invited to the partner portal we hold your email address, your name (if given), the projects you may view, the date your account was created and when you last signed in. Your password is stored only in a protected, one-way (hashed) form, so we cannot read it.</li>
+        <li><strong>Security records.</strong> To protect accounts we keep short-lived records of failed sign-in attempts, linked to the email address and network (IP) address used, so that repeated failures can be temporarily blocked.</li>
+        <li><strong>Technical data.</strong> Our hosting provider processes technical information such as IP addresses, browser type and the pages requested, in order to deliver the website and protect it from abuse.</li>
+        <li><strong>Analytics, only with your consent.</strong> If you choose "Accept analytics", Microsoft Clarity records how you use our public pages, such as clicks, scrolling and the pages viewed. Text you type into forms is masked. Clarity is never used on the partner portal, the partner login or the admin pages.</li>
+        <li><strong>Correspondence.</strong> If you email us, we keep the emails and any information you include.</li>
+      </ul>
+      <p>We do not ask for special category data (such as health information) and ask you not to send it to us.</p>"""
+    use = """<div class="table-scroll"><table class="dtable"><thead><tr><th>Purpose</th><th>Information</th><th>Lawful basis (UK GDPR)</th></tr></thead><tbody>
+        <tr><td>Responding to enquiries and discussing possible partnerships</td><td>Enquiry details, correspondence</td><td>Our legitimate interests in responding to people who contact us and developing business relationships; where you are acting for an organisation, steps before entering into a contract</td></tr>
+        <tr><td>Running the partner portal, including invitations, sign-in and access to the projects shared with you</td><td>Account details, security records</td><td>Performance of our arrangement with you or your organisation (including any confidentiality agreement), and our legitimate interests in keeping confidential information secure</td></tr>
+        <tr><td>Keeping the website and accounts secure</td><td>Technical data, security records</td><td>Our legitimate interests in protecting our website, our partners and confidential information</td></tr>
+        <tr><td>Understanding how the public website is used, so we can improve it</td><td>Analytics data</td><td>Your consent, which you can withdraw at any time</td></tr>
+        <tr><td>Meeting legal and regulatory obligations, and establishing or defending legal claims</td><td>Any of the above, as needed</td><td>Legal obligation, and our legitimate interests</td></tr>
+      </tbody></table></div>
+      <p>We do not sell your personal data, use it for automated decision-making, or send marketing emails without your agreement.</p>"""
+    share = """<p>We share personal data only with service providers who process it on our behalf and under our instructions:</p>
+      <ul>
+        <li><strong>Netlify, Inc.</strong> hosts the website, receives enquiry form submissions and stores partner portal account data.</li>
+        <li><strong>Microsoft Corporation</strong> provides Microsoft Clarity analytics, used only if you consent.</li>
+        <li><strong>Our email provider</strong>, used when we correspond with you.</li>
+      </ul>
+      <p>We may also share information with professional advisers, or where required by law, a court or a regulator. If you are introduced to a project owner or partner, we will only share your details with them where you have asked us to or agreed to it.</p>"""
+    transfers = """<p>Netlify and Microsoft are based in the United States, so personal data may be processed outside the UK. Where this happens we rely on recognised safeguards, such as the UK Extension to the EU-US Data Privacy Framework or the UK International Data Transfer Addendum to standard contractual clauses, as offered by those providers.</p>"""
+    keep = """<ul>
+        <li><strong>Enquiries and correspondence:</strong> for as long as needed to deal with your enquiry and any resulting discussions, and normally no longer than 24 months after our last contact with you.</li>
+        <li><strong>Partner portal accounts:</strong> while you have access. When access is no longer needed we delete the account; you can ask us to do this at any time.</li>
+        <li><strong>Failed sign-in records:</strong> cleared after a successful sign-in, and any temporary block lifts after 15 minutes.</li>
+        <li><strong>Sign-in cookies:</strong> partner sessions last up to 30 days and admin sessions up to 2 hours.</li>
+        <li><strong>Analytics:</strong> held by Microsoft in line with Microsoft's own retention periods.</li>
+      </ul>
+      <p>We may keep information for longer where the law requires it or where it is needed for a legal claim.</p>"""
+    security = """<p>We protect personal data with appropriate measures. Partner passwords are hashed, sign-in cookies are signed and cannot be read by scripts on the page, repeated failed sign-ins are blocked, and the admin area needs both a password and an authenticator code. No system is completely secure, so please keep your sign-in details private and tell us straight away if you think they have been misused.</p>"""
+    rights = """<p>Under UK data protection law you have the right to:</p>
+      <ul>
+        <li>ask for a copy of the personal data we hold about you;</li>
+        <li>ask us to correct inaccurate data or complete incomplete data;</li>
+        <li>ask us to delete your data;</li>
+        <li>ask us to restrict how we use your data;</li>
+        <li>object to our use of your data where we rely on legitimate interests;</li>
+        <li>ask for your data to be transferred to another organisation, where this applies;</li>
+        <li>withdraw your consent at any time, where we rely on consent (for analytics, use Cookie settings at the foot of any page).</li>
+      </ul>
+      <p>To use any of these rights, email <a href="mailto:{EMAIL}">{EMAIL}</a>. We will respond within one month. You also have the right to complain to the Information Commissioner's Office (ICO) at <a href="https://ico.org.uk/make-a-complaint/" rel="noopener">ico.org.uk</a>, although we would appreciate the chance to deal with your concern first.</p>""".replace("{EMAIL}", EMAIL)
+    other = f"""<p><strong>Cookies.</strong> Our <a href="../cookies/">Cookie Policy</a> explains the cookies we use and how to change your choice.</p>
+      <p><strong>Other websites.</strong> Our website links to other websites. We are not responsible for their privacy practices.</p>
+      <p><strong>Children.</strong> Our website and services are intended for businesses and professional investors, not for children.</p>
+      <p><strong>Changes.</strong> We may update this policy from time to time. The latest version will always be on this page, with the date it was last updated.</p>"""
+    legal_page("privacy", "Privacy Policy", "How Britcom Trading Limited, trading as Guilgal International, collects and uses personal data.",
+               "This policy explains how we collect, use and protect personal data when you use this website, contact us or use the partner portal.",
+               [("who", "Who we are", who), ("collect", "Information we collect", collect), ("use", "How we use it and our lawful bases", use),
+                ("share", "Who we share it with", share), ("transfers", "International transfers", transfers), ("keep", "How long we keep it", keep),
+                ("security", "How we protect it", security), ("rights", "Your rights", rights), ("other", "Cookies, other websites and changes", other)])
+
+
+def terms_of_use():
+    about = f"""<p>These terms apply to your use of this website, including the private partner portal. The website is operated by <strong>Britcom Trading Limited</strong>, trading as Guilgal International, a company registered in England and Wales with company number 15625520 ("we", "us", "our"). Our registered office address is shown on the <a href="{CH_URL}" rel="noopener">Companies House register</a>.</p>
+      <p>By using the website you agree to these terms. If you do not agree, please do not use it.</p>"""
+    role = """<p>Guilgal International facilitates mineral and energy project opportunities, mainly in Africa. We identify and coordinate opportunities and introduce project owners, investors, technical specialists and commercial partners.</p>
+      <p>We are not a mining operator, broker, fund, lender or investment, financial, legal or tax adviser. Nothing on this website is investment advice, a financial promotion, a recommendation, or an offer or solicitation to buy, sell or invest in anything. Any arrangement with us or with a project owner will be set out in separate written agreements.</p>"""
+    info = """<p>Information on this website, including project descriptions, figures, maps, timelines and estimates, is indicative and provided for general information only. It may be incomplete, may change and is subject to technical review and agreement. Statements about future plans, results or timings are forward-looking and may not happen as described. Images may be illustrative or regional examples rather than photographs of a specific project.</p>
+      <p>You should not rely on any information on this website when making a decision. Before entering into any transaction you should carry out your own due diligence and take independent technical, financial, legal and tax advice.</p>"""
+    portal = """<p>The partner portal is available only to people we have invited, normally after a confidentiality agreement has been signed. If you have a partner account:</p>
+      <ul>
+        <li>keep your sign-in details secure and do not share them; your account is for you alone;</li>
+        <li>use the information only to evaluate the opportunities shared with you, and do not copy, forward or publish it, or share links to it, except as your confidentiality agreement allows;</li>
+        <li>tell us straight away if you think someone else has used your account or seen confidential information.</li>
+      </ul>
+      <p>Your confidentiality agreement with us continues to apply to everything in the portal, including downloaded project briefs. If these terms and that agreement conflict, the confidentiality agreement prevails. We may suspend or end portal access at any time, for example when a discussion ends or if we believe these terms have been broken.</p>"""
+    use = """<p>You must not:</p>
+      <ul>
+        <li>try to gain access to any part of the website, account or information you are not authorised to see;</li>
+        <li>interfere with the website's security or operation, or introduce viruses or other harmful material;</li>
+        <li>use automated tools to copy or collect content from the website;</li>
+        <li>use the website for anything unlawful, misleading or fraudulent.</li>
+      </ul>"""
+    ip = """<p>The content of this website, including text, images, maps, designs and the Guilgal International name and logo, belongs to us or our licensors. You may view it and print or download extracts for your own reference. You may not otherwise copy, reproduce, adapt or distribute it without our written permission. Information about third-party projects may also be subject to the rights of the project owners.</p>"""
+    links = """<p>Links to other websites are provided for convenience only. We have no control over those websites and are not responsible for their content.</p>"""
+    liability = """<p>We provide the website free of charge and "as is". We do our best to keep it accurate and available, but we do not guarantee that it will be accurate, complete, up to date, uninterrupted or free from errors or viruses.</p>
+      <p>To the extent permitted by law, we are not liable for any loss or damage arising from your use of, or reliance on, the website or its content, including any loss of profit, business, opportunity or data, or any indirect or consequential loss. The website is intended for business and professional users.</p>
+      <p>Nothing in these terms limits or excludes our liability for death or personal injury caused by our negligence, for fraud or fraudulent misrepresentation, or for anything else that cannot be limited or excluded by law.</p>"""
+    general = f"""<p><strong>Privacy and cookies.</strong> Our <a href="../privacy/">Privacy Policy</a> and <a href="../cookies/">Cookie Policy</a> explain how we use personal data and cookies.</p>
+      <p><strong>Changes.</strong> We may update these terms from time to time. The version on this page applies each time you use the website.</p>
+      <p><strong>Governing law.</strong> These terms, and any dispute arising from them or from your use of the website, are governed by the law of England and Wales, and the courts of England and Wales have exclusive jurisdiction.</p>
+      <p><strong>Contact.</strong> Questions about these terms: <a href="mailto:{EMAIL}">{EMAIL}</a>.</p>"""
+    legal_page("terms", "Terms of Use", "The terms that apply to the Guilgal International website and partner portal.",
+               "Please read these terms carefully. They explain the basis on which you may use this website and the partner portal.",
+               [("about", "About these terms", about), ("role", "What Guilgal International does", role), ("info", "Information on this website", info),
+                ("portal", "The partner portal", portal), ("use", "Using the website", use), ("ip", "Intellectual property", ip),
+                ("links", "Links to other websites", links), ("liability", "Our liability", liability), ("general", "Privacy, changes and governing law", general)])
 
 
 def cookie_policy():
@@ -1177,8 +1281,8 @@ if __name__ == "__main__":
     for s, n, _ in PROJECTS:
         project_page(s, n)
         brief_page(s, n)
-    for s, t in [("privacy", "Privacy Policy"), ("terms", "Terms of Use")]:
-        legal(s, t)
+    privacy_policy()
+    terms_of_use()
     cookie_policy()
     seo()
     private_media()
