@@ -20,10 +20,11 @@ export default async (request, context) => {
   const members = getStore({ name: "members", consistency: "strong" });
 
   // JSON writes must come from this site's own pages
-  if (request.method !== "GET" && !path.endsWith("/briefs")) {
+  if (request.method === "POST" && !path.endsWith("/briefs")) {
     const ct = request.headers.get("content-type") || "";
     if (!ct.includes("application/json")) return json({ error: "Expected JSON" }, 415);
   }
+  // Admin cookie is SameSite=Strict, so other sites cannot send DELETE or upload requests with it.
 
   if (path === "/api/admin/login" && request.method === "POST") {
     const pw = env("ADMIN_PASSWORD"), secret = env("ADMIN_TOTP_SECRET");

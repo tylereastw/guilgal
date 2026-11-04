@@ -108,7 +108,9 @@ def qr(path, name):
     """Real, scannable QR code for SITE/path, saved as SVG; returns the file name."""
     out = ROOT / IMG / "qr" / f"{name}.svg"
     out.parent.mkdir(parents=True, exist_ok=True)
-    segno.make(SITE + "/" + path, error="m").save(str(out), scale=6, dark="#10291F", light=None, border=0)
+    q = segno.make(SITE + "/" + path, error="m")
+    q.save(str(out), scale=6, dark="#10291F", light=None, border=0)
+    q.save(str(out.with_suffix(".png")), scale=12, dark="#10291F", light="#FFFFFF", border=3)
     return f"qr/{name}.svg"
 
 
@@ -180,6 +182,7 @@ def page(path, title, desc, active, body, p, noindex=False, scripts=()):
   <meta name="description" content="{e(desc)}">{robots}{canon}
   <link rel="preload" href="{p}assets/fonts/v2/Montserrat-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="{p}assets/fonts/v2/OpenSans-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="icon" href="{p}public/images/Guilgal_Favicon.ico" sizes="any">
   <link rel="stylesheet" href="{p}css/fonts.css">
   <link rel="stylesheet" href="{p}css/styles.css">
 </head>
@@ -635,11 +638,24 @@ def admin():
           <div><h2>Project briefs</h2><p class="small">Upload a PDF for each project. Partners with access download it from the project page.</p>
             <ul class="briefs" data-briefs></ul></div>
         </div>
+        <h2 style="margin-top:40px">Project links and QR codes</h2>
+        <p class="small">Send these to partners with access. Each link opens the project page after the partner signs in; anyone without access is asked to log in.</p>
+        <ul class="qrs">{{QRLIST}}</ul>
         <h2 style="margin-top:40px">Partners</h2>
         <div class="table-scroll"><table class="dtable" data-users><thead><tr><th>Email</th><th>Name</th><th>Projects</th><th>Status</th><th>Last login</th><th></th></tr></thead><tbody></tbody></table></div>
       </div>
     </div></section>
 '''
+    qrs = []
+    for slug, name, _ in PROJECTS:
+        code = qr(f"members/projects/{slug}/", f"project-{slug}")
+        url = f"{SITE}/members/projects/{slug}/"
+        png = code.replace(".svg", ".png")
+        qrs.append(f'''<li><img src="{p}{IMG}{code}" alt="QR code for {e(name)}" width="120" height="120"><div><strong>{e(name)}</strong>
+          <code>{url}</code><span><a class="btn btn--sm btn--gold" href="{p}{IMG}{png}" download="Guilgal-International-{slug}-QR.png">Download PNG</a>
+          <a class="btn btn--sm btn--line-dark" href="{p}{IMG}{code}" download="Guilgal-International-{slug}-QR.svg">SVG</a>
+          <button class="btn btn--sm btn--line-dark" type="button" data-copy="{url}">Copy link</button></span></div></li>''')
+    body = body.replace("{QRLIST}", "".join(qrs))
     page("admin/", "Admin | Guilgal International", "Admin.", "", body, p, noindex=True, scripts=["js/admin.js"])
 
 
