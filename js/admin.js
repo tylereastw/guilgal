@@ -24,12 +24,7 @@
       <td>${u.disabled ? 'Disabled' : 'Active'}</td><td>${u.lastLogin ? new Date(u.lastLogin).toLocaleString('en-GB') : 'Never'}</td>
       <td><button class="btn btn--sm btn--line-dark" data-edit="${esc(u.email)}">Edit</button> <button class="btn btn--sm btn--line-dark" data-del="${esc(u.email)}">Delete</button></td></tr>`).join('')
       || '<tr><td colspan="6">No partners yet.</td></tr>';
-    $$('[data-edit]').forEach(b => b.addEventListener('click', () => {
-      const u = users.find(x => x.email === b.dataset.edit), f = $('[data-user-form]');
-      f.email.value = u.email; f.name.value = u.name; f.password.value = ''; f.resetPassword.checked = false; f.disabled.checked = u.disabled;
-      $$('input[name=projects]', f).forEach(c => { c.checked = u.projects.includes(c.value); });
-      f.scrollIntoView({ behavior: 'smooth' });
-    }));
+    $$('[data-edit]').forEach(b => b.addEventListener('click', () => editMode(users.find(x => x.email === b.dataset.edit))));
     $$('[data-del]').forEach(b => b.addEventListener('click', async () => {
       if (!confirm('Delete ' + b.dataset.del + '? They will lose access immediately.')) return;
       await api('users?email=' + encodeURIComponent(b.dataset.del), { method: 'DELETE' });
@@ -37,26 +32,7 @@
     }));
   }
 
-  async function loadBriefs() {
-    const { briefs, projects } = await api('briefs');
-    $('[data-briefs]').innerHTML = Object.entries(projects).map(([slug, name]) => `<li>
-      <strong>${esc(name)}</strong>
-      <span class="small">${briefs[slug] ? esc(briefs[slug].filename) + ', uploaded ' + new Date(briefs[slug].uploaded).toLocaleDateString('en-GB') : 'No brief uploaded'}</span>
-      <form data-brief="${slug}"><label class="sr" for="f-${slug}">PDF for ${esc(name)}</label><input id="f-${slug}" type="file" name="file" accept="application/pdf" required>
-      <button class="btn btn--sm btn--gold" type="submit">Upload</button>${briefs[slug] ? ` <button class="btn btn--sm btn--line-dark" type="button" data-clear-brief="${slug}">Remove</button>` : ''}</form></li>`).join('');
-    $$('form[data-brief]').forEach(f => f.addEventListener('submit', async e => {
-      e.preventDefault();
-      const fd = new FormData(f); fd.append('slug', f.dataset.brief);
-      try { await api('briefs', { method: 'POST', body: fd }); loadBriefs(); } catch (err) { alert(err.message); }
-    }));
-    $$('[data-clear-brief]').forEach(b => b.addEventListener('click', async () => {
-      if (!confirm('Remove this brief?')) return;
-      await api('briefs?slug=' + b.dataset.clearBrief, { method: 'DELETE' });
-      loadBriefs();
-    }));
-  }
-
-  const start = () => { showApp(true); loadUsers(); loadBriefs(); };
+  const start = () => { showApp(true); loadUsers(); };
 
   $('[data-admin-signin]').addEventListener('submit', async e => {
     e.preventDefault();
@@ -66,21 +42,86 @@
   });
   $('[data-admin-logout]').addEventListener('click', async () => { await postJSON('logout', {}); showApp(false); });
 
-  $('[data-user-form]').addEventListener('submit', async e => {
+  // ---------- add / edit partner form
+  const form = $('[data-user-form]');
+  const projectBoxes = () => $$('input[name=projects]', form);
+  const syncAll = () => {
+    const all = $('input[value="*"]', form).checked;
+    projectBoxes().filter(c => c.value !== '*').forEach(c => { c.disabled = all; if (all) c.checked = false; });
+  };
+  const syncPw = () => { $('[data-choose]').hidden = form.pwmode.value !== 'choose'; };
+  $('input[value="*"]', form).addEventListener('change', syncAll);
+  $$('input[name=pwmode]', form).forEach(r => r.addEventListener('change', syncPw));
+
+  function addMode() {
+    form.reset();
+    form.email.readOnly = false;
+    $('[data-form-title]').textContent = 'Add a partner';
+    $('[data-submit-label]').firstChild.textContent = 'Add partner ';
+    $('[data-gen-label]').textContent = 'Create a secure password for me';
+    $$('[data-only-edit]').forEach(el => { el.hidden = true; });
+    $('[data-edit-note]').hidden = true;
+    $('.form__msg', form).hidden = true;
+    form.pwmode.value = 'generate';
+    syncAll(); syncPw();
+  }
+  function editMode(u) {
+    addMode();
+    form.email.value = u.email; form.email.readOnly = true;
+    form.name.value = u.name;
+    projectBoxes().forEach(c => { c.checked = u.projects.includes(c.value); });
+    form.active.checked = !u.disabled;
+    $('[data-form-title]').textContent = 'Edit partner';
+    $('[data-submit-label]').firstChild.textContent = 'Save changes ';
+    $('[data-gen-label]').textContent = 'Create a new secure password';
+    $$('[data-only-edit]').forEach(el => { el.hidden = false; });
+    $('[data-edit-note]').hidden = false;
+    $('[data-edit-email]').textContent = u.email;
+    form.pwmode.value = 'keep';
+    $('[data-details]').hidden = true;
+    syncAll(); syncPw();
+    form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  $('[data-cancel-edit]').addEventListener('click', addMode);
+
+  function showDetails(email, password, isNew) {
+    const loginUrl = location.origin + '/login/';
+    const text = `Guilgal International partner portal\nSign in: ${loginUrl}\nEmail: ${email}\nPassword: ${password}`;
+    $('[data-details-title]').textContent = isNew ? 'Partner added.' : 'New password created.';
+    $('[data-details-text]').textContent = text;
+    $('[data-mail-details]').href = 'mailto:' + encodeURIComponent(email) + '?subject=' + encodeURIComponent('Your Guilgal International partner login') +
+      '&body=' + encodeURIComponent('Hello,\n\nYou now have access to the Guilgal International partner portal.\n\n' + text + '\n\nPlease keep these details private.\n');
+    $('[data-details]').hidden = false;
+  }
+  $('[data-copy-details]').addEventListener('click', e => {
+    navigator.clipboard.writeText($('[data-details-text]').textContent).then(() => { e.target.textContent = 'Copied'; setTimeout(() => { e.target.textContent = 'Copy details'; }, 1500); });
+  });
+
+  form.addEventListener('submit', async e => {
     e.preventDefault();
-    const f = e.target;
+    const isNew = !form.email.readOnly;
+    const mode = form.pwmode.value;
+    if (!form.email.value.trim()) return say(form, 'Enter the partner\'s email address.');
+    if (mode === 'choose' && form.password.value.length < 10) return say(form, 'Passwords must be at least 10 characters.');
+    const projects = projectBoxes().filter(c => c.checked).map(c => c.value);
+    if (!projects.length && !confirm('No projects are ticked, so this partner will not see anything yet. Continue?')) return;
     const data = {
-      email: f.email.value, name: f.name.value, password: f.password.value || undefined,
-      resetPassword: f.resetPassword.checked, disabled: f.disabled.checked,
-      projects: $$('input[name=projects]:checked', f).map(c => c.value),
+      email: form.email.value, name: form.name.value, projects,
+      password: mode === 'choose' ? form.password.value : undefined,
+      resetPassword: mode === 'generate' && !isNew,
+      disabled: isNew ? false : !form.active.checked,
     };
     try {
       const r = await postJSON('users', data);
-      say(f, r.password ? `Saved. Password for ${r.user.email}: ${r.password} (copy it now; it is not shown again)` : 'Saved.');
-      f.password.value = ''; f.resetPassword.checked = false;
+      const pw = r.password || (mode === 'choose' ? form.password.value : null);
+      if (pw) showDetails(r.user.email, pw, isNew); else $('[data-details]').hidden = true;
+      say(form, isNew ? 'Partner added.' : 'Changes saved.');
+      if (isNew) { const keep = $('.form__msg', form).textContent; addMode(); say(form, keep); }
+      else { form.pwmode.value = 'keep'; form.password.value = ''; syncPw(); }
       loadUsers();
-    } catch (err) { say(f, err.message); }
+    } catch (err) { say(form, err.message); }
   });
+  addMode();
 
   $$('[data-copy]').forEach(b => b.addEventListener('click', () => {
     navigator.clipboard.writeText(b.dataset.copy).then(() => { b.textContent = 'Copied'; setTimeout(() => { b.textContent = 'Copy link'; }, 1500); });

@@ -10,7 +10,10 @@ figures, tonnages, grades, timelines or ownership splits. Project facts below
 are taken from John Boardman's mock-ups and are marked for technical review.
 The previous design is kept in archive/editorial-v1/.
 """
+from datetime import date
 from html import escape
+import shutil
+import subprocess
 from pathlib import Path
 import segno
 
@@ -165,7 +168,7 @@ def footer(p):
     </div>
     <div class="wrap footer__bottom">
       <p class="footer__disclaimer">{DISCLAIMER}</p>
-      <p>Guilgal International Ltd, registered in England and Wales. <a href="{p}privacy/">Privacy</a> · <a href="{p}cookies/">Cookies</a> · <a href="{p}terms/">Terms</a></p>
+      <p>Guilgal International Ltd, registered in England and Wales. <a href="{p}privacy/">Privacy</a> · <a href="{p}cookies/">Cookies</a> · <a href="{p}terms/">Terms</a> · <a href="{p}cookies/" data-cookie-settings>Cookie settings</a></p>
     </div>
   </footer>'''
 
@@ -193,7 +196,7 @@ def page(path, title, desc, active, body, p, noindex=False, scripts=()):
 {body}
   </main>
   {footer(p)}
-  <script src="{p}js/main.js"></script>{"".join(f'<script src="{p}{x}"></script>' for x in scripts)}
+  <script src="{p}js/main.js"></script>{"".join(f'<script src="{p}{x}"></script>' for x in scripts)}{"" if noindex else f'<script src="{p}js/consent.js"></script>'}
 </body>
 </html>
 '''
@@ -336,12 +339,17 @@ def home():
       </div>
     </section>
 
-    <section class="section section--cream2">
+    <section class="section section--cream2" id="team">
       <div class="wrap">
-        <div class="shead"><h2>Latest News &amp; Milestones</h2></div>
-        {news_cards(p, NEWS[:3])}
+        <div class="shead"><h2>Meet the Team</h2></div>
+        <p class="lead">The people behind Guilgal International's project origination, partnerships and development activities across Africa.</p>
+        <ul class="people people--home">{"".join(f'''<li class="person"><a href="about/team/">
+          <div class="person__photo"><img src="{IMG}{t["photo"]}" alt="Portrait of {e(t["name"])}" style="object-position:{t.get("pos", "50% 25%")}" loading="lazy"></div>
+          <div class="person__head"><h3>{e(t["name"])}</h3><p class="person__role">{e(t["role"])}</p></div>
+          <div class="person__body"><p>{e(t["short"])}</p><span class="person__more">View profile {ico("arrow")}</span></div></a></li>''' for t in TEAM)}</ul>
       </div>
     </section>
+
 
     <section class="band">
       <div class="band__bg"><img src="{IMG}about-hero.jpg" alt=""></div>
@@ -449,17 +457,20 @@ def about():
 
 TEAM = [
     dict(name="John Boardman", role="Director, Guilgal International",
-         sub="Former CEO, 1620 Capital | International Mining Investment & Corporate Development", photo="team-john.jpg",
+         sub="Former CEO, 1620 Capital | International Mining Investment & Corporate Development", photo="team-john.jpg", pos="50% 6%",
+         short="Corporate strategy, international partnerships, investor relations and commercial project development.",
          bio=["John Boardman is responsible for Guilgal International's corporate strategy, international partnerships, investor relations and commercial project development.",
               "He has extensive experience in the mining sector, including his previous role as Chief Executive Officer of 1620 Capital in Perth, Western Australia, where he was involved in identifying, structuring and advancing mineral resource opportunities with ASX- and AIM-listed companies.",
               "John focuses on connecting African mineral opportunities with international partners, technical expertise and development capital."],
          keys=[("handshake", "Strategic partnerships"), ("people", "Investor engagement"), ("chart", "Corporate development"), ("target", "Project origination and transaction support")]),
     dict(name="Gedeon Ngoy Makonga Pelesa", role="DRC Project Partner", sub="Geological Coordination | Project Development", photo="team-gedeon.jpg",
+         short="Local knowledge, project coordination and geological engagement across key mineral opportunities in the DRC.",
          bio=["Gedeon Ngoy Makonga Pelesa supports Guilgal International's project activities in the Democratic Republic of the Congo, contributing extensive local knowledge, project coordination and geological engagement across key mineral opportunities.",
               "He has significant experience in exploration, project identification and liaison with local authorities, technical teams and community stakeholders, with a focus on responsible and sustainable development.",
               "Gedeon plays a key role in advancing Guilgal International's mineral projects, including copper, gold, tantalum, tin and critical minerals, and coordinates field activities, technical studies and local partnerships."],
          keys=[("pick", "Geological coordination"), ("map", "Project identification and evaluation"), ("people", "Local partnerships and stakeholder engagement"), ("leaf", "Field activities and technical support")]),
     dict(name="Didier", role="Project Partner", sub="Business Development | Strategic Relationships", photo="team-didier.jpg",
+         short="In-country relationships, commercial coordination and project development support in the DRC.",
          bio=["Didier contributes to Guilgal International's in-country relationships, commercial coordination and project development support in the Democratic Republic of the Congo.",
               "He plays an important role in business development, government and stakeholder engagement, and the facilitation of strategic partnerships across Guilgal International's project portfolio.",
               "Didier's local expertise and extensive network support the advancement of mineral and infrastructure opportunities, helping to create long-term value through collaboration and responsible development."],
@@ -473,7 +484,7 @@ def team():
           <p class="hero__sub">The people behind Guilgal International's project origination, partnerships and development activities across Africa.</p>'''
     cards = []
     for t in TEAM:
-        photo = f'<img src="{p}{IMG}{t["photo"]}" alt="Portrait of {e(t["name"])}">' if t["photo"] else f'<b aria-hidden="true">{e(t["name"][0])}</b>'
+        photo = f'<img src="{p}{IMG}{t["photo"]}" alt="Portrait of {e(t["name"])}" style="object-position:{t.get("pos", "50% 25%")}">' if t["photo"] else f'<b aria-hidden="true">{e(t["name"][0])}</b>'
         keys = "".join(f"<li>{ico(i)}{e(k)}</li>" for i, k in t["keys"])
         cards.append(f'''<li class="person">
           <div class="person__photo">{photo}</div>
@@ -642,19 +653,38 @@ def admin():
       <div data-admin-app hidden>
         <p><button class="btn btn--line-dark btn--sm" type="button" data-admin-logout>Sign out</button></p>
         <div class="grid-2" style="align-items:start">
-          <div class="formcard"><h3 class="formcard__head">Add or update a partner</h3>
-            <form class="form" data-user-form novalidate>
-              <div class="form__row"><label class="field"><span>Email*</span><input type="email" name="email" required></label>
-              <label class="field"><span>Name</span><input name="name"></label></div>
-              <fieldset class="checks"><legend>Projects</legend><label class="check"><input type="checkbox" name="projects" value="*"><span>All projects</span></label>{checks}</fieldset>
-              <label class="field"><span>Password (leave blank to generate one for new partners, or keep the current one)</span><input name="password" autocomplete="new-password"></label>
-              <label class="check"><input type="checkbox" name="resetPassword"><span>Generate a new password (signs the partner out everywhere)</span></label>
-              <label class="check"><input type="checkbox" name="disabled"><span>Disable this account</span></label>
+          <div class="formcard"><h3 class="formcard__head" data-form-title>Add a partner</h3>
+            <form class="form pform" data-user-form novalidate>
+              <p class="pform__editing" data-edit-note hidden>Editing <b data-edit-email></b> <button type="button" class="linkbtn" data-cancel-edit>Add a new partner instead</button></p>
+              <div class="form__row">
+                <label class="field"><span>Email address*</span><input type="email" name="email" required></label>
+                <label class="field"><span>Name</span><input name="name" placeholder="Optional"></label>
+              </div>
+              <fieldset class="checks">
+                <legend>Project access</legend>
+                <p class="small">The partner only sees the projects ticked here.</p>
+                <label class="check check--all"><input type="checkbox" name="projects" value="*"><span>All projects, including any added later</span></label>
+                {checks}
+              </fieldset>
+              <fieldset class="checks">
+                <legend>Password</legend>
+                <label class="check" data-only-edit hidden><input type="radio" name="pwmode" value="keep"><span>Keep their current password</span></label>
+                <label class="check"><input type="radio" name="pwmode" value="generate" checked><span data-gen-label>Create a secure password for me</span></label>
+                <label class="check"><input type="radio" name="pwmode" value="choose"><span>Let me type a password</span></label>
+                <label class="field" data-choose hidden><span>Password (at least 10 characters)</span><input name="password" autocomplete="new-password"></label>
+                <p class="small" data-only-edit hidden>A new password signs the partner out on all their devices.</p>
+              </fieldset>
+              <label class="check switch" data-only-edit hidden><input type="checkbox" name="active" checked><span>Account active (untick to block access without deleting)</span></label>
               <p class="form__msg" role="alert" hidden></p>
-              <button class="btn btn--gold" type="submit">Save partner {ico("arrow")}</button>
-            </form></div>
-          <div><h2>Project briefs</h2><p class="small">Upload a PDF for each project. Partners with access download it from the project page.</p>
-            <ul class="briefs" data-briefs></ul></div>
+              <div class="pform__actions"><button class="btn btn--gold" type="submit" data-submit-label>Add partner {ico("arrow")}</button></div>
+            </form>
+            <div class="details" data-details hidden>
+              <p><strong data-details-title>Partner added.</strong> Send them these login details. The password is shown only once.</p>
+              <pre data-details-text></pre>
+              <div class="pform__actions"><button class="btn btn--sm btn--gold" type="button" data-copy-details>Copy details</button><a class="btn btn--sm btn--line-dark" data-mail-details href="#">Open in email</a></div>
+            </div></div>
+          <div><h2>Project briefs</h2><p class="small">Briefs are generated automatically from each project page every time the site is built, so they always match the page. Preview them here.</p>
+            <ul class="briefs">{{BRIEFLIST}}</ul></div>
         </div>
         <h2 style="margin-top:40px">Project links and QR codes</h2>
         <p class="small">Send these to partners with access. Each link opens the project page after the partner signs in; anyone without access is asked to log in.</p>
@@ -674,6 +704,9 @@ def admin():
           <a class="btn btn--sm btn--line-dark" href="{p}{IMG}{code}" download="Guilgal-International-{slug}-QR.svg">SVG</a>
           <button class="btn btn--sm btn--line-dark" type="button" data-copy="{url}">Copy link</button></span></div></li>''')
     body = body.replace("{QRLIST}", "".join(qrs))
+    body = body.replace("{BRIEFLIST}", "".join(
+        f'<li><strong>{e(n)}</strong><span><a class="btn btn--sm btn--gold" href="{p}members/projects/{s}/brief.pdf" target="_blank" rel="noopener">Open PDF</a></span></li>'
+        for s, n, _ in PROJECTS))
     page("admin/", "Admin | Guilgal International", "Admin.", "", body, p, noindex=True, scripts=["js/admin.js"])
 
 
@@ -820,9 +853,8 @@ def project_page(slug, card_name):
           <p class="hero__meta">{meta}</p>
           <p class="hero__lead">{e(d["lead"])}</p>
           <ul class="pills">{"".join(f'<li><span class="pill">{e(x)}</span></li>' for x in d["pills"])}</ul>
-          <div class="hero__actions"><a class="btn btn--gold" href="brief">{ico("doc")} Download project brief</a><a class="btn btn--line" href="mailto:{EMAIL}?subject={e(card_name)}">Contact us {ico("arrow")}</a></div>'''
-    side = qr_panel(p, path, f"project-{slug}", f"Scan for {e(card_name)} updates", "View project information, technical summaries and latest milestones.")
-    body = hero(p, f"{slug}-hero.jpg", inner, "hero--page", side)
+          <div class="hero__actions"><a class="btn btn--gold" href="brief.pdf" download>{ico("doc")} Download project brief</a><a class="btn btn--line" href="mailto:{EMAIL}?subject={e(card_name)}">Contact us {ico("arrow")}</a></div>'''
+    body = hero(p, f"{slug}-hero.jpg", inner, "hero--page")
     if d.get("facts"):
         body += '    <section class="factbar"><ul class="factbar__list">' + "".join(
             f"<li>{dot(i)}<div><strong>{e(t)}</strong><span>{e(s)}</span></div></li>" for i, t, s in d["facts"]) + "</ul></section>\n"
@@ -882,7 +914,7 @@ def project_page(slug, card_name):
         {tl}
         <div class="opp"><p class="label">Partnership opportunity</p><div class="opp__text">{dot("handshake", True)}<p class="small">{e(d["opportunity"])}</p></div>
           <a class="btn btn--gold" href="{p}investors/#enquiry">Investor enquiries {ico("arrow")}</a>
-          <a class="btn btn--dark" href="brief">Download project brief {ico("arrow")}</a>
+          <a class="btn btn--dark" href="brief.pdf" download>Download project brief {ico("arrow")}</a>
           <p class="small">{INDICATIVE}</p></div>
       </div>
     </section>
@@ -893,6 +925,140 @@ def project_page(slug, card_name):
       <a class="related__more" href="{p}members/">Partner portal →</a></div></section>
 '''
     page(path, f"{d['title']} | Partner Access | Guilgal International", "Private project page.", "Projects", body, p, noindex=True)
+
+
+BRIEF_CSS = """
+@page { size: A4; margin: 0; }
+* { box-sizing: border-box; }
+html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+body { margin: 0; font: 9.6pt/1.5 "Open Sans", Arial, sans-serif; color: #13251D; background: #fff; }
+h1, h2, h3 { font-family: "Montserrat", Arial, sans-serif; margin: 0; }
+.cover { position: relative; height: 98mm; color: #fff; background: #10291F; overflow: hidden; }
+.cover img.bg { position: absolute; right: 0; top: 0; width: 70%; height: 100%; object-fit: cover; }
+.cover::before { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(90deg, #10291F 28%, rgba(16,41,31,.85) 45%, rgba(16,41,31,.2) 80%); }
+.cover .in { position: relative; z-index: 2; padding: 12mm 14mm; height: 100%; display: flex; flex-direction: column; }
+.brandrow { display: flex; align-items: center; gap: 10px; }
+.brandrow img { width: 15mm; height: 15mm; border-radius: 50%; object-fit: cover; }
+.brandrow b { font: 700 15pt "Cinzel", Georgia, serif; color: #D7B46E; letter-spacing: .04em; display: block; line-height: 1; }
+.brandrow span { font: 600 6.5pt "Montserrat", Arial, sans-serif; letter-spacing: .38em; display: block; margin-top: 3px; }
+.tagline { font: 600 6pt "Montserrat", Arial, sans-serif; letter-spacing: .12em; color: rgba(255,255,255,.8); margin-top: 3px; }
+.kicker { margin-top: auto; font: 700 7.5pt "Montserrat", Arial, sans-serif; letter-spacing: .14em; text-transform: uppercase; color: #D7B46E; }
+.cover h1 { font-size: 27pt; line-height: 1.05; margin: 2mm 0 2mm; max-width: 120mm; }
+.cover .meta { font: 500 11pt "Montserrat", Arial, sans-serif; margin-bottom: 3mm; }
+.cover .meta i { color: #D7B46E; font-style: normal; padding: 0 6px; }
+.cover .lead { font: 600 10pt/1.45 "Montserrat", Arial, sans-serif; color: #E8C77E; max-width: 115mm; margin: 0 0 3mm; }
+.pills { display: flex; flex-wrap: wrap; gap: 5px; margin: 0; padding: 0; list-style: none; }
+.pills li { border: 1px solid rgba(255,255,255,.8); border-radius: 20px; padding: 2px 9px; font: 600 6.5pt "Montserrat", Arial, sans-serif; letter-spacing: .06em; text-transform: uppercase; }
+.page { padding: 8mm 14mm 0; }
+.note { background: #FFF6E0; border-left: 3px solid #D7B46E; padding: 3mm 4mm; font-size: 8.4pt; margin-bottom: 5mm; }
+.role { background: #10291F; color: #fff; padding: 3mm 4mm; font-weight: 600; margin-bottom: 4mm; }
+.label { font: 700 8pt "Montserrat", Arial, sans-serif; letter-spacing: .1em; text-transform: uppercase; color: #9A7424; margin: 0 0 2.5mm; display: flex; align-items: center; gap: 8px; }
+.label::after { content: ""; width: 14mm; height: 1px; background: #D7B46E; }
+.cols { display: grid; grid-template-columns: 1.1fr 1fr; gap: 8mm; margin-bottom: 5mm; }
+.cols3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6mm; margin-bottom: 6mm; }
+.cols p { margin: 0 0 2.5mm; }
+.hl { list-style: none; margin: 0; padding: 0; display: grid; gap: 2.2mm; }
+.hl li { position: relative; padding-left: 6mm; }
+.hl li::before { content: ""; position: absolute; left: 0; top: 1.2mm; width: 3mm; height: 3mm; border-radius: 50%; background: #10291F; box-shadow: inset 0 0 0 .8mm #D7B46E; }
+.facts { display: grid; grid-template-columns: repeat(5, 1fr); gap: 3mm; margin-bottom: 6mm; padding: 3mm 0; border-top: 1px solid #E4DCCB; border-bottom: 1px solid #E4DCCB; }
+.facts b { display: block; font: 700 7pt "Montserrat", Arial, sans-serif; text-transform: uppercase; }
+.facts span { font-size: 7.4pt; color: #3F4A44; line-height: 1.3; display: block; }
+figure { margin: 0; break-inside: avoid; }
+figure img { width: 100%; height: 34mm; object-fit: cover; border-radius: 2px; display: block; }
+figure.map img { height: 56mm; }
+figcaption { font-size: 7pt; color: #3F4A44; margin-top: 1mm; }
+.bul { list-style: none; margin: 2mm 0 0; padding: 0; }
+.bul li { position: relative; padding-left: 4mm; font-size: 8.2pt; margin-bottom: 1mm; }
+.bul li::before { content: ""; position: absolute; left: 0; top: 1.4mm; width: 1.8mm; height: 1.8mm; border-radius: 50%; border: .5mm solid #D7B46E; }
+table { width: 100%; border-collapse: collapse; font-size: 8pt; }
+th { background: #10291F; color: #fff; text-align: left; padding: 1.4mm 2mm; font: 600 7.4pt "Montserrat", Arial, sans-serif; }
+td { padding: 1.2mm 2mm; border-bottom: 1px solid #E4DCCB; }
+td:first-child { font-weight: 700; }
+.steps { list-style: none; margin: 0; padding: 0; counter-reset: s; display: grid; gap: 2mm; }
+.steps li { counter-increment: s; position: relative; padding-left: 8mm; min-height: 6mm; }
+.steps li::before { content: counter(s); position: absolute; left: 0; top: 0; width: 5.6mm; height: 5.6mm; border-radius: 50%; background: #D7B46E; color: #10291F; font: 700 8pt/5.6mm "Montserrat", Arial, sans-serif; text-align: center; }
+.steps b { display: block; font: 700 8.4pt "Montserrat", Arial, sans-serif; }
+.steps span { font-size: 8pt; color: #3F4A44; }
+.tl { list-style: none; margin: 0 0 2mm; padding: 0; display: grid; gap: 1.6mm; }
+.tl li { display: grid; grid-template-columns: 22mm 1fr; font-size: 8pt; }
+.tl b { font: 700 8pt "Montserrat", Arial, sans-serif; }
+.small { font-size: 7.4pt; color: #3F4A44; }
+.keep { break-inside: avoid; }
+.foot { margin-top: 6mm; background: #13251D; color: rgba(255,255,255,.85); padding: 6mm 14mm; font-size: 7.6pt; break-inside: avoid; }
+.foot b { color: #D7B46E; font-family: "Montserrat", Arial, sans-serif; }
+.foot p { margin: 0 0 1.5mm; }
+"""
+
+
+def brief_page(slug, card_name):
+    """Print-designed HTML version of a project page; tools/briefs.mjs prints it to brief.pdf."""
+    d = PDATA[slug]
+    root = "../../../"
+    img = lambda f: f"{root}{IMG}{f}"
+    meta = "<i>|</i>".join(e(m) for m in d["meta"])
+    sub = f'<p class="meta">{e(d["sub"])}</p>' if d.get("sub") else ""
+    pills = "".join(f"<li>{e(x)}</li>" for x in d["pills"])
+    facts = ("<div class='facts'>" + "".join(f"<div><b>{e(t)}</b><span>{e(x)}</span></div>" for _, t, x in d["facts"]) + "</div>") if d.get("facts") else ""
+    role = "<p class='role'>Guilgal International's role on this project is commercial facilitation and introductions only.</p>" if d.get("role") else ""
+    note = f"<p class='note'>{e(d['note'])}</p>" if d.get("note") else ""
+    figs = []
+    for title, im, cap, bullets in d["figures"]:
+        bl = "<ul class='bul'>" + "".join(f"<li>{e(b)}</li>" for b in bullets) + "</ul>" if bullets else ""
+        figs.append(f"<div class='keep'><p class='label'>{e(title)}</p><figure><img src='{img(slug + '-' + im + '.jpg')}' alt=''>{f'<figcaption>{e(cap)}</figcaption>' if cap else ''}</figure>{bl}</div>")
+    for st, sub_, im, bl, status in d.get("sites", []):
+        figs.append(f"<div class='keep'><p class='label'>{e(st)}</p><p class='small' style='margin:-1mm 0 2mm'>{e(sub_)}</p><figure><img src='{img(slug + '-' + im + '.jpg')}' alt=''></figure>"
+                    "<ul class='bul'>" + "".join(f"<li>{e(x)}</li>" for x in bl) + "</ul>"
+                    "<p class='label' style='margin-top:3mm'>Project status (indicative)</p><ol class='steps'>" +
+                    "".join(f"<li><b>{e(a)}</b><span>{e(b)}</span></li>" for a, b in status) + "</ol></div>")
+    table = ""
+    if d.get("table"):
+        tt, head, rows, tnote = d["table"]
+        table = (f"<div class='keep'><p class='label'>{e(tt)}</p><table><thead><tr>" + "".join(f"<th>{h}</th>" for h in head) + "</tr></thead><tbody>" +
+                 "".join("<tr>" + "".join(f"<td>{c}</td>" for c in r) + "</tr>" for r in rows) + f"</tbody></table><p class='small'>{e(tnote)}</p></div>")
+        figs.append(table)
+    grid = "cols3" if len(figs) >= 3 else "cols"
+    gallery = ""
+    if d.get("gallery"):
+        n = min(len(d["gallery"]), 4)
+        gallery = (f"<div class='keep' style='display:grid;grid-template-columns:repeat({n},1fr);gap:4mm;margin-bottom:6mm'>" +
+                   "".join(f"<figure><img src='{img(slug + '-' + g + '.jpg')}' alt='' style='height:28mm'><figcaption>{e(c)}</figcaption></figure>" for g, c in d["gallery"][:4]) + "</div>")
+    prog = ("<div class='keep'><p class='label'>" + ("Development pathway" if slug == "alpha" else "Next steps" if slug == "nizi-baluma" else "Exploration programme") +
+            "</p><ol class='steps'>" + "".join(f"<li><b>{e(t)}</b>{f'<span>{e(x)}</span>' if x else ''}</li>" for t, x in d["programme"]) + "</ol></div>") if d.get("programme") else ""
+    tl = ""
+    if d.get("timeline"):
+        tl = ("<div class='keep'><p class='label'>Indicative timeline</p><ul class='tl'>" + "".join(f"<li><b>{e(a)}</b><span>{e(b)}</span></li>" for a, b in d["timeline"]) +
+              f"</ul><p class='small'>{e(d.get('timeline_note', 'Timeline is indicative and subject to funding, access, seasonal conditions and regulatory approvals.'))}</p></div>")
+    benefits = ("<div class='keep'><p class='label'>Strategic benefits</p><ul class='hl'>" + "".join(f"<li>{e(t)}</li>" for _, t in d["benefits"]) + "</ul></div>") if d.get("benefits") else ""
+    opp = f"<div class='keep'><p class='label'>Partnership opportunity</p><p>{e(d['opportunity'])}</p></div>"
+    lower = [x for x in (prog, benefits, tl, opp) if x]
+    generated = date.today().strftime("%-d %B %Y")
+    html = f"""<!doctype html><html lang="en-GB"><head><meta charset="utf-8"><title>{e(d['title'])}: Project Brief | Guilgal International</title>
+<meta name="robots" content="noindex, nofollow, noarchive"><link rel="stylesheet" href="{root}css/fonts.css"><style>{BRIEF_CSS}</style></head><body>
+<section class="cover"><img class="bg" src="{img(slug + '-hero.jpg')}" alt=""><div class="in">
+  <div class="brandrow"><img src="{img('logo-emblem.jpg')}" alt=""><div><b>GUILGAL</b><span>INTERNATIONAL</span><div class="tagline">EXPLORATION | DEVELOPMENT | PARTNERSHIPS</div></div></div>
+  <p class="kicker">Project brief · Confidential</p>
+  <h1>{e(d['title'])}</h1>{sub}<p class="meta">{meta}</p>
+  <p class="lead">{e(d['lead'])}</p><ul class="pills">{pills}</ul>
+</div></section>
+<main class="page">
+  <p class="note"><b>Confidential. For invited partners only.</b> {INDICATIVE} Facts and figures are draft and require competent technical review.</p>
+  {role}{note}{facts}
+  <div class="cols"><div><p class="label">Project overview</p>{''.join(f'<p>{e(x)}</p>' for x in d['overview'])}</div>
+    <div><p class="label">Key highlights</p><ul class="hl">{''.join(f'<li>{e(t)}</li>' for _, t in d['highlights'])}</ul></div></div>
+  <div class="cols"><figure class="map keep"><p class="label">Project location</p><img src="{img(slug + '-location.jpg')}" alt=""><figcaption>Illustrative location map</figcaption></figure>
+    <div>{figs[0] if figs else ''}</div></div>
+  {f'<div class="{grid}">' + ''.join(figs[1:]) + '</div>' if len(figs) > 1 else ''}
+  {gallery}
+  <div class="cols3">{''.join(lower)}</div>
+</main>
+<footer class="foot">
+  <p><b>Contact Guilgal International</b> · John Boardman, Director · {EMAIL} · {SITE}</p>
+  <p>{DISCLAIMER} {INDICATIVE}</p>
+  <p>Guilgal International Ltd, registered in England and Wales. Generated from the project page on {generated}.</p>
+</footer></body></html>"""
+    assert "—" not in html, f"em dash in brief {slug}"
+    out = ROOT / f"members/projects/{slug}/brief.html"
+    out.write_text(html)
 
 
 def legal(slug, title):
@@ -906,6 +1072,36 @@ def legal(slug, title):
     page(f"{slug}/", f"{title} | Guilgal International", f"{title} for Guilgal International.", "", body, p)
 
 
+def cookie_policy():
+    p = "../"
+    rows = [
+        ("gi_cookie_consent", "Guilgal International", "Essential", "Remembers your cookie choice (stored in your browser, not sent to us).", "12 months"),
+        ("gi_session", "Guilgal International", "Essential", "Keeps invited partners signed in to the private partner portal.", "30 days"),
+        ("gi_admin", "Guilgal International", "Essential", "Keeps Guilgal International administrators signed in to the admin panel.", "2 hours"),
+        ("_clck, _clsk, CLID, ANONCHK, MR, MUID, SM", "Microsoft Clarity", "Analytics (only with consent)", "Measure how visitors use the site, including page views, clicks and scrolling, so we can improve it.", "Up to 12 months"),
+    ]
+    table = "".join(f"<tr><td>{e(a)}</td><td>{e(b)}</td><td>{e(c)}</td><td>{e(d)}</td><td>{e(x)}</td></tr>" for a, b, c, d, x in rows)
+    body = hero(p, "about-river.jpg", "<h1>Cookie Policy</h1>") + f'''
+    <section class="section"><div class="wrap legal">
+      <p class="lead">This policy explains how Guilgal International Ltd uses cookies and similar technologies on {SITE}.</p>
+      <h2>What cookies are</h2>
+      <p>Cookies are small files stored on your device by websites you visit. Some are essential for a site to work; others help the site owner understand how it is used.</p>
+      <h2>Cookies we use</h2>
+      <div class="table-scroll"><table class="dtable"><thead><tr><th>Name</th><th>Set by</th><th>Type</th><th>Purpose</th><th>Duration</th></tr></thead><tbody>{table}</tbody></table></div>
+      <h2>Analytics</h2>
+      <p>We use Microsoft Clarity to understand how visitors use our public pages. Clarity records interactions such as clicks, scrolling and mouse movement and produces heatmaps and session replays; text you type into forms is masked. Clarity cookies are set only if you choose "Accept analytics". Clarity is never used on the private partner portal, the partner login or the admin pages. Microsoft's privacy statement: <a href="https://privacy.microsoft.com/privacystatement">privacy.microsoft.com</a>.</p>
+      <h2>Hosting</h2>
+      <p>The site is hosted by Netlify. Netlify processes technical data such as IP addresses to deliver the site and protect it from abuse; it does not set analytics or advertising cookies on this site. Enquiry forms are processed through Netlify Forms.</p>
+      <h2>Changing your choice</h2>
+      <p>You can change your choice at any time using <a href="#" data-cookie-settings>Cookie settings</a> (also in the footer of every page), or by clearing cookies in your browser.</p>
+      <h2>Contact</h2>
+      <p>Questions about this policy: <a href="mailto:{EMAIL}">{EMAIL}</a>. Guilgal International Ltd, registered in England and Wales.</p>
+      <p class="small">Last updated {date.today().strftime("%-d %B %Y")}.</p>
+    </div></section>
+'''
+    page("cookies/", "Cookie Policy | Guilgal International", "How Guilgal International uses cookies.", "", body, p)
+
+
 def seo():
     pub = ["", "about/", "about/team/", "investors/", "news/", "contact/", "privacy/", "cookies/", "terms/"]
     (ROOT / "sitemap.xml").write_text('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
@@ -917,7 +1113,13 @@ if __name__ == "__main__":
     home(); about(); team(); investors(); news(); contact(); members(); login(); admin(); thanks()
     for s, n, _ in PROJECTS:
         project_page(s, n)
-    for s, t in [("privacy", "Privacy Policy"), ("cookies", "Cookie Policy"), ("terms", "Terms of Use")]:
+        brief_page(s, n)
+    for s, t in [("privacy", "Privacy Policy"), ("terms", "Terms of Use")]:
         legal(s, t)
+    cookie_policy()
     seo()
+    if shutil.which("node"):
+        subprocess.run(["node", str(ROOT / "tools" / "briefs.mjs")], check=True)
+    else:
+        print("node not found: project brief PDFs were not regenerated (run node tools/briefs.mjs)")
     print("built")

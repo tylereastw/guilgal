@@ -11,7 +11,6 @@
 //   store "members": users/<email>  { email, name, salt, hash, projects: [slugs] | ["*"], ver, disabled, created }
 //                    attempts/<key> { n, until }  failed-login counters
 //                    config/session-secret, config/admin-totp, config/admin-totp-pending
-//   store "briefs":  <slug>          PDF project briefs uploaded from the admin panel
 
 export const PROJECTS = {
   "pumba": "Pumba Copper & Gold",

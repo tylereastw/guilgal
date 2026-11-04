@@ -81,7 +81,7 @@ reached by direct link (or QR code); there is no public projects page.
 | Gate on every `/members/` request (redirects to `/login/`, blocks unassigned projects) | `netlify/edge-functions/members-gate.mjs` |
 | Partner sign in / sign out / who am I | `netlify/functions/login.mjs` (`/api/login`, `/api/logout`, `/api/me`) |
 | Admin API: partners, project access, briefs | `netlify/functions/admin.mjs` (`/api/admin/*`) |
-| Brief downloads (`/members/projects/<slug>/brief`) | `netlify/functions/brief.mjs` |
+| Project briefs: PDF generated from each project page at build time (`members/projects/<slug>/brief.pdf`, behind the login) | `tools/build.py` + `tools/briefs.mjs` |
 | Shared crypto and session helpers | `netlify/lib/auth.mjs` |
 | Pages | `/login/`, `/members/` (portal), `/admin/` |
 
@@ -103,8 +103,8 @@ dashboard (Blobs) and visit `/admin/` again.
 
 **In the admin panel** you can add a partner (email, name, projects; a password is generated
 and shown once), change their projects, reset their password (signs them out everywhere),
-disable or delete them, upload a PDF brief for each project, and download each project's QR
-code and link to send on.
+disable or delete them, preview each project's generated brief, and download each project's QR
+code and link to send on. After adding a partner the panel shows their login details to copy or email.
 
 ## Forms
 The contact and investor enquiry forms are Netlify Forms (`data-netlify`, with a honeypot).
@@ -114,3 +114,14 @@ Submissions appear in Netlify under Forms; turn on email notifications there
 ## Images
 `public/images/v2/IMAGES.md` lists every image; `public/images/v2/IMAGE_PROMPTS.md` lists the
 blurry ones with prompts to regenerate them.
+
+## Cookies and analytics
+Microsoft Clarity (project `z8gzw297n1`) loads only after a visitor chooses "Accept analytics" in
+the cookie banner (`js/consent.js`), and never on `/members/`, `/login/` or `/admin/`, so private
+project pages are not recorded. "Cookie settings" in the footer reopens the banner. The Cookie
+Policy page lists every cookie. Netlify hosting and Forms set no analytics cookies; Netlify
+Analytics, if switched on in the dashboard, is server-side and cookie-free.
+
+## Building
+`python3 tools/build.py` regenerates every page and then prints the project brief PDFs with
+Playwright (`node tools/briefs.mjs`). Commit the generated files.
