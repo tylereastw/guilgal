@@ -46,10 +46,28 @@
             <button class="btn btn--gold" type="submit">Finish setup <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
           </form></div>
       </div>
+      <div data-admin-invite hidden>
+        <div class="formcard" style="max-width:560px"><h3 class="formcard__head">Set up your admin account</h3>
+          <form class="form" data-invite-form novalidate>
+            <p class="small">You have been invited to manage the Guilgal International partner portal as <strong data-invite-email></strong>.</p>
+            <p class="small"><strong>1.</strong> Choose a password (at least 12 characters).</p>
+            <label class="field"><span>Password*</span><input type="password" name="password" autocomplete="new-password" required></label>
+            <label class="field"><span>Repeat password*</span><input type="password" name="password2" autocomplete="new-password" required></label>
+            <p class="small"><strong>2.</strong> In an authenticator app on your phone (Google Authenticator, Microsoft Authenticator or 1Password), tap + and scan this code.</p>
+            <div class="setup-qr" data-invite-qr></div>
+            <p class="small">Can't scan? Choose "Enter a setup key" and type: <code data-invite-key></code></p>
+            <p class="small"><strong>3.</strong> Enter the 6-digit code the app now shows.</p>
+            <label class="field"><span>Authenticator code*</span><input name="code" inputmode="numeric" maxlength="6" autocomplete="one-time-code" required></label>
+            <p class="form__msg" role="alert" hidden></p>
+            <button class="btn btn--gold" type="submit">Finish setup <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+          </form></div>
+      </div>
       <div data-admin-login hidden>
         <div class="formcard" style="max-width:460px"><h3 class="formcard__head">Admin sign in</h3>
           <form class="form" data-admin-signin novalidate>
-            <label class="field"><span>Admin password*</span><input type="password" name="password" autocomplete="current-password" required></label>
+            <label class="field"><span>Email</span><input type="email" name="email" autocomplete="username" placeholder="Your admin email"></label>
+            <p class="small" style="margin-top:-6px">Leave the email blank if you sign in with the main admin password.</p>
+            <label class="field"><span>Password*</span><input type="password" name="password" autocomplete="current-password" required></label>
             <label class="field"><span>Authenticator code*</span><input name="code" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="one-time-code" required></label>
             <p class="form__msg" role="alert" hidden></p>
             <button class="btn btn--gold" type="submit">Sign in <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
@@ -61,6 +79,7 @@
             <button type="button" role="tab" class="adm-tab is-on" data-tab="partners" aria-selected="true"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="7" r="3"/><circle cx="5" cy="10" r="2.3"/><circle cx="19" cy="10" r="2.3"/><path d="M7 20c0-3 2-6 5-6s5 3 5 6M1 19c0-2 2-4 4-4M23 19c0-2-2-4-4-4"/></svg> Partners</button>
             <button type="button" role="tab" class="adm-tab" data-tab="links" aria-selected="false"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-3 6 3 6-3v15l-6 3-6-3-6 3zM9 3v15M15 6v15"/></svg> Project links &amp; QR codes</button>
             <button type="button" role="tab" class="adm-tab" data-tab="briefs" aria-selected="false"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2h9l5 5v15H6zM15 2v5h5M9 12h8M9 16h8M9 8h3"/></svg> Project briefs</button>
+            <button type="button" role="tab" class="adm-tab" data-tab="admins" aria-selected="false"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l8 3v6c0 5-3.5 9-8 11-4.5-2-8-6-8-11V5z"/><path d="M8 12l3 3 5-6"/></svg> Admins</button>
           </div>
           <button class="btn btn--line-dark btn--sm" type="button" data-admin-logout>Sign out</button>
         </div>
@@ -91,6 +110,28 @@
         <div class="adm-panel" data-panel="briefs" hidden>
           <div class="adm-head"><div><h2>Project briefs</h2><p class="small">Briefs are generated automatically from each project page every time the site is built, so they always match the page. Nothing needs uploading.</p></div></div>
           <ul class="briefs" data-briefs></ul>
+        </div>
+
+        <div class="adm-panel" data-panel="admins" hidden>
+          <div class="adm-head"><div><h2>Admins</h2><p class="small">People who can manage partners in this panel. Each admin has their own email, password and authenticator code. <span data-me-line></span></p></div></div>
+          <div class="grid-2" style="align-items:start">
+            <div><ul class="ulist" data-admins></ul></div>
+            <div class="formcard"><h3 class="formcard__head">Add an admin</h3>
+              <form class="form pform" data-admin-add novalidate>
+                <label class="field"><span>Email address*</span><input type="email" name="email" required></label>
+                <label class="field"><span>Name</span><input name="name" placeholder="For example, John Boardman"></label>
+                <p class="small">You will get a private set-up link, valid for 7 days. Send it to the new admin: they choose their own password and set up their authenticator.</p>
+                <p class="form__msg" role="alert" hidden></p>
+                <div class="pform__actions"><button class="btn btn--gold" type="submit">Create set-up link <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
+              </form>
+              <div class="details" data-admin-link hidden>
+                <p class="details__ok" data-admin-link-title>Set-up link created</p>
+                <p class="small">Send this link to <b data-admin-link-who></b>. It works once and expires in 7 days.</p>
+                <pre data-admin-link-url></pre>
+                <div class="pform__actions"><button class="btn btn--sm btn--gold" type="button" data-admin-link-copy>Copy link</button><a class="btn btn--sm btn--line-dark" data-admin-link-mail href="#">Open email draft</a></div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 

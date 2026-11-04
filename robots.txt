@@ -4,4 +4,4 @@ Disallow: /admin/
 Disallow: /login/
 Disallow: /archive/
 
-Sitemap: https://www.guilgal.org/sitemap.xml
+Sitemap: https://guilgal-demo.netlify.app/sitemap.xml

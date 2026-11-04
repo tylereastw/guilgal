@@ -21,7 +21,13 @@ import hashlib
 import json
 
 ROOT = Path(__file__).resolve().parent.parent
-SITE = "https://www.guilgal.org"
+# Address used for every absolute link: QR codes, invitation and admin links, canonical
+# tags, sitemap, robots.txt and the brief footer. Until guilgal.org is connected to
+# Netlify everything points at the demo address. On go-live day set SITE = LIVE_SITE,
+# run python3 tools/build.py and re-send any QR codes already shared.
+DEMO_SITE = "https://guilgal-demo.netlify.app"
+LIVE_SITE = "https://www.guilgal.org"
+SITE = DEMO_SITE
 EMAIL = "john@guilgal.org"
 MEDIA = "members/media/"   # project-only images, served behind the partner login
 QR_SALT = "gi-qr-7f3c9a1e"  # QR image names are hashed so they do not reveal project names
@@ -657,10 +663,28 @@ def admin():
             <button class="btn btn--gold" type="submit">Finish setup {ico("arrow")}</button>
           </form></div>
       </div>
+      <div data-admin-invite hidden>
+        <div class="formcard" style="max-width:560px"><h3 class="formcard__head">Set up your admin account</h3>
+          <form class="form" data-invite-form novalidate>
+            <p class="small">You have been invited to manage the Guilgal International partner portal as <strong data-invite-email></strong>.</p>
+            <p class="small"><strong>1.</strong> Choose a password (at least 12 characters).</p>
+            <label class="field"><span>Password*</span><input type="password" name="password" autocomplete="new-password" required></label>
+            <label class="field"><span>Repeat password*</span><input type="password" name="password2" autocomplete="new-password" required></label>
+            <p class="small"><strong>2.</strong> In an authenticator app on your phone (Google Authenticator, Microsoft Authenticator or 1Password), tap + and scan this code.</p>
+            <div class="setup-qr" data-invite-qr></div>
+            <p class="small">Can't scan? Choose "Enter a setup key" and type: <code data-invite-key></code></p>
+            <p class="small"><strong>3.</strong> Enter the 6-digit code the app now shows.</p>
+            <label class="field"><span>Authenticator code*</span><input name="code" inputmode="numeric" maxlength="6" autocomplete="one-time-code" required></label>
+            <p class="form__msg" role="alert" hidden></p>
+            <button class="btn btn--gold" type="submit">Finish setup {ico("arrow")}</button>
+          </form></div>
+      </div>
       <div data-admin-login hidden>
         <div class="formcard" style="max-width:460px"><h3 class="formcard__head">Admin sign in</h3>
           <form class="form" data-admin-signin novalidate>
-            <label class="field"><span>Admin password*</span><input type="password" name="password" autocomplete="current-password" required></label>
+            <label class="field"><span>Email</span><input type="email" name="email" autocomplete="username" placeholder="Your admin email"></label>
+            <p class="small" style="margin-top:-6px">Leave the email blank if you sign in with the main admin password.</p>
+            <label class="field"><span>Password*</span><input type="password" name="password" autocomplete="current-password" required></label>
             <label class="field"><span>Authenticator code*</span><input name="code" inputmode="numeric" pattern="[0-9]{{6}}" maxlength="6" autocomplete="one-time-code" required></label>
             <p class="form__msg" role="alert" hidden></p>
             <button class="btn btn--gold" type="submit">Sign in {ico("arrow")}</button>
@@ -672,6 +696,7 @@ def admin():
             <button type="button" role="tab" class="adm-tab is-on" data-tab="partners" aria-selected="true">{ico("people")} Partners</button>
             <button type="button" role="tab" class="adm-tab" data-tab="links" aria-selected="false">{ico("map")} Project links &amp; QR codes</button>
             <button type="button" role="tab" class="adm-tab" data-tab="briefs" aria-selected="false">{ico("doc")} Project briefs</button>
+            <button type="button" role="tab" class="adm-tab" data-tab="admins" aria-selected="false">{ico("shield")} Admins</button>
           </div>
           <button class="btn btn--line-dark btn--sm" type="button" data-admin-logout>Sign out</button>
         </div>
@@ -702,6 +727,28 @@ def admin():
         <div class="adm-panel" data-panel="briefs" hidden>
           <div class="adm-head"><div><h2>Project briefs</h2><p class="small">Briefs are generated automatically from each project page every time the site is built, so they always match the page. Nothing needs uploading.</p></div></div>
           <ul class="briefs" data-briefs></ul>
+        </div>
+
+        <div class="adm-panel" data-panel="admins" hidden>
+          <div class="adm-head"><div><h2>Admins</h2><p class="small">People who can manage partners in this panel. Each admin has their own email, password and authenticator code. <span data-me-line></span></p></div></div>
+          <div class="grid-2" style="align-items:start">
+            <div><ul class="ulist" data-admins></ul></div>
+            <div class="formcard"><h3 class="formcard__head">Add an admin</h3>
+              <form class="form pform" data-admin-add novalidate>
+                <label class="field"><span>Email address*</span><input type="email" name="email" required></label>
+                <label class="field"><span>Name</span><input name="name" placeholder="For example, John Boardman"></label>
+                <p class="small">You will get a private set-up link, valid for 7 days. Send it to the new admin: they choose their own password and set up their authenticator.</p>
+                <p class="form__msg" role="alert" hidden></p>
+                <div class="pform__actions"><button class="btn btn--gold" type="submit">Create set-up link {ico("arrow")}</button></div>
+              </form>
+              <div class="details" data-admin-link hidden>
+                <p class="details__ok" data-admin-link-title>Set-up link created</p>
+                <p class="small">Send this link to <b data-admin-link-who></b>. It works once and expires in 7 days.</p>
+                <pre data-admin-link-url></pre>
+                <div class="pform__actions"><button class="btn btn--sm btn--gold" type="button" data-admin-link-copy>Copy link</button><a class="btn btn--sm btn--line-dark" data-admin-link-mail href="#">Open email draft</a></div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -759,6 +806,28 @@ def thanks():
     body = hero(p, "about-hero.jpg", '''<h1>Thank you</h1><p class="hero__sub">Your message has been sent. We will be in touch.</p>
           <a class="btn btn--gold" href="../">Back to home</a>''')
     page("thanks/", "Thank you | Guilgal International", "Message sent.", "", body, p, noindex=True)
+
+def not_found():
+    """404 page. Netlify serves /404.html for any missing address, at any depth, so every
+    link and asset uses an absolute path (p = "/")."""
+    p = "/"
+    body = hero(p, "about-river.jpg", f'''<p class="label label--light">Error 404</p><h1>Page not found</h1>
+          <p class="hero__sub">The page you are looking for has moved, or the address may be mistyped.</p>
+          <div class="hero__actions"><a class="btn btn--gold" href="/">Back to home {ico("arrow")}</a><a class="btn btn--line" href="/contact/">Contact us {ico("arrow")}</a></div>''', "hero--page") + f'''
+    <section class="section"><div class="wrap">
+      <div class="shead"><h2>Where to next?</h2></div>
+      <ul class="nf-links">
+        <li><a href="/about/">{dot("globe")}<span><strong>About Guilgal International</strong>Who we are and how we work</span></a></li>
+        <li><a href="/about/team/">{dot("people")}<span><strong>Meet the team</strong>The people behind our projects</span></a></li>
+        <li><a href="/investors/">{dot("chart")}<span><strong>Investors</strong>How we partner and how to request access</span></a></li>
+        <li><a href="/login/">{dot("shield")}<span><strong>Partner login</strong>For invited partners</span></a></li>
+      </ul>
+    </div></section>
+'''
+    page("404/", "Page not found | Guilgal International", "Page not found.", "", body, p, noindex=True)
+    (ROOT / "404" / "index.html").replace(ROOT / "404.html")
+    (ROOT / "404").rmdir()
+
 
 # ---------------------------------------------------------------- project pages (members only)
 # Copy and figures below come from John Boardman's project mock-ups. They are
@@ -1274,7 +1343,7 @@ def private_media():
 
 if __name__ == "__main__":
     # news() is paused for now; /news/ redirects home (netlify.toml)
-    home(); about(); team(); investors(); contact(); members(); login(); admin(); thanks()
+    home(); about(); team(); investors(); contact(); members(); login(); admin(); thanks(); not_found()
     for s, n, _ in PROJECTS:
         project_page(s, n)
         brief_page(s, n)

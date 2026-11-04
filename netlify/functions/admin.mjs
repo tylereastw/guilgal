@@ -2,7 +2,12 @@
 //   GET    /api/admin/status                       { configured, needsSetup }
 //   POST   /api/admin/setup   { password }         first run only: new authenticator key + QR code
 //   POST   /api/admin/setup/confirm { password, code }  saves the key once a code from the app matches
-//   POST   /api/admin/login   { password, code }   password + authenticator code -> admin cookie (2 hours)
+//   POST   /api/admin/login   { email?, password, code }  main admin (no email) or a named admin -> admin cookie (2 hours)
+//   GET    /api/admin/admins                        list named admins          (signed-in admins only)
+//   POST   /api/admin/admins  { email, name }       add an admin or renew their invite link -> { inviteUrl }
+//   DELETE /api/admin/admins?email=...              remove a named admin
+//   POST   /api/admin/invite/start  { token }       invite link: new authenticator key + QR code
+//   POST   /api/admin/invite/finish { token, password, code }  sets password and authenticator, signs in
 //   POST   /api/admin/logout
 //   GET    /api/admin/users                        list partner accounts
 //   POST   /api/admin/users   { email, name, projects, password?, disabled? }  create or update
@@ -10,7 +15,7 @@
 //   DELETE /api/admin/users?email=...
 import { getStore } from "@netlify/blobs";
 import QRCode from "qrcode";
-import { env, json, sign, cookie, isAdmin, checkTotp, safeEqual, hashPassword, randomPassword, normEmail, publicUser,
+import { env, json, sign, cookie, isAdmin, adminFromRequest, checkPassword, sha256hex, randomToken, checkTotp, safeEqual, hashPassword, randomPassword, normEmail, publicUser,
          throttled, recordFailure, clearFailures, adminTotpSecret, newTotpSecret, totpUri, ADMIN_COOKIE, ADMIN_HOURS, PROJECTS } from "../lib/auth.mjs";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -31,13 +36,55 @@ export default async (request, context) => {
   const ipKey = "admin:" + (context.ip || "unknown");
   const readBody = async () => { try { return await request.json(); } catch { return null; } };
   const passwordOk = (b) => !!pw && safeEqual(String(b?.password || ""), pw);
-  const startSession = async () => {
-    const token = await sign({ a: 1, x: Date.now() + ADMIN_HOURS * 36e5 }, members);
+  const INVITE_DAYS = 7;
+  const publicAdmin = (a) => ({ email: a.email, name: a.name || "", status: a.hash ? (a.disabled ? "paused" : "active") : "invited",
+    created: a.created || null, lastLogin: a.lastLogin || null, inviteExpires: a.hash ? null : a.invite?.expires || null });
+  const inviteFor = async (token) => {
+    if (!token || token.length < 20) return null;
+    const email = await members.get("admin-invites/" + (await sha256hex(token)));
+    const a = email && (await members.get("admins/" + email, { type: "json" }));
+    if (!a || !a.invite || a.invite.expires < Date.now()) return null;
+    return a;
+  };
+  const startSession = async (admin) => {
+    const payload = { a: 1, x: Date.now() + ADMIN_HOURS * 36e5 };
+    if (admin) { payload.u = admin.email; payload.v = admin.ver || 0; }
+    const token = await sign(payload, members);
     return json({ ok: true }, 200, { "Set-Cookie": cookie(ADMIN_COOKIE, token, { maxAge: ADMIN_HOURS * 3600, sameSite: "Strict" }) });
   };
 
   if (path === "/api/admin/status") {
-    return json({ configured: !!pw, needsSetup: !!pw && !(await adminTotpSecret(members)), signedIn: await isAdmin(request, members) });
+    const me = await adminFromRequest(request, members);
+    return json({ configured: !!pw, needsSetup: !!pw && !(await adminTotpSecret(members)), signedIn: !!me,
+      me: me ? { owner: !!me.owner, email: me.email, name: me.name || "" } : null });
+  }
+
+  // Invite links: a new admin sets their own password and authenticator.
+  if (path.startsWith("/api/admin/invite/") && request.method === "POST") {
+    if (await throttled(members, ipKey)) return json({ error: "Too many attempts. Please wait 15 minutes." }, 429);
+    const b = await readBody();
+    const a = await inviteFor(String(b?.token || ""));
+    if (!a) { await recordFailure(members, ipKey); return json({ error: "This invite link is not valid or has expired. Ask an admin for a new one." }, 404); }
+    if (path === "/api/admin/invite/start") {
+      a.pendingTotp = newTotpSecret();
+      await members.setJSON("admins/" + a.email, a);
+      const uri = totpUri(a.pendingTotp, a.email);
+      const svg = await QRCode.toString(uri, { type: "svg", margin: 2, color: { dark: "#10291F", light: "#FFFFFF" } });
+      return json({ email: a.email, name: a.name || "", secret: a.pendingTotp, qr: svg });
+    }
+    if (path === "/api/admin/invite/finish") {
+      const password = String(b.password || "");
+      if (password.length < 12) return json({ error: "Choose a password of at least 12 characters." }, 400);
+      if (!a.pendingTotp) return json({ error: "Reload the invite link and scan the code again." }, 400);
+      if (!(await checkTotp(a.pendingTotp, String(b.code || "").trim()))) { await recordFailure(members, ipKey); return json({ error: "That code does not match. Check the time on your phone and try the newest code." }, 401); }
+      Object.assign(a, await hashPassword(password));
+      a.totp = a.pendingTotp; delete a.pendingTotp;
+      await members.delete("admin-invites/" + a.invite.hash); delete a.invite;
+      a.ver = (a.ver || 0) + 1; a.lastLogin = Date.now();
+      await members.setJSON("admins/" + a.email, a);
+      await clearFailures(members, ipKey);
+      return startSession(a);
+    }
   }
 
   if (path.startsWith("/api/admin/setup") && request.method === "POST") {
@@ -65,11 +112,22 @@ export default async (request, context) => {
   }
 
   if (path === "/api/admin/login" && request.method === "POST") {
+    if (await throttled(members, ipKey)) return json({ error: "Too many attempts. Please wait 15 minutes." }, 429);
+    const b = await readBody();
+    const email = normEmail(b?.email);
+    if (email) {
+      const emailKey = "admin-email:" + email;
+      if (await throttled(members, emailKey)) return json({ error: "Too many attempts. Please wait 15 minutes." }, 429);
+      const a = await members.get("admins/" + email, { type: "json" });
+      const ok = !!a && !a.disabled && !!a.hash && (await checkPassword(String(b.password || ""), a)) && (await checkTotp(a.totp, String(b.code || "").trim()));
+      if (!ok) { await recordFailure(members, ipKey); await recordFailure(members, emailKey); return json({ error: "Email, password or authenticator code is incorrect." }, 401); }
+      await clearFailures(members, ipKey); await clearFailures(members, emailKey);
+      a.lastLogin = Date.now(); await members.setJSON("admins/" + email, a);
+      return startSession(a);
+    }
     if (!pw) return json({ error: "Admin access is not configured. Set ADMIN_PASSWORD in Netlify." }, 503);
     const secret = await adminTotpSecret(members);
     if (!secret) return json({ error: "Set up the authenticator first.", needsSetup: true }, 409);
-    if (await throttled(members, ipKey)) return json({ error: "Too many attempts. Please wait 15 minutes." }, 429);
-    const b = await readBody();
     const ok = passwordOk(b) && (await checkTotp(secret, String(b?.code || "").trim()));
     if (!ok) { await recordFailure(members, ipKey); return json({ error: "Password or authenticator code is incorrect." }, 401); }
     await clearFailures(members, ipKey);
@@ -77,7 +135,50 @@ export default async (request, context) => {
   }
   if (path === "/api/admin/logout") return json({ ok: true }, 200, { "Set-Cookie": cookie(ADMIN_COOKIE, "", { maxAge: 0, sameSite: "Strict" }) });
 
-  if (!(await isAdmin(request, members))) return json({ error: "Not signed in" }, 401);
+  const me = await adminFromRequest(request, members);
+  if (!me) return json({ error: "Not signed in" }, 401);
+
+  if (path === "/api/admin/admins") {
+    if (request.method === "GET") {
+      const { blobs } = await members.list({ prefix: "admins/" });
+      const admins = [];
+      for (const x of blobs) { const a = await members.get(x.key, { type: "json" }); if (a) admins.push(publicAdmin(a)); }
+      admins.sort((x, y) => x.email.localeCompare(y.email));
+      return json({ admins, me: { owner: !!me.owner, email: me.email } });
+    }
+    if (request.method === "POST") {
+      const b = await readBody();
+      const email = normEmail(b?.email);
+      if (!EMAIL_RE.test(email)) return json({ error: "Enter a valid email address." }, 400);
+      const a = (await members.get("admins/" + email, { type: "json" })) || { email, created: new Date().toISOString(), ver: 0 };
+      a.name = String(b.name ?? a.name ?? "").slice(0, 120);
+      if (typeof b.disabled === "boolean") {
+        if (me.email === email && b.disabled) return json({ error: "You cannot pause your own account." }, 400);
+        if (b.disabled && !a.disabled) a.ver = (a.ver || 0) + 1;
+        a.disabled = b.disabled;
+      }
+      let inviteUrl = null;
+      if (!a.hash || b.newInvite) {
+        // New admin, or a fresh link to reset their password and authenticator.
+        if (a.invite?.hash) await members.delete("admin-invites/" + a.invite.hash);
+        const token = randomToken();
+        a.invite = { hash: await sha256hex(token), expires: Date.now() + INVITE_DAYS * 864e5 };
+        await members.set("admin-invites/" + a.invite.hash, email);
+        if (a.hash && b.newInvite) { delete a.hash; delete a.salt; delete a.totp; a.ver = (a.ver || 0) + 1; }
+        inviteUrl = new URL("/admin/?invite=" + token, url).toString();
+      }
+      await members.setJSON("admins/" + email, a);
+      return json({ ok: true, admin: publicAdmin(a), inviteUrl });
+    }
+    if (request.method === "DELETE") {
+      const email = normEmail(url.searchParams.get("email"));
+      if (me.email === email) return json({ error: "You cannot remove your own account." }, 400);
+      const a = await members.get("admins/" + email, { type: "json" });
+      if (a?.invite?.hash) await members.delete("admin-invites/" + a.invite.hash);
+      await members.delete("admins/" + email);
+      return json({ ok: true });
+    }
+  }
 
   if (path === "/api/admin/users") {
     if (request.method === "GET") {

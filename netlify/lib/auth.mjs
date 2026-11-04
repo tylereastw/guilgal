@@ -10,7 +10,13 @@
 // Data lives in Netlify Blobs:
 //   store "members": users/<email>  { email, name, salt, hash, projects: [slugs] | ["*"], ver, disabled, created }
 //                    attempts/<key> { n, until }  failed-login counters
+//                    admins/<email>  { email, name, salt, hash, totp, ver, disabled, created, lastLogin,
+//                                      invite: { hash, expires }, pendingTotp }  named admin accounts
+//                    admin-invites/<sha256 of token>  email of the admin the invite link is for
 //                    config/session-secret, config/admin-totp, config/admin-totp-pending
+// The main admin signs in with ADMIN_PASSWORD and the authenticator set up on first run.
+// Further admins are invited from the admin panel and each has their own email, password
+// and authenticator.
 
 export const PROJECTS = {
   "pumba": "Pumba Copper & Gold",
@@ -50,8 +56,8 @@ export function newTotpSecret() {
   const a = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
   return [...crypto.getRandomValues(new Uint8Array(32))].map((x) => a[x % 32]).join("");
 }
-export function totpUri(secret) {
-  const label = encodeURIComponent("Guilgal International:admin");
+export function totpUri(secret, account = "admin") {
+  const label = encodeURIComponent("Guilgal International:" + account);
   return `otpauth://totp/${label}?secret=${secret}&issuer=${encodeURIComponent("Guilgal International")}&digits=6&period=30`;
 }
 
@@ -186,9 +192,26 @@ export async function userFromRequest(request, store) {
   if (!user || user.disabled || (user.ver || 0) !== s.v) return null;
   return user;
 }
-export async function isAdmin(request, store) {
+// Who is signed in to the admin panel: { owner: true } for the main admin, the admin record
+// for a named admin, or null. A named admin's session ends if their account is removed,
+// paused or their password is changed (ver).
+export async function adminFromRequest(request, store) {
   const s = await verify(readCookie(request, ADMIN_COOKIE), store);
-  return !!(s && s.a === 1);
+  if (!s || s.a !== 1) return null;
+  if (!s.u) return { owner: true, email: null, name: "Main admin" };
+  const a = await store.get("admins/" + s.u, { type: "json" });
+  if (!a || a.disabled || !a.hash || (a.ver || 0) !== (s.v || 0)) return null;
+  return a;
+}
+export async function isAdmin(request, store) {
+  return !!(await adminFromRequest(request, store));
+}
+export async function sha256hex(text) {
+  const d = await crypto.subtle.digest("SHA-256", enc.encode(text));
+  return [...new Uint8Array(d)].map((b) => b.toString(16).padStart(2, "0")).join("");
+}
+export function randomToken(bytes = 32) {
+  return b64url(crypto.getRandomValues(new Uint8Array(bytes)));
 }
 
 // Failed-login throttle: 8 failures locks the key for 15 minutes.

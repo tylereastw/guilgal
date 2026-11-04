@@ -12,7 +12,7 @@
   const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   let PROJECTS = {};
 
-  const show = which => ['setup', 'login', 'app'].forEach(k => { $('[data-admin-' + k + ']').hidden = k !== which; });
+  const show = which => ['setup', 'invite', 'login', 'app'].forEach(k => { $('[data-admin-' + k + ']').hidden = k !== which; });
   const showApp = on => show(on ? 'app' : 'login');
 
   // ---------- partner list
@@ -101,12 +101,94 @@
     const b = e.target.closest('[data-qrs] [data-copy]'); if (!b) return;
     navigator.clipboard.writeText(b.dataset.copy).then(() => { b.textContent = 'Copied'; setTimeout(() => { b.textContent = 'Copy link'; }, 1500); });
   });
-  const start = () => { showApp(true); adminHint(true); loadProjects().then(loadUsers); };
+  // ---------- admins
+  let ME = null;
+  async function loadAdmins() {
+    const { admins, me } = await api('admins');
+    ME = me;
+    $('[data-me-line]').textContent = me.owner ? 'You are signed in as the main admin (admin password).' : 'You are signed in as ' + me.email + '.';
+    const mainRow = `<li class="urow"><span class="urow__avatar" aria-hidden="true">MA</span><div class="urow__who"><strong>Main admin</strong><span>Admin password set in Netlify</span><small>Always active</small></div><div class="urow__projects"></div><span class="badge badge--on">Active</span><div class="urow__actions"></div></li>`;
+    $('[data-admins]').innerHTML = mainRow + admins.map(a => {
+      const self = me.email === a.email;
+      const badge = a.status === 'active' ? '<span class="badge badge--on">Active</span>' : a.status === 'paused' ? '<span class="badge badge--off">Paused</span>' : '<span class="badge badge--off">Invited</span>';
+      const sub = a.status === 'invited' ? (a.inviteExpires && a.inviteExpires > Date.now() ? 'Set-up link sent, not used yet' : 'Set-up link expired') : when(a.lastLogin);
+      return `<li class="urow${a.status === 'paused' ? ' is-paused' : ''}"><span class="urow__avatar" aria-hidden="true">${esc(initials(a))}</span>
+        <div class="urow__who"><strong>${esc(a.name || a.email)}${self ? ' (you)' : ''}</strong>${a.name ? `<span>${esc(a.email)}</span>` : ''}<small>${sub}</small></div><div class="urow__projects"></div>${badge}
+        <div class="urow__actions">${self ? '' : `<button class="btn btn--sm btn--gold" data-a-link="${esc(a.email)}">${a.status === 'invited' ? 'New set-up link' : 'Reset login'}</button>
+          ${a.status === 'invited' ? '' : `<button class="btn btn--sm btn--line-dark" data-a-toggle="${esc(a.email)}" data-paused="${a.status === 'paused'}">${a.status === 'paused' ? 'Resume' : 'Pause'}</button>`}
+          <button class="btn btn--sm btn--line-dark btn--danger" data-a-del="${esc(a.email)}">Remove</button>`}</div></li>`;
+    }).join('');
+  }
+  function showAdminLink(admin, link) {
+    $('[data-admin-link-who]').textContent = admin.name || admin.email;
+    $('[data-admin-link-url]').textContent = link;
+    const body = `Hello${admin.name ? ' ' + admin.name.split(' ')[0] : ''},\n\nYou have been added as an admin of the Guilgal International partner portal. Open this private link to choose your password and set up your authenticator app:\n\n${link}\n\nThe link works once and expires in 7 days. Please do not forward it.\n`;
+    $('[data-admin-link-mail]').href = 'mailto:' + encodeURIComponent(admin.email) + '?subject=' + encodeURIComponent('Your Guilgal International admin access') + '&body=' + encodeURIComponent(body);
+    $('[data-admin-link]').hidden = false;
+  }
+  $('[data-admin-add]').addEventListener('submit', async e => {
+    e.preventDefault();
+    const f = e.target;
+    try {
+      const r = await postJSON('admins', { email: f.email.value, name: f.name.value });
+      if (r.inviteUrl) showAdminLink(r.admin, r.inviteUrl); else say(f, 'That admin is already set up. Use "Reset login" to send a new set-up link.');
+      f.reset(); loadAdmins();
+    } catch (err) { say(f, err.message); }
+  });
+  $('[data-admin-link-copy]').addEventListener('click', e => {
+    navigator.clipboard.writeText($('[data-admin-link-url]').textContent).then(() => { e.target.textContent = 'Copied'; setTimeout(() => { e.target.textContent = 'Copy link'; }, 1500); });
+  });
+  $('[data-admins]').addEventListener('click', async e => {
+    const b = e.target.closest('button'); if (!b) return;
+    try {
+      if (b.dataset.aLink) {
+        const em = b.dataset.aLink;
+        if (b.textContent.trim() === 'Reset login' && !confirm('Reset ' + em + "'s login? Their password and authenticator stop working until they use the new set-up link.")) return;
+        const r = await postJSON('admins', { email: em, newInvite: true });
+        showAdminLink(r.admin, r.inviteUrl);
+      }
+      if (b.dataset.aToggle) {
+        const paused = b.dataset.paused === 'true';
+        if (!paused && !confirm('Pause ' + b.dataset.aToggle + '? They will be signed out and cannot sign in until resumed.')) return;
+        await postJSON('admins', { email: b.dataset.aToggle, disabled: !paused });
+      }
+      if (b.dataset.aDel) {
+        if (!confirm('Remove ' + b.dataset.aDel + ' as an admin? They lose access immediately.')) return;
+        await api('admins?email=' + encodeURIComponent(b.dataset.aDel), { method: 'DELETE' });
+      }
+      loadAdmins();
+    } catch (err) { alert(err.message); }
+  });
+
+  // ---------- admin invite link (/admin/?invite=...)
+  const inviteToken = new URLSearchParams(location.search).get('invite');
+  async function startInvite() {
+    const f = $('[data-invite-form]');
+    show('invite');
+    try {
+      const r = await postJSON('invite/start', { token: inviteToken });
+      $('[data-invite-email]').textContent = r.email;
+      $('[data-invite-qr]').innerHTML = r.qr;
+      $('[data-invite-key]').textContent = r.secret.replace(/(.{4})/g, '$1 ').trim();
+    } catch (err) { say(f, err.message); $$('input, button', f).forEach(x => { x.disabled = true; }); }
+    f.addEventListener('submit', async e => {
+      e.preventDefault();
+      if (f.password.value.length < 12) return say(f, 'Choose a password of at least 12 characters.');
+      if (f.password.value !== f.password2.value) return say(f, 'The two passwords do not match.');
+      try {
+        await postJSON('invite/finish', { token: inviteToken, password: f.password.value, code: f.code.value });
+        history.replaceState(null, '', '/admin/');
+        start();
+      } catch (err) { say(f, err.message); }
+    });
+  }
+
+  const start = () => { showApp(true); adminHint(true); loadProjects().then(loadUsers); loadAdmins().catch(() => {}); };
 
   $('[data-admin-signin]').addEventListener('submit', async e => {
     e.preventDefault();
     const f = e.target;
-    try { await postJSON('login', { password: f.password.value, code: f.code.value }); f.reset(); start(); }
+    try { await postJSON('login', { email: f.email.value.trim(), password: f.password.value, code: f.code.value }); f.reset(); start(); }
     catch (err) { say(f, err.message); }
   });
   $('[data-admin-logout]').addEventListener('click', async () => { await postJSON('logout', {}); adminHint(false); ['[data-project-checks]', '[data-qrs]', '[data-briefs]', '[data-users]'].forEach(x => { $(x).innerHTML = ''; }); showApp(false); });
@@ -250,7 +332,7 @@
     <div style="${F}font-size:12px;color:#5C6B63;margin:0 8px 6px">Each code opens the project page. You will be asked to sign in first if you are not already.</div>
     <table role="presentation" cellpadding="0" cellspacing="0">${rows.join('')}</table></td></tr>` : `<tr><td style="padding:8px 28px;text-align:center"><img src="${img('qr/login.png')}" width="120" height="120" alt="QR code for the sign-in page" style="border:1px solid #E4DED0"><div style="${F}font-size:12px;color:#5C6B63">Scan to sign in</div></td></tr>`}
   <tr><td style="padding:16px 28px 26px;${F}font-size:12px;line-height:1.55;color:#5C6B63;border-top:1px solid #E4DED0">
-    Please keep these details private; the information in the portal is confidential and shared under your confidentiality agreement. If you need help or forget your password, reply to this email or contact <a href="mailto:john@guilgal.org" style="color:#9A7A3A">john@guilgal.org</a>.<br><br>Guilgal International is a trading name of Britcom Trading Limited, registered in England and Wales, company number 15625520. Guilgal International does not provide investment, financial or legal advice. Nothing in this invitation is an offer or solicitation.
+    Please keep these details private; the information in the portal is confidential and shared under your confidentiality agreement. If you need help or forget your password, reply to this email or contact <a href="mailto:john@guilgal.org" style="color:#9A7A3A">john@guilgal.org</a>.<br><br>Guilgal International is a trading name of Britcom Trading Limited, registered in England and Wales, company number 15625520.
   </td></tr>
 </table>`;
   }
@@ -339,7 +421,8 @@ Guilgal International`;
     catch (err) { say(f, err.message); }
   });
 
-  api('users').then(start).catch(async () => {
+  if (inviteToken) startInvite();
+  else api('users').then(start).catch(async () => {
     const st = await api('status').catch(() => ({}));
     if (st.needsSetup) show('setup');
     else {

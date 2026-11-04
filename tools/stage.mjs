@@ -10,7 +10,7 @@ const out = join(root, "dist");
 
 // Everything the site serves. Anything not listed here is never published.
 const PUBLISH = [
-  "index.html", "favicon.ico", "robots.txt", "sitemap.xml",
+  "index.html", "404.html", "favicon.ico", "robots.txt", "sitemap.xml",
   "about", "admin", "archive", "assets", "contact", "cookies", "css", "investors", "js",
   "login", "members", "privacy", "public", "terms", "thanks",
 ];
