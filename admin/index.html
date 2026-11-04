@@ -20,7 +20,7 @@
       <span class="brand__text"><span class="brand__name">GUILGAL</span><span class="brand__intl">INTERNATIONAL</span><span class="brand__tag">EXPLORATION | DEVELOPMENT | PARTNERSHIPS</span></span>
     </a>
     <nav class="nav__links" id="menu" aria-label="Main">
-      <ul class="nav__list"><li class="nav__item"><a href="../">Home</a></li><li class="nav__item nav__item--has-sub"><a href="../about/">About</a><button class="nav__subtoggle" aria-expanded="false" aria-label="Show About pages"><i></i></button><ul class="nav__sub"><li><a href="../about/">About Guilgal International</a></li><li><a href="../about/#our-name">Our Name</a></li><li><a href="../about/team/">Meet the Team</a></li></ul></li><li class="nav__item"><a href="../investors/">Investors</a></li><li class="nav__item"><a href="../news/">News &amp; Milestones</a></li><li class="nav__item"><a href="../contact/">Contact</a></li></ul>
+      <ul class="nav__list"><li class="nav__item"><a href="../">Home</a></li><li class="nav__item nav__item--has-sub"><a href="../about/">About</a><button class="nav__subtoggle" aria-expanded="false" aria-label="Show About pages"><i></i></button><ul class="nav__sub"><li><a href="../about/">About Guilgal International</a></li><li><a href="../about/#our-name">Our Name</a></li><li><a href="../about/team/">Meet the Team</a></li></ul></li><li class="nav__item"><a href="../investors/">Investors</a></li><li class="nav__item"><a href="../contact/">Contact</a></li></ul>
       <a class="btn btn--gold nav__cta" href="../investors/#enquiry">Investor Enquiries</a>
     </nav>
     <button class="burger" aria-expanded="false" aria-controls="menu" aria-label="Menu"><span></span><span></span><span></span></button>
@@ -56,44 +56,36 @@
           </form></div>
       </div>
       <div data-admin-app hidden>
-        <p><button class="btn btn--line-dark btn--sm" type="button" data-admin-logout>Sign out</button></p>
-        <div class="grid-2" style="align-items:start">
-          <div class="formcard"><h3 class="formcard__head" data-form-title>Add a partner</h3>
-            <form class="form pform" data-user-form novalidate>
-              <p class="pform__editing" data-edit-note hidden>Editing <b data-edit-email></b> <button type="button" class="linkbtn" data-cancel-edit>Add a new partner instead</button></p>
-              <div class="form__row">
-                <label class="field"><span>Email address*</span><input type="email" name="email" required></label>
-                <label class="field"><span>Name</span><input name="name" placeholder="Optional"></label>
-              </div>
-              <fieldset class="checks">
-                <legend>Project access</legend>
-                <p class="small">The partner only sees the projects ticked here.</p>
-                <label class="check check--all"><input type="checkbox" name="projects" value="*"><span>All projects, including any added later</span></label>
-                <label class="check"><input type="checkbox" name="projects" value="pumba"><span>Pumba Copper &amp; Gold</span></label><label class="check"><input type="checkbox" name="projects" value="alpha"><span>Alpha Tantalum &amp; Tin</span></label><label class="check"><input type="checkbox" name="projects" value="nizi-baluma"><span>Nizi–Baluma Gold</span></label><label class="check"><input type="checkbox" name="projects" value="ndela-mpaza"><span>Ndela–Mpaza</span></label><label class="check"><input type="checkbox" name="projects" value="hydropower"><span>Hydropower Projects</span></label><label class="check"><input type="checkbox" name="projects" value="tumfa"><span>Ghana Tumfa Gold</span></label>
-              </fieldset>
-              <fieldset class="checks">
-                <legend>Password</legend>
-                <label class="check" data-only-edit hidden><input type="radio" name="pwmode" value="keep"><span>Keep their current password</span></label>
-                <label class="check"><input type="radio" name="pwmode" value="generate" checked><span data-gen-label>Create a secure password for me</span></label>
-                <label class="check"><input type="radio" name="pwmode" value="choose"><span>Let me type a password</span></label>
-                <label class="field" data-choose hidden><span>Password (at least 10 characters)</span><input name="password" autocomplete="new-password"></label>
-                <p class="small" data-only-edit hidden>A new password signs the partner out on all their devices.</p>
-              </fieldset>
-              <label class="check switch" data-only-edit hidden><input type="checkbox" name="active" checked><span>Account active (untick to block access without deleting)</span></label>
-              <p class="form__msg" role="alert" hidden></p>
-              <div class="pform__actions"><button class="btn btn--gold" type="submit" data-submit-label>Add partner <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
-            </form>
-            <div class="details" data-details hidden>
-              <p><strong data-details-title>Partner added.</strong> Send them these login details. The password is shown only once.</p>
-              <pre data-details-text></pre>
-              <div class="pform__actions"><button class="btn btn--sm btn--gold" type="button" data-copy-details>Copy details</button><a class="btn btn--sm btn--line-dark" data-mail-details href="#">Open in email</a></div>
-            </div></div>
-          <div><h2>Project briefs</h2><p class="small">Briefs are generated automatically from each project page every time the site is built, so they always match the page. Preview them here.</p>
-            <ul class="briefs"><li><strong>Pumba Copper &amp; Gold</strong><span><a class="btn btn--sm btn--gold" href="../members/projects/pumba/brief.pdf" target="_blank" rel="noopener">Open PDF</a></span></li><li><strong>Alpha Tantalum &amp; Tin</strong><span><a class="btn btn--sm btn--gold" href="../members/projects/alpha/brief.pdf" target="_blank" rel="noopener">Open PDF</a></span></li><li><strong>Nizi–Baluma Gold</strong><span><a class="btn btn--sm btn--gold" href="../members/projects/nizi-baluma/brief.pdf" target="_blank" rel="noopener">Open PDF</a></span></li><li><strong>Ndela–Mpaza</strong><span><a class="btn btn--sm btn--gold" href="../members/projects/ndela-mpaza/brief.pdf" target="_blank" rel="noopener">Open PDF</a></span></li><li><strong>Hydropower Projects</strong><span><a class="btn btn--sm btn--gold" href="../members/projects/hydropower/brief.pdf" target="_blank" rel="noopener">Open PDF</a></span></li><li><strong>Ghana Tumfa Gold</strong><span><a class="btn btn--sm btn--gold" href="../members/projects/tumfa/brief.pdf" target="_blank" rel="noopener">Open PDF</a></span></li></ul></div>
+        <div class="adm-bar">
+          <div class="adm-tabs" role="tablist">
+            <button type="button" role="tab" class="adm-tab is-on" data-tab="partners" aria-selected="true"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="7" r="3"/><circle cx="5" cy="10" r="2.3"/><circle cx="19" cy="10" r="2.3"/><path d="M7 20c0-3 2-6 5-6s5 3 5 6M1 19c0-2 2-4 4-4M23 19c0-2-2-4-4-4"/></svg> Partners</button>
+            <button type="button" role="tab" class="adm-tab" data-tab="links" aria-selected="false"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-3 6 3 6-3v15l-6 3-6-3-6 3zM9 3v15M15 6v15"/></svg> Project links &amp; QR codes</button>
+            <button type="button" role="tab" class="adm-tab" data-tab="briefs" aria-selected="false"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2h9l5 5v15H6zM15 2v5h5M9 12h8M9 16h8M9 8h3"/></svg> Project briefs</button>
+          </div>
+          <button class="btn btn--line-dark btn--sm" type="button" data-admin-logout>Sign out</button>
         </div>
-        <h2 style="margin-top:40px">Project links and QR codes</h2>
-        <p class="small">Send these to partners with access. Each link opens the project page after the partner signs in; anyone without access is asked to log in.</p>
-        <ul class="qrs"><li><img src="../public/images/v2/qr/project-pumba.svg" alt="QR code for Pumba Copper &amp; Gold" width="120" height="120"><div><strong>Pumba Copper &amp; Gold</strong>
+
+        <div class="adm-panel" data-panel="partners">
+          <div class="adm-head">
+            <div><h2>Partners</h2><p class="small">Everyone who can sign in to the partner portal, and the projects each one can see.</p></div>
+            <button class="btn btn--gold" type="button" data-add>+ Add partner</button>
+          </div>
+          <div class="adm-tools">
+            <p class="adm-stats" data-stats></p>
+            <label class="adm-search"><span class="sr-only">Search partners</span><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></svg><input type="search" placeholder="Search by name, email or project" data-search></label>
+          </div>
+          <ul class="ulist" data-users></ul>
+          <details class="adm-help"><summary>How partner access works</summary>
+            <ol>
+              <li><b>Add partner</b>: enter their email and tick the projects they may see. A secure password is created for you.</li>
+              <li><b>Invitation</b>: create a ready-to-send invitation with the sign-in link, their login details, step-by-step instructions and a QR code for each project. Copy it into an email or save it as a PDF.</li>
+              <li><b>Edit</b> to change their projects or reset their password. <b>Pause</b> blocks access without deleting the account; <b>Delete</b> removes it.</li>
+            </ol></details>
+        </div>
+
+        <div class="adm-panel" data-panel="links" hidden>
+          <div class="adm-head"><div><h2>Project links &amp; QR codes</h2><p class="small">Each link opens the project page after the partner signs in. Anyone without access is taken to the login screen first. Invitations include these automatically.</p></div></div>
+          <ul class="qrs"><li><img src="../public/images/v2/qr/project-pumba.svg" alt="QR code for Pumba Copper &amp; Gold" width="120" height="120"><div><strong>Pumba Copper &amp; Gold</strong>
           <code>https://www.guilgal.org/members/projects/pumba/</code><span><a class="btn btn--sm btn--gold" href="../public/images/v2/qr/project-pumba.png" download="Guilgal-International-pumba-QR.png">Download PNG</a>
           <a class="btn btn--sm btn--line-dark" href="../public/images/v2/qr/project-pumba.svg" download="Guilgal-International-pumba-QR.svg">SVG</a>
           <button class="btn btn--sm btn--line-dark" type="button" data-copy="https://www.guilgal.org/members/projects/pumba/">Copy link</button></span></div></li><li><img src="../public/images/v2/qr/project-alpha.svg" alt="QR code for Alpha Tantalum &amp; Tin" width="120" height="120"><div><strong>Alpha Tantalum &amp; Tin</strong>
@@ -112,9 +104,58 @@
           <code>https://www.guilgal.org/members/projects/tumfa/</code><span><a class="btn btn--sm btn--gold" href="../public/images/v2/qr/project-tumfa.png" download="Guilgal-International-tumfa-QR.png">Download PNG</a>
           <a class="btn btn--sm btn--line-dark" href="../public/images/v2/qr/project-tumfa.svg" download="Guilgal-International-tumfa-QR.svg">SVG</a>
           <button class="btn btn--sm btn--line-dark" type="button" data-copy="https://www.guilgal.org/members/projects/tumfa/">Copy link</button></span></div></li></ul>
-        <h2 style="margin-top:40px">Partners</h2>
-        <div class="table-scroll"><table class="dtable" data-users><thead><tr><th>Email</th><th>Name</th><th>Projects</th><th>Status</th><th>Last login</th><th></th></tr></thead><tbody></tbody></table></div>
+        </div>
+
+        <div class="adm-panel" data-panel="briefs" hidden>
+          <div class="adm-head"><div><h2>Project briefs</h2><p class="small">Briefs are generated automatically from each project page every time the site is built, so they always match the page. Nothing needs uploading.</p></div></div>
+          <ul class="briefs"><li><strong>Pumba Copper &amp; Gold</strong><span><a class="btn btn--sm btn--gold" href="../members/projects/pumba/brief.pdf" target="_blank" rel="noopener">Open PDF</a></span></li><li><strong>Alpha Tantalum &amp; Tin</strong><span><a class="btn btn--sm btn--gold" href="../members/projects/alpha/brief.pdf" target="_blank" rel="noopener">Open PDF</a></span></li><li><strong>Nizi–Baluma Gold</strong><span><a class="btn btn--sm btn--gold" href="../members/projects/nizi-baluma/brief.pdf" target="_blank" rel="noopener">Open PDF</a></span></li><li><strong>Ndela–Mpaza</strong><span><a class="btn btn--sm btn--gold" href="../members/projects/ndela-mpaza/brief.pdf" target="_blank" rel="noopener">Open PDF</a></span></li><li><strong>Hydropower Projects</strong><span><a class="btn btn--sm btn--gold" href="../members/projects/hydropower/brief.pdf" target="_blank" rel="noopener">Open PDF</a></span></li><li><strong>Ghana Tumfa Gold</strong><span><a class="btn btn--sm btn--gold" href="../members/projects/tumfa/brief.pdf" target="_blank" rel="noopener">Open PDF</a></span></li></ul>
+        </div>
       </div>
+
+      <dialog class="adm-dialog" data-user-dialog aria-labelledby="udlg-title">
+        <div class="adm-dialog__head"><h3 id="udlg-title" data-form-title>Add a partner</h3><button type="button" class="adm-x" data-close aria-label="Close">&times;</button></div>
+        <form class="form pform" data-user-form novalidate>
+          <div class="form__row">
+            <label class="field"><span>Email address*</span><input type="email" name="email" required></label>
+            <label class="field"><span>Name</span><input name="name" placeholder="For example, Jane Smith"></label>
+          </div>
+          <fieldset class="checks">
+            <legend>Which projects can they see?</legend>
+            <label class="check check--all"><input type="checkbox" name="projects" value="*"><span>All projects, including any added later</span></label>
+            <label class="check"><input type="checkbox" name="projects" value="pumba"><span>Pumba Copper &amp; Gold</span></label><label class="check"><input type="checkbox" name="projects" value="alpha"><span>Alpha Tantalum &amp; Tin</span></label><label class="check"><input type="checkbox" name="projects" value="nizi-baluma"><span>Nizi–Baluma Gold</span></label><label class="check"><input type="checkbox" name="projects" value="ndela-mpaza"><span>Ndela–Mpaza</span></label><label class="check"><input type="checkbox" name="projects" value="hydropower"><span>Hydropower Projects</span></label><label class="check"><input type="checkbox" name="projects" value="tumfa"><span>Ghana Tumfa Gold</span></label>
+          </fieldset>
+          <fieldset class="checks">
+            <legend>Password</legend>
+            <label class="check" data-only-edit hidden><input type="radio" name="pwmode" value="keep"><span>Keep their current password</span></label>
+            <label class="check"><input type="radio" name="pwmode" value="generate" checked><span data-gen-label>Create a secure password for me</span></label>
+            <label class="check"><input type="radio" name="pwmode" value="choose"><span>Let me type a password</span></label>
+            <label class="field" data-choose hidden><span>Password (at least 10 characters)</span><input name="password" autocomplete="new-password"></label>
+            <p class="small" data-only-edit hidden>A new password signs the partner out on all their devices.</p>
+          </fieldset>
+          <label class="check switch" data-only-edit hidden><input type="checkbox" name="active" checked><span>Account active (untick to pause access without deleting)</span></label>
+          <p class="form__msg" role="alert" hidden></p>
+          <div class="pform__actions"><button class="btn btn--gold" type="submit" data-submit-label>Add partner <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button><button class="btn btn--line-dark" type="button" data-close>Cancel</button></div>
+        </form>
+        <div class="details" data-details hidden>
+          <p class="details__ok" data-details-title>Partner added</p>
+          <p class="small">Send them their invitation now. The password is shown only once.</p>
+          <pre data-details-text></pre>
+          <div class="pform__actions"><button class="btn btn--gold" type="button" data-details-invite>Create invitation <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button><button class="btn btn--sm btn--line-dark" type="button" data-copy-details>Copy details</button><button class="btn btn--sm btn--line-dark" type="button" data-close>Done</button></div>
+        </div>
+      </dialog>
+
+      <dialog class="adm-dialog adm-dialog--sm" data-invite-dialog aria-labelledby="idlg-title">
+        <div class="adm-dialog__head"><h3 id="idlg-title">Invitation for <span data-invite-who></span></h3><button type="button" class="adm-x" data-close aria-label="Close">&times;</button></div>
+        <div class="pform">
+          <p>For security, passwords are never stored in a readable form, so an invitation can only show a password that is created now.</p>
+          <div class="pform__actions pform__actions--stack">
+            <button class="btn btn--gold" type="button" data-invite-new>Create a new password and invitation <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+            <button class="btn btn--line-dark" type="button" data-invite-nopw>Invitation without password (send it separately)</button>
+          </div>
+          <p class="small">A new password replaces their current one and signs them out on other devices.</p>
+          <p class="form__msg" role="alert" hidden></p>
+        </div>
+      </dialog>
     </div></section>
 
   </main>
@@ -128,7 +169,8 @@
         <p class="footer__lines">Mining • Critical Minerals • Project Development • Strategic Partnerships</p>
         <p class="footer__motto">Connecting Opportunities. Developing Partnerships.</p>
       </div>
-      <nav class="footer__nav" aria-label="Footer"><a href="../about/">About</a><a href="../investors/">Investors</a><a href="../news/">News &amp; Milestones</a><a href="../contact/">Contact</a><a href="../login/">Partner login</a><a href="mailto:john@guilgal.org">john@guilgal.org</a></nav>
+      <nav class="footer__nav" aria-label="Footer"><a href="../about/">About</a><a href="../investors/">Investors</a><a href="../contact/">Contact</a><a href="mailto:john@guilgal.org">john@guilgal.org</a></nav>
+      <div class="footer__logins"><a class="footer__login" href="../login/"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg> Partner login</a><a class="footer__login" href="../admin/"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg> Admin login</a></div>
     </div>
     <div class="wrap footer__bottom">
       <p class="footer__disclaimer">Guilgal International does not provide investment, financial or legal advice. Nothing on this site is an offer or solicitation.</p>

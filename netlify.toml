@@ -23,6 +23,20 @@
   to = "/members/"
   status = 301
 
+# Briefs are generated from each project page at build time (brief.pdf). Old links to
+# the retired upload endpoint go straight to the generated PDF, still behind the login.
+[[redirects]]
+  from = "/members/projects/:slug/brief"
+  to = "/members/projects/:slug/brief.pdf"
+  status = 301
+  force = true
+
+# News & Milestones is paused for now.
+[[redirects]]
+  from = "/news/*"
+  to = "/"
+  status = 302
+
 [[headers]]
   for = "/archive/*"
   [headers.values]
