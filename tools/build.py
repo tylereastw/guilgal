@@ -15,11 +15,16 @@ from html import escape
 import shutil
 import subprocess
 from pathlib import Path
+import re
 import segno
+import hashlib
+import json
 
 ROOT = Path(__file__).resolve().parent.parent
 SITE = "https://www.guilgal.org"
 EMAIL = "john@guilgal.org"
+MEDIA = "members/media/"   # project-only images, served behind the partner login
+QR_SALT = "gi-qr-7f3c9a1e"  # QR image names are hashed so they do not reveal project names
 LEGAL = "Guilgal International is a trading name of Britcom Trading Limited, registered in England and Wales, company number 15625520."
 IMG = "public/images/v2/"
 DISCLAIMER = ("Guilgal International does not provide investment, financial or legal advice. "
@@ -231,7 +236,7 @@ def strip(items, n=3):
 
 def project_cards(p):
     return '<ul class="pcards">' + "".join(
-        f'''<li class="pcard"><a href="{p}members/projects/{s}/" rel="nofollow">
+        f'''<li class="pcard" data-slug="{s}"><a href="{p}members/projects/{s}/" rel="nofollow">
           <div class="pcard__photo"><img src="{p}{IMG}card-{s}.jpg" alt="" loading="lazy"></div>
           <div class="pcard__body"><strong>{e(n)}</strong><span>{e(c)}</span><i class="arrow-circle">{ico("arrow")}</i></div>
           </a></li>''' for s, n, c in PROJECTS) + "</ul>"
@@ -632,7 +637,6 @@ def login():
 
 def admin():
     p = "../"
-    checks = "".join(f'<label class="check"><input type="checkbox" name="projects" value="{s}"><span>{e(n)}</span></label>' for s, n, _ in PROJECTS)
     body = f'''    <section class="section admin"><div class="wrap">
       <h1>Partner Access Admin</h1>
       <div data-admin-setup hidden>
@@ -692,12 +696,12 @@ def admin():
 
         <div class="adm-panel" data-panel="links" hidden>
           <div class="adm-head"><div><h2>Project links &amp; QR codes</h2><p class="small">Each link opens the project page after the partner signs in. Anyone without access is taken to the login screen first. Invitations include these automatically.</p></div></div>
-          <ul class="qrs">{{QRLIST}}</ul>
+          <ul class="qrs" data-qrs></ul>
         </div>
 
         <div class="adm-panel" data-panel="briefs" hidden>
           <div class="adm-head"><div><h2>Project briefs</h2><p class="small">Briefs are generated automatically from each project page every time the site is built, so they always match the page. Nothing needs uploading.</p></div></div>
-          <ul class="briefs">{{BRIEFLIST}}</ul>
+          <ul class="briefs" data-briefs></ul>
         </div>
       </div>
 
@@ -711,7 +715,7 @@ def admin():
           <fieldset class="checks">
             <legend>Which projects can they see?</legend>
             <label class="check check--all"><input type="checkbox" name="projects" value="*"><span>All projects, including any added later</span></label>
-            {checks}
+            <div class="checks__list" data-project-checks></div>
           </fieldset>
           <fieldset class="checks">
             <legend>Password</legend>
@@ -747,20 +751,6 @@ def admin():
       </dialog>
     </div></section>
 '''
-    qr("login/", "login")
-    qrs = []
-    for slug, name, _ in PROJECTS:
-        code = qr(f"members/projects/{slug}/", f"project-{slug}")
-        url = f"{SITE}/members/projects/{slug}/"
-        png = code.replace(".svg", ".png")
-        qrs.append(f'''<li><img src="{p}{IMG}{code}" alt="QR code for {e(name)}" width="120" height="120"><div><strong>{e(name)}</strong>
-          <code>{url}</code><span><a class="btn btn--sm btn--gold" href="{p}{IMG}{png}" download="Guilgal-International-{slug}-QR.png">Download PNG</a>
-          <a class="btn btn--sm btn--line-dark" href="{p}{IMG}{code}" download="Guilgal-International-{slug}-QR.svg">SVG</a>
-          <button class="btn btn--sm btn--line-dark" type="button" data-copy="{url}">Copy link</button></span></div></li>''')
-    body = body.replace("{QRLIST}", "".join(qrs))
-    body = body.replace("{BRIEFLIST}", "".join(
-        f'<li><strong>{e(n)}</strong><span><a class="btn btn--sm btn--gold" href="{p}members/projects/{s}/brief.pdf" target="_blank" rel="noopener">Open PDF</a></span></li>'
-        for s, n, _ in PROJECTS))
     page("admin/", "Admin | Guilgal International", "Admin.", "", body, p, noindex=True, scripts=["js/admin.js"])
 
 
@@ -1159,6 +1149,28 @@ def seo():
     (ROOT / "robots.txt").write_text(f"User-agent: *\nDisallow: /members/\nDisallow: /admin/\nDisallow: /login/\nDisallow: /archive/\n\nSitemap: {SITE}/sitemap.xml\n")
 
 
+def qr_name(slug):
+    return "p" + hashlib.sha256((QR_SALT + slug).encode()).hexdigest()[:16]
+
+
+def private_media():
+    """Point private pages at members/media/ for project-only images, write the QR codes
+    under hashed names and a private manifest the admin panel reads after sign-in."""
+    media = ROOT / MEDIA
+    names = {f.name for f in media.iterdir() if f.is_file()}
+    for f in (ROOT / "members").rglob("*.html"):
+        h = f.read_text()
+        h2 = re.sub(r"public/images/v2/([\w.-]+)", lambda m: (MEDIA + m.group(1)) if m.group(1) in names else m.group(0), h)
+        if h2 != h:
+            f.write_text(h2)
+    qr("login/", "login")
+    manifest = {}
+    for slug, name, _ in PROJECTS:
+        code = qr(f"members/projects/{slug}/", qr_name(slug))
+        manifest[slug] = {"name": name, "qr": code[:-4], "url": f"{SITE}/members/projects/{slug}/"}
+    (media / "projects.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=1))
+
+
 if __name__ == "__main__":
     # news() is paused for now; /news/ redirects home (netlify.toml)
     home(); about(); team(); investors(); contact(); members(); login(); admin(); thanks()
@@ -1169,6 +1181,7 @@ if __name__ == "__main__":
         legal(s, t)
     cookie_policy()
     seo()
+    private_media()
     if shutil.which("node"):
         subprocess.run(["node", str(ROOT / "tools" / "briefs.mjs")], check=True)
     else:
