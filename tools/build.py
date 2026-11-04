@@ -294,12 +294,11 @@ def home():
           <h1>Unlocking Africa's<br>Mineral Potential</h1>
           <p class="hero__sub">Connecting high-potential mineral projects with technical expertise, development partners and international partnerships.</p>
           <div class="hero__actions"><a class="btn btn--gold" href="about/">Discover More {ico("arrow")}</a><a class="btn btn--line" href="investors/#enquiry">Investor Enquiries {ico("arrow")}</a></div>'''
-    side = qr_panel(p, "investors/", "investors", "Scan to visit the Investor Centre", "", stack=True)
     strengths = [("doc", "Extensive Geological Data Analysis", "Detailed review of existing geological records to guide exploration."),
                  ("pick", "Field Reconnaissance and Sampling", "Direct field investigations to verify mineral prospects."),
                  ("handshake", "Strategic Connections", "Introductions between project owners, technical specialists and international partners.")]
     minerals = ["Copper", "Lithium", "Tantalum", "Tin", "Niobium", "Wolframite"]
-    body = hero(p, "home-hero.jpg", inner, "hero--home", side) + strip([
+    body = hero(p, "home-hero.jpg", inner, "hero--home") + strip([
         ("cubes", "Copper & Gold", "Exploration opportunities"),
         ("crystal", "Critical Minerals", "Strategic resources"),
         ("handshake", "Strategic Partnerships", "Lasting value")]) + f'''
