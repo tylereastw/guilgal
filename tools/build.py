@@ -21,7 +21,13 @@ import hashlib
 import json
 
 ROOT = Path(__file__).resolve().parent.parent
-SITE = "https://www.guilgal.org"
+# Address used for every absolute link: QR codes, invitation and admin links, canonical
+# tags, sitemap, robots.txt and the brief footer. Until guilgal.org is connected to
+# Netlify everything points at the demo address. On go-live day set SITE = LIVE_SITE,
+# run python3 tools/build.py and re-send any QR codes already shared.
+DEMO_SITE = "https://guilgal-demo.netlify.app"
+LIVE_SITE = "https://www.guilgal.org"
+SITE = DEMO_SITE
 EMAIL = "john@guilgal.org"
 MEDIA = "members/media/"   # project-only images, served behind the partner login
 QR_SALT = "gi-qr-7f3c9a1e"  # QR image names are hashed so they do not reveal project names
