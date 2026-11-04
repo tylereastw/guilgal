@@ -606,3 +606,27 @@ body:has(.admin) .admin { padding-top: 40px; }
 /* team photos: fill the 4:3 frame so object-position actually applies */
 .person__photo { position: relative; }
 .person__photo img { position: absolute; inset: 0; }
+
+/* investors quote: the Africa image is the band's background and fades into it */
+.quote-band { position: relative; overflow: hidden; display: flex; align-items: center; justify-content: flex-end; min-height: 230px; padding: 34px clamp(24px, 5vw, 64px); background: linear-gradient(90deg, #011104 0%, #021806 38%, var(--green) 100%); border-radius: 4px; }
+.quote-band img { position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: min(46%, 520px); height: auto; max-height: none; aspect-ratio: 1024 / 1536; object-fit: cover; object-position: 50% 45%;
+  -webkit-mask-image: linear-gradient(90deg, #000 55%, transparent 100%), linear-gradient(180deg, transparent 0%, #000 14%, #000 86%, transparent 100%);
+  -webkit-mask-composite: source-in; mask-image: linear-gradient(90deg, #000 55%, transparent 100%), linear-gradient(180deg, transparent 0%, #000 14%, #000 86%, transparent 100%); mask-composite: intersect; opacity: .95; }
+.quote-band::after { content: ""; position: absolute; inset: 0; background: radial-gradient(ellipse 40% 90% at 22% 50%, rgba(215,180,110,.12), transparent 70%); pointer-events: none; }
+.quote-band blockquote { position: relative; z-index: 1; max-width: 640px; margin: 0; text-align: left; font: italic 400 clamp(1.4rem, 2.6vw, 2.1rem)/1.3 Georgia, "Times New Roman", serif; color: var(--white); text-shadow: 0 2px 18px rgba(0,0,0,.5); }
+@media (max-width: 760px) {
+  .quote-band { min-height: 0; padding: 40px 20px; justify-content: center; background: #021806; }
+  .quote-band img { width: 100%; left: 50%; top: 50%; transform: translate(-50%, -50%); opacity: .45; -webkit-mask-image: radial-gradient(ellipse 60% 55% at 50% 50%, #000 40%, transparent 100%); mask-image: radial-gradient(ellipse 60% 55% at 50% 50%, #000 40%, transparent 100%); }
+  .quote-band blockquote { text-align: center; }
+}
+@media (min-width: 761px) {
+  .quote-band { min-height: 280px; padding-left: 42%; justify-content: flex-start; }
+  .quote-band img { width: auto; height: 118%; left: 6%; }
+}
+@media (min-width: 761px) {
+  .quote-band { padding-left: 38%; }
+  .quote-band img {
+    -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 18%, #000 60%, transparent 100%), linear-gradient(180deg, transparent 0%, #000 12%, #000 88%, transparent 100%);
+    mask-image: linear-gradient(90deg, transparent 0%, #000 18%, #000 60%, transparent 100%), linear-gradient(180deg, transparent 0%, #000 12%, #000 88%, transparent 100%);
+  }
+}
