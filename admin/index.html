@@ -58,19 +58,38 @@
       <div data-admin-app hidden>
         <p><button class="btn btn--line-dark btn--sm" type="button" data-admin-logout>Sign out</button></p>
         <div class="grid-2" style="align-items:start">
-          <div class="formcard"><h3 class="formcard__head">Add or update a partner</h3>
-            <form class="form" data-user-form novalidate>
-              <div class="form__row"><label class="field"><span>Email*</span><input type="email" name="email" required></label>
-              <label class="field"><span>Name</span><input name="name"></label></div>
-              <fieldset class="checks"><legend>Projects</legend><label class="check"><input type="checkbox" name="projects" value="*"><span>All projects</span></label><label class="check"><input type="checkbox" name="projects" value="pumba"><span>Pumba Copper &amp; Gold</span></label><label class="check"><input type="checkbox" name="projects" value="alpha"><span>Alpha Tantalum &amp; Tin</span></label><label class="check"><input type="checkbox" name="projects" value="nizi-baluma"><span>Nizi–Baluma Gold</span></label><label class="check"><input type="checkbox" name="projects" value="ndela-mpaza"><span>Ndela–Mpaza</span></label><label class="check"><input type="checkbox" name="projects" value="hydropower"><span>Hydropower Projects</span></label><label class="check"><input type="checkbox" name="projects" value="tumfa"><span>Ghana Tumfa Gold</span></label></fieldset>
-              <label class="field"><span>Password (leave blank to generate one for new partners, or keep the current one)</span><input name="password" autocomplete="new-password"></label>
-              <label class="check"><input type="checkbox" name="resetPassword"><span>Generate a new password (signs the partner out everywhere)</span></label>
-              <label class="check"><input type="checkbox" name="disabled"><span>Disable this account</span></label>
+          <div class="formcard"><h3 class="formcard__head" data-form-title>Add a partner</h3>
+            <form class="form pform" data-user-form novalidate>
+              <p class="pform__editing" data-edit-note hidden>Editing <b data-edit-email></b> <button type="button" class="linkbtn" data-cancel-edit>Add a new partner instead</button></p>
+              <div class="form__row">
+                <label class="field"><span>Email address*</span><input type="email" name="email" required></label>
+                <label class="field"><span>Name</span><input name="name" placeholder="Optional"></label>
+              </div>
+              <fieldset class="checks">
+                <legend>Project access</legend>
+                <p class="small">The partner only sees the projects ticked here.</p>
+                <label class="check check--all"><input type="checkbox" name="projects" value="*"><span>All projects, including any added later</span></label>
+                <label class="check"><input type="checkbox" name="projects" value="pumba"><span>Pumba Copper &amp; Gold</span></label><label class="check"><input type="checkbox" name="projects" value="alpha"><span>Alpha Tantalum &amp; Tin</span></label><label class="check"><input type="checkbox" name="projects" value="nizi-baluma"><span>Nizi–Baluma Gold</span></label><label class="check"><input type="checkbox" name="projects" value="ndela-mpaza"><span>Ndela–Mpaza</span></label><label class="check"><input type="checkbox" name="projects" value="hydropower"><span>Hydropower Projects</span></label><label class="check"><input type="checkbox" name="projects" value="tumfa"><span>Ghana Tumfa Gold</span></label>
+              </fieldset>
+              <fieldset class="checks">
+                <legend>Password</legend>
+                <label class="check" data-only-edit hidden><input type="radio" name="pwmode" value="keep"><span>Keep their current password</span></label>
+                <label class="check"><input type="radio" name="pwmode" value="generate" checked><span data-gen-label>Create a secure password for me</span></label>
+                <label class="check"><input type="radio" name="pwmode" value="choose"><span>Let me type a password</span></label>
+                <label class="field" data-choose hidden><span>Password (at least 10 characters)</span><input name="password" autocomplete="new-password"></label>
+                <p class="small" data-only-edit hidden>A new password signs the partner out on all their devices.</p>
+              </fieldset>
+              <label class="check switch" data-only-edit hidden><input type="checkbox" name="active" checked><span>Account active (untick to block access without deleting)</span></label>
               <p class="form__msg" role="alert" hidden></p>
-              <button class="btn btn--gold" type="submit">Save partner <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
-            </form></div>
-          <div><h2>Project briefs</h2><p class="small">Upload a PDF for each project. Partners with access download it from the project page.</p>
-            <ul class="briefs" data-briefs></ul></div>
+              <div class="pform__actions"><button class="btn btn--gold" type="submit" data-submit-label>Add partner <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
+            </form>
+            <div class="details" data-details hidden>
+              <p><strong data-details-title>Partner added.</strong> Send them these login details. The password is shown only once.</p>
+              <pre data-details-text></pre>
+              <div class="pform__actions"><button class="btn btn--sm btn--gold" type="button" data-copy-details>Copy details</button><a class="btn btn--sm btn--line-dark" data-mail-details href="#">Open in email</a></div>
+            </div></div>
+          <div><h2>Project briefs</h2><p class="small">Briefs are generated automatically from each project page every time the site is built, so they always match the page. Preview them here.</p>
+            <ul class="briefs"><li><strong>Pumba Copper &amp; Gold</strong><span><a class="btn btn--sm btn--gold" href="../members/projects/pumba/brief.pdf" target="_blank" rel="noopener">Open PDF</a></span></li><li><strong>Alpha Tantalum &amp; Tin</strong><span><a class="btn btn--sm btn--gold" href="../members/projects/alpha/brief.pdf" target="_blank" rel="noopener">Open PDF</a></span></li><li><strong>Nizi–Baluma Gold</strong><span><a class="btn btn--sm btn--gold" href="../members/projects/nizi-baluma/brief.pdf" target="_blank" rel="noopener">Open PDF</a></span></li><li><strong>Ndela–Mpaza</strong><span><a class="btn btn--sm btn--gold" href="../members/projects/ndela-mpaza/brief.pdf" target="_blank" rel="noopener">Open PDF</a></span></li><li><strong>Hydropower Projects</strong><span><a class="btn btn--sm btn--gold" href="../members/projects/hydropower/brief.pdf" target="_blank" rel="noopener">Open PDF</a></span></li><li><strong>Ghana Tumfa Gold</strong><span><a class="btn btn--sm btn--gold" href="../members/projects/tumfa/brief.pdf" target="_blank" rel="noopener">Open PDF</a></span></li></ul></div>
         </div>
         <h2 style="margin-top:40px">Project links and QR codes</h2>
         <p class="small">Send these to partners with access. Each link opens the project page after the partner signs in; anyone without access is asked to log in.</p>
@@ -113,7 +132,7 @@
     </div>
     <div class="wrap footer__bottom">
       <p class="footer__disclaimer">Guilgal International does not provide investment, financial or legal advice. Nothing on this site is an offer or solicitation.</p>
-      <p>Guilgal International Ltd, registered in England and Wales. <a href="../privacy/">Privacy</a> · <a href="../cookies/">Cookies</a> · <a href="../terms/">Terms</a></p>
+      <p>Guilgal International Ltd, registered in England and Wales. <a href="../privacy/">Privacy</a> · <a href="../cookies/">Cookies</a> · <a href="../terms/">Terms</a> · <a href="../cookies/" data-cookie-settings>Cookie settings</a></p>
     </div>
   </footer>
   <script src="../js/main.js"></script><script src="../js/admin.js"></script>

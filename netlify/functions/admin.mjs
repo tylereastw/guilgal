@@ -8,9 +8,6 @@
 //   POST   /api/admin/users   { email, name, projects, password?, disabled? }  create or update
 //                                                  (omit password to keep it; set resetPassword: true to generate one)
 //   DELETE /api/admin/users?email=...
-//   GET    /api/admin/briefs                       which projects have a brief uploaded
-//   POST   /api/admin/briefs  multipart: slug, file (PDF, max 15 MB)
-//   DELETE /api/admin/briefs?slug=...
 import { getStore } from "@netlify/blobs";
 import QRCode from "qrcode";
 import { env, json, sign, cookie, isAdmin, checkTotp, safeEqual, hashPassword, randomPassword, normEmail, publicUser,
@@ -24,7 +21,7 @@ export default async (request, context) => {
   const members = getStore({ name: "members", consistency: "strong" });
 
   // JSON writes must come from this site's own pages
-  if (request.method === "POST" && !path.endsWith("/briefs")) {
+  if (request.method === "POST") {
     const ct = request.headers.get("content-type") || "";
     if (!ct.includes("application/json")) return json({ error: "Expected JSON" }, 415);
   }
@@ -114,36 +111,6 @@ export default async (request, context) => {
     if (request.method === "DELETE") {
       const email = normEmail(url.searchParams.get("email"));
       await members.delete("users/" + email);
-      return json({ ok: true });
-    }
-  }
-
-  if (path === "/api/admin/briefs") {
-    const briefs = getStore({ name: "briefs", consistency: "strong" });
-    if (request.method === "GET") {
-      const out = {};
-      for (const slug of Object.keys(PROJECTS)) {
-        const m = await briefs.getMetadata(slug);
-        out[slug] = m ? { filename: m.metadata?.filename || slug + ".pdf", uploaded: m.metadata?.uploaded || null, size: m.metadata?.size || null } : null;
-      }
-      return json({ briefs: out, projects: PROJECTS });
-    }
-    if (request.method === "POST") {
-      const form = await request.formData();
-      const slug = String(form.get("slug") || "");
-      const file = form.get("file");
-      if (!PROJECTS[slug]) return json({ error: "Unknown project" }, 400);
-      if (!file || typeof file === "string") return json({ error: "Choose a PDF file." }, 400);
-      if (file.size > 15 * 1024 * 1024) return json({ error: "The file must be 15 MB or smaller." }, 400);
-      const data = await file.arrayBuffer();
-      if (new TextDecoder().decode(new Uint8Array(data).slice(0, 5)) !== "%PDF-") return json({ error: "The file must be a PDF." }, 400);
-      await briefs.set(slug, data, { metadata: { filename: file.name || slug + ".pdf", type: "application/pdf", size: file.size, uploaded: new Date().toISOString() } });
-      return json({ ok: true });
-    }
-    if (request.method === "DELETE") {
-      const slug = url.searchParams.get("slug");
-      if (!PROJECTS[slug]) return json({ error: "Unknown project" }, 400);
-      await briefs.delete(slug);
       return json({ ok: true });
     }
   }
