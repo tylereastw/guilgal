@@ -39,7 +39,7 @@ empty (sky, forest, soft landscape) with the subject on the right.
 | `card-ndela-mpaza.jpg` | 1600×900 | Rocky granite ridge covered in green woodland under a blue sky, DRC. |
 | `card-hydropower.jpg` | 1600×900 | Front view of a concrete hydroelectric dam spillway with white water, forested hills. |
 | `card-tumfa.jpg` | 1600×900 | Close-up of gold nuggets piled on dark stone, warm light. |
-| `team-gedeon.jpg`, `team-didier.jpg` | 1200×900 | **Use real photographs.** These must be genuine portraits of Gedeon and Didier, not generated images. |
+| `team-gedeon.jpg` | 1200×900 | **Use real photographs.** These must be genuine portraits of Gedeon and Didier, not generated images. |
 | `logo-emblem.jpg` | 1200×1200 | **Use the official logo file** from the 31 October logo pack (transparent PNG or SVG), not a generated image. |
 
 ## 3. Mineral specimens (About page)

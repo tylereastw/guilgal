@@ -12,7 +12,7 @@ const out = join(root, "dist");
 const PUBLISH = [
   "index.html", "404.html", "favicon.ico", "robots.txt", "sitemap.xml",
   "about", "admin", "archive", "assets", "contact", "cookies", "css", "investors", "js",
-  "login", "members", "privacy", "public", "terms", "thanks",
+  "login", "members", "privacy", "projects", "public", "terms", "thanks",
 ];
 // Never published, even inside the folders above.
 const SKIP_EXT = new Set([".md", ".py", ".mjs", ".ts", ".map", ".psd", ".ai"]);

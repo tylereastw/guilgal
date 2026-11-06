@@ -6,6 +6,8 @@
 //   GET    /api/admin/admins                        list named admins          (signed-in admins only)
 //   POST   /api/admin/admins  { email, name }       add an admin or renew their invite link -> { inviteUrl }
 //   DELETE /api/admin/admins?email=...              remove a named admin
+//   GET    /api/admin/public-projects               how each project appears publicly
+//   POST   /api/admin/public-projects { modes: { slug: "named" | "confidential" | "hidden" } }
 //   POST   /api/admin/invite/start  { token }       invite link: new authenticator key + QR code
 //   POST   /api/admin/invite/finish { token, password, code }  sets password and authenticator, signs in
 //   POST   /api/admin/logout
@@ -137,6 +139,19 @@ export default async (request, context) => {
 
   const me = await adminFromRequest(request, members);
   if (!me) return json({ error: "Not signed in" }, 401);
+
+  // Public project listing: named, confidential (no name or details) or hidden, per project.
+  if (path === "/api/admin/public-projects") {
+    const key = "config/public-projects";
+    if (request.method === "GET") return json({ modes: (await members.get(key, { type: "json" })) || {}, projects: PROJECTS });
+    if (request.method === "POST") {
+      const b = await readBody();
+      const modes = {};
+      for (const [slug, mode] of Object.entries(b?.modes || {})) if (PROJECTS[slug] && ["named", "confidential", "hidden"].includes(mode)) modes[slug] = mode;
+      await members.setJSON(key, modes);
+      return json({ ok: true, modes });
+    }
+  }
 
   if (path === "/api/admin/admins") {
     if (request.method === "GET") {

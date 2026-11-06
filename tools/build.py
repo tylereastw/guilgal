@@ -33,8 +33,6 @@ MEDIA = "members/media/"   # project-only images, served behind the partner logi
 QR_SALT = "gi-qr-7f3c9a1e"  # QR image names are hashed so they do not reveal project names
 LEGAL = "Guilgal International is a trading name of Britcom Trading Limited, registered in England and Wales, company number 15625520."
 IMG = "public/images/v2/"
-DISCLAIMER = ("Guilgal International does not provide investment, financial or legal advice. "
-              "Nothing on this site is an offer or solicitation.")
 INDICATIVE = "Information is indicative and subject to technical review and agreement."
 
 
@@ -89,6 +87,7 @@ def dot(name, lg=False):
 NAV = [
     ("Home", ""),
     ("About", "about/", [("About Guilgal International", "about/"), ("Our Name", "about/#our-name"), ("Meet the Team", "about/team/")]),
+    ("Projects", "projects/"),
     ("Investors", "investors/"),
     ("Contact", "contact/"),
 ]
@@ -102,6 +101,87 @@ PROJECTS = [
     ("hydropower", "Hydropower Projects", "DRC"),
     ("tumfa", "Ghana Tumfa Gold", "Ghana"),
 ]
+
+# Public project summaries (Projects page, homepage, enquiry form). Each project is shown
+# Named, Confidential (no name, licence or exact location) or Hidden, as chosen in the admin
+# panel; the edge gate removes the versions that should not be seen. "opaque" is what a
+# Confidential card says instead of the name. Wording to be approved by John.
+PUBLIC = {
+    "pumba": dict(name="Pumba Copper & Gold", opaque="Copper and gold exploration project", commodity="Copper, gold", icon="cubes",
+                  location="Haut-Katanga Province, DRC", country="DRC", licence="PR15201",
+                  stage="Exploration: priority drill targets defined", role="Project coordination and partner introductions",
+                  next="Site visit and target review (Q4 2026)"),
+    "alpha": dict(name="Alpha Tantalum & Tin", opaque="Tantalum and tin project", commodity="Tantalum, tin", icon="crystal",
+                  location="Democratic Republic of the Congo", country="DRC", licence="PR16516 & PR16517",
+                  stage="Early exploration, with artisanal activity", role="Project coordination and partner introductions",
+                  next="Detailed geological mapping and sampling"),
+    "nizi-baluma": dict(name="Nizi–Baluma Gold", opaque="Gold tailings reprocessing project", commodity="Gold (tailings)", icon="bars",
+                  location="Ituri Province, DRC", country="DRC", licence="PE5110",
+                  stage="Agreements and feasibility", role="Project coordination and partner introductions",
+                  next="Finalise agreements"),
+    "ndela-mpaza": dict(name="Ndela–Mpaza", opaque="Rare earths and lithium project", commodity="Rare earths, lithium, critical minerals", icon="crystal",
+                  location="Kweneng, DRC", country="DRC", licence="PR15621 & PR15648",
+                  stage="Early exploration: radiometric targets", role="Project coordination and partner introductions",
+                  next="Site visit and detailed mapping"),
+    "hydropower": dict(name="Hydropower Projects", opaque="Hydropower infrastructure projects", commodity="Hydroelectric power", icon="bolt",
+                  location="Haut-Katanga and Haut-Lomami, DRC", country="DRC", licence="",
+                  stage="Government engagement", role="Commercial facilitation and introductions",
+                  next="Government agreements and mandates (Q4 2026)"),
+    "tumfa": dict(name="Ghana Tumfa Gold", opaque="Gold project", commodity="Gold (alluvial and hard rock)", icon="cubes",
+                  location="Kibi Belt, Eastern Region, Ghana", country="Ghana", licence="",
+                  stage="Review and planning", role="Project coordination and partner introductions",
+                  next="Detailed review and planning"),
+}
+
+
+def summary_cards(p, limit=None):
+    """Both versions of every card; the edge gate keeps the one matching each project's setting."""
+    out = []
+    for slug, _, _ in PROJECTS[:limit]:
+        d = PUBLIC[slug]
+        rows = lambda loc: (f'<dl class="psum__facts"><div><dt>Commodity</dt><dd>{e(d["commodity"])}</dd></div>'
+                            f'<div><dt>Location</dt><dd>{e(loc)}</dd></div><div><dt>Stage</dt><dd>{e(d["stage"])}</dd></div>'
+                            f'<div><dt>Our role</dt><dd>{e(d["role"])}</dd></div><div><dt>Next milestone</dt><dd>{e(d["next"])}</dd></div></dl>')
+        img = public_card_image(slug)
+        out.append(f'''<li class="psum" data-pslug="{slug}" data-pvariant="named">
+          <div class="psum__photo"><img src="{p}{IMG}{img}" alt="" loading="lazy"><span class="psum__tag">Illustrative image</span></div>
+          <div class="psum__body"><h3>{e(d["name"])}</h3>{f'<p class="psum__licence">{e(d["licence"])}</p>' if d["licence"] else ""}{rows(d["location"])}
+            <a class="psum__link" href="{p}members/projects/{slug}/">Partner access {ico("arrow")}</a></div></li>
+        <li class="psum psum--opaque" data-pslug="{slug}" data-pvariant="opaque">
+          <div class="psum__photo psum__photo--opaque">{dot(d["icon"], True)}<span class="psum__tag">Confidential</span></div>
+          <div class="psum__body"><h3>{e(d["opaque"])}</h3><p class="psum__licence">Name and details shared under a confidentiality agreement</p>{rows(d["country"])}
+            <a class="psum__link" href="{p}investors/#enquiry">Request information {ico("arrow")}</a></div></li>''')
+    return '<ul class="psums">' + "".join(out) + '</ul><p class="small psums__none" data-psums-none hidden>Project details are available to partners on request.</p>'
+
+
+def public_card_image(slug):
+    """Public copy of a project's card image under a hashed name (the original stays behind the login)."""
+    name = "pc-" + hashlib.sha256((QR_SALT + "card" + slug).encode()).hexdigest()[:12] + ".jpg"
+    src = ROOT / MEDIA / f"card-{slug}.jpg"
+    dst = ROOT / IMG / name
+    if src.exists() and (not dst.exists() or dst.stat().st_mtime < src.stat().st_mtime):
+        shutil.copyfile(src, dst)
+    return name
+
+
+def projects_page():
+    p = "../"
+    inner = '''<p class="label label--light">Projects</p><h1>Our Projects</h1>
+          <p class="hero__sub">Mineral and energy opportunities in the Democratic Republic of the Congo and Ghana. Full technical information is shared with partners after a confidentiality agreement.</p>'''
+    body = hero(p, "about-who.jpg", inner) + f'''
+    <section class="section"><div class="wrap">
+      <div class="shead"><h2>Project Summaries</h2></div>
+      <p class="lead">A short overview of each project. Images are illustrative. Some projects are shown without their names while discussions are under way.</p>
+      {summary_cards(p)}
+    </div></section>
+    <section class="section section--cream2"><div class="wrap grid-2" style="align-items:center">
+      <div><h2>Access the full project information</h2><p class="lead">Technical summaries, maps and project briefs are available to invited partners. Request access and we will send a confidentiality agreement.</p></div>
+      <div class="hero__actions"><a class="btn btn--gold" href="{p}investors/#enquiry">Request access {ico("arrow")}</a><a class="btn btn--line-dark" href="{p}login/">Partner login {ico("arrow")}</a></div>
+    </div></section>
+'''
+    page("projects/", "Projects | Guilgal International", "Summaries of Guilgal International's mineral and energy projects in the DRC and Ghana.", "Projects", body, p)
+
+
 
 APPROACH = [  # John Boardman's wording (About page mock-up)
     ("doc", "Identify", "Source and review promising project opportunities."),
@@ -180,12 +260,10 @@ def footer(p):
       <div class="footer__logins">
         <a class="footer__login" href="{p}login/" data-when="partner-out">{ico("lock")} Partner login</a>
         <span class="footer__signed" data-when="partner-in" hidden><a class="footer__login footer__login--on" href="{p}members/">{ico("people")} Partner portal</a><button type="button" class="footer__login" data-footer-logout="partner">Log out</button></span>
-        <a class="footer__login" href="{p}admin/" data-when="admin-out">{ico("lock")} Admin login</a>
         <span class="footer__signed" data-when="admin-in" hidden><a class="footer__login footer__login--on" href="{p}admin/">{ico("gear")} Admin panel</a><button type="button" class="footer__login" data-footer-logout="admin">Log out</button></span>
       </div>
     </div>
     <div class="wrap footer__bottom">
-      <p class="footer__disclaimer">{DISCLAIMER}</p>
       <p>{LEGAL} <a href="{p}privacy/">Privacy</a> · <a href="{p}cookies/">Cookies</a> · <a href="{p}terms/">Terms</a> · <a href="{p}cookies/" data-cookie-settings>Cookie settings</a></p>
     </div>
   </footer>'''
@@ -268,8 +346,10 @@ def consent(p):
 
 
 def enquiry_form(p, title="Send Us a Message", projects=True, name="contact"):
-    areas = ["Copper and gold", "Tantalum, tin and critical minerals", "Gold", "Energy and infrastructure", "Partner access request", "General partnership enquiry"]
-    opts = "".join(f'<option>{e(a)}</option>' for a in areas)
+    # Named projects first (the edge gate removes any project set to Confidential or Hidden
+    # in the admin panel), then general options.
+    opts = "".join(f'<option data-pslug="{s}">{e(PUBLIC[s]["name"])}</option>' for s, _, _ in PROJECTS)
+    opts += "".join(f'<option>{a}</option>' for a in ["Partnership enquiry", "Partner access request", "Other"])
     area = (f'<label class="field"><span>Area of interest*</span><select name="interest" required><option value="">Select an area</option>'
             f'{opts}</select></label>') if projects else ""
     org = ('<div class="form__row"><label class="field"><span>Organisation</span><input name="organisation" autocomplete="organization"></label>'
@@ -331,6 +411,15 @@ def home():
       </div>
     </section>
 
+    <section class="section section--cream2" id="projects">
+      <div class="wrap">
+        <div class="shead"><h2>Our Projects</h2></div>
+        <p class="lead">Copper, gold, tantalum, tin, critical minerals and hydropower in the DRC and Ghana.</p>
+        {summary_cards(p)}
+        <p style="margin-top:22px"><a class="btn btn--dark" href="projects/">All project summaries {ico("arrow")}</a></p>
+      </div>
+    </section>
+
     <section class="section section--dark on-dark">
       <div class="wrap">
         <p class="label">Track record</p>
@@ -342,13 +431,6 @@ def home():
       </div>
     </section>
 
-    <section class="section section--cream2">
-      <div class="wrap">
-        <div class="shead"><h2>Key Strengths Driving Successful Mining Ventures</h2></div>
-        <p class="lead">Our expertise spans data analysis, fieldwork and strategic connections to advance mining opportunities with clear evidence and trusted partnerships.</p>
-        <ul class="cols4 cols3">{"".join(f"<li>{dot(i, True)}<h3>{t}</h3><p>{d}</p></li>" for i, t, d in strengths)}</ul>
-      </div>
-    </section>
 
     <section class="section">
       <div class="wrap">
@@ -373,7 +455,7 @@ def home():
       <div class="band__bg"><img src="{IMG}about-hero.jpg" alt=""></div>
       <div class="wrap band__grid">
         <div><p class="label">Start a conversation</p><h2>Start Developing Your Mining Project with Guilgal International</h2>
-          <p>Engage with Guilgal International's experienced team to investigate, develop and advance promising mineral projects with confidence and precision.</p>
+          <p>Talk to our team about investigating, developing or partnering on a mineral project.</p>
           <ul class="pills">{"".join(f'<li><span class="pill">{m}</span></li>' for m in minerals)}</ul>
           <div class="hero__actions"><a class="btn btn--gold" href="contact/">Contact Us {ico("arrow")}</a><a class="btn btn--line" href="investors/#enquiry">Investor Enquiries {ico("arrow")}</a></div></div>
         <aside class="qr"><div><p class="qr__title">Talk to John Boardman</p><p>Director, Guilgal International. Discuss mining services and project development needs in the DRC.</p><a class="btn btn--gold btn--sm" href="mailto:{EMAIL}">{EMAIL}</a></div></aside>
@@ -487,12 +569,6 @@ TEAM = [
               "He has significant experience in exploration, project identification and liaison with local authorities, technical teams and community stakeholders, with a focus on responsible and sustainable development.",
               "Gedeon plays a key role in advancing Guilgal International's mineral projects, including copper, gold, tantalum, tin and critical minerals, and coordinates field activities, technical studies and local partnerships."],
          keys=[("pick", "Geological coordination"), ("map", "Project identification and evaluation"), ("people", "Local partnerships and stakeholder engagement"), ("leaf", "Field activities and technical support")]),
-    dict(name="Didier", role="Project Partner", sub="Business Development | Strategic Relationships", photo="team-didier.jpg",
-         short="In-country relationships, commercial coordination and project development support in the DRC.",
-         bio=["Didier contributes to Guilgal International's in-country relationships, commercial coordination and project development support in the Democratic Republic of the Congo.",
-              "He plays an important role in business development, government and stakeholder engagement, and the facilitation of strategic partnerships across Guilgal International's project portfolio.",
-              "Didier's local expertise and extensive network support the advancement of mineral and infrastructure opportunities, helping to create long-term value through collaboration and responsible development."],
-         keys=[("handshake", "Business development"), ("people", "Government and stakeholder engagement"), ("chart", "Strategic partnerships"), ("gear", "Project coordination and commercial support")]),
 ]
 
 
@@ -694,6 +770,7 @@ def admin():
         <div class="adm-bar">
           <div class="adm-tabs" role="tablist">
             <button type="button" role="tab" class="adm-tab is-on" data-tab="partners" aria-selected="true">{ico("people")} Partners</button>
+            <button type="button" role="tab" class="adm-tab" data-tab="listing" aria-selected="false">{ico("globe")} Public listing</button>
             <button type="button" role="tab" class="adm-tab" data-tab="links" aria-selected="false">{ico("map")} Project links &amp; QR codes</button>
             <button type="button" role="tab" class="adm-tab" data-tab="briefs" aria-selected="false">{ico("doc")} Project briefs</button>
             <button type="button" role="tab" class="adm-tab" data-tab="admins" aria-selected="false">{ico("shield")} Admins</button>
@@ -717,6 +794,13 @@ def admin():
               <li><b>Invitation</b>: create a ready-to-send invitation with the sign-in link, their login details, step-by-step instructions and a QR code for each project. Copy it into an email or save it as a PDF.</li>
               <li><b>Edit</b> to change their projects or reset their password. <b>Pause</b> blocks access without deleting the account; <b>Delete</b> removes it.</li>
             </ol></details>
+        </div>
+
+        <div class="adm-panel" data-panel="listing" hidden>
+          <div class="adm-head"><div><h2>Public listing</h2><p class="small">Choose how each project appears on the public Projects page, the homepage and the enquiry form. Changes apply straight away. Project pages themselves always stay behind the partner login.</p></div></div>
+          <ul class="ulist listing" data-listing></ul>
+          <div class="adm-help" style="margin-top:14px"><b>Named</b> shows the project name, licence, location, stage, our role and next milestone. <b>Confidential</b> shows only the commodity, country, stage, role and milestone, with no name, licence, image or exact location. <b>Hidden</b> leaves the project off the public site entirely.</div>
+          <div class="pform__actions" style="margin-top:16px"><button class="btn btn--gold" type="button" data-listing-save>Save public listing {ico("arrow")}</button><span class="small" data-listing-msg></span></div>
         </div>
 
         <div class="adm-panel" data-panel="links" hidden>
@@ -1159,7 +1243,7 @@ def brief_page(slug, card_name):
 </main>
 <footer class="foot">
   <p><b>Contact Guilgal International</b> · John Boardman, Director · {EMAIL} · {SITE}</p>
-  <p>{DISCLAIMER} {INDICATIVE}</p>
+  <p>{INDICATIVE}</p>
   <p>{LEGAL} Generated from the project page on {generated}.</p>
 </footer></body></html>"""
     assert "—" not in html, f"em dash in brief {slug}"
@@ -1313,10 +1397,10 @@ def cookie_policy():
 
 
 def seo():
-    pub = ["", "about/", "about/team/", "investors/", "contact/", "privacy/", "cookies/", "terms/"]
+    pub = ["", "about/", "about/team/", "projects/", "investors/", "contact/", "privacy/", "cookies/", "terms/"]
     (ROOT / "sitemap.xml").write_text('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
-                                      "".join(f"  <url><loc>{SITE}/{u}</loc></url>\n" for u in pub) + "</urlset>\n")
-    (ROOT / "robots.txt").write_text(f"User-agent: *\nDisallow: /members/\nDisallow: /admin/\nDisallow: /login/\nDisallow: /archive/\n\nSitemap: {SITE}/sitemap.xml\n")
+                                      "".join(f"  <url><loc>{SITE}/{u}</loc><lastmod>{date.today().isoformat()}</lastmod></url>\n" for u in pub) + "</urlset>\n")
+    (ROOT / "robots.txt").write_text(f"User-agent: *\nDisallow: /members/\nDisallow: /admin/\nDisallow: /login/\nDisallow: /archive/\nDisallow: /api/\nDisallow: /thanks/\n\nSitemap: {SITE}/sitemap.xml\n")
 
 
 def qr_name(slug):
@@ -1343,7 +1427,7 @@ def private_media():
 
 if __name__ == "__main__":
     # news() is paused for now; /news/ redirects home (netlify.toml)
-    home(); about(); team(); investors(); contact(); members(); login(); admin(); thanks(); not_found()
+    home(); about(); team(); projects_page(); investors(); contact(); members(); login(); admin(); thanks(); not_found()
     for s, n, _ in PROJECTS:
         project_page(s, n)
         brief_page(s, n)

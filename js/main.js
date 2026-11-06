@@ -10,7 +10,7 @@
 
   // header background after scrolling
   const nav = $('.nav');
-  const onScroll = () => nav.classList.toggle('is-scrolled', scrollY > 160);
+  const onScroll = () => nav.classList.toggle('is-scrolled', scrollY > 40);
   addEventListener('scroll', onScroll, { passive: true });
   onScroll();
 

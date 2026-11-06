@@ -41,7 +41,7 @@ python3 -m http.server 8000
   `data-endpoint="..."` on the `<form>` (in `tools/build.py`); until then they ask visitors to email
   john@guilgal.org.
 - **John Boardman's photo** goes at `public/images/team/john-boardman.jpg` (portrait, 4:5). His
-  biography, and Gedeon's and Didier's titles and biographies, are placeholders.
+  biography, and Gedeon's title and biography, are placeholders.
 - **News:** the cards are "Coming soon" placeholders until the first posts are published.
 - **Our Approach:** the heading and four steps are placeholder test copy (Lorem ipsum) until the final wording is agreed; edit `APPROACH` and the heading in `tools/build.py`.
 - **Project pages:** overview, licence and location, geology, work completed and next steps are

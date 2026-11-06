@@ -3,5 +3,7 @@ Disallow: /members/
 Disallow: /admin/
 Disallow: /login/
 Disallow: /archive/
+Disallow: /api/
+Disallow: /thanks/
 
 Sitemap: https://guilgal-demo.netlify.app/sitemap.xml

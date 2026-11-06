@@ -4,7 +4,7 @@
   command = "node tools/stage.mjs"
   publish = "dist"
 
-# Projects are private. Old /projects/ links go to the partner area, where the gate
+# /projects/ is the public summaries page. Old /projects/<name>/ links go to the partner area, where the gate
 # sends anyone not signed in to the login screen and returns them here afterwards.
 [[redirects]]
   from = "/projects/hydropower-projects/*"
@@ -14,16 +14,6 @@
 [[redirects]]
   from = "/projects/:slug/*"
   to = "/members/projects/:slug/"
-  status = 301
-
-[[redirects]]
-  from = "/projects"
-  to = "/members/"
-  status = 301
-
-[[redirects]]
-  from = "/projects/"
-  to = "/members/"
   status = 301
 
 # Briefs are generated from each project page at build time (brief.pdf). Old links to
