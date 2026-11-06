@@ -21,6 +21,36 @@ export function normalisePath(pathname) {
   return p.replace(/\\/g, "/").replace(/\/{2,}/g, "/");
 }
 
+// Public pages that list projects. Each project card is in the page twice (named and
+// confidential) and each project is an option in the enquiry form; this keeps only what the
+// admin panel allows: named, confidential (no name or details) or hidden. Default: confidential.
+const LISTING_PAGES = new Set(["/", "/index.html", "/projects", "/projects/", "/projects/index.html",
+  "/contact/", "/contact/index.html", "/investors/", "/investors/index.html"]);
+export async function listingModes(store) {
+  try { return (await store.get("config/public-projects", { type: "json" })) || {}; } catch { return {}; }
+}
+export function applyListing(html, modes) {
+  const mode = sl => (["named", "confidential", "hidden"].includes(modes[sl]) ? modes[sl] : "confidential");
+  let shown = 0;
+  let out = html.replace(/<li class="psum[^"]*" data-pslug="([a-z0-9-]+)" data-pvariant="(named|opaque)">[\s\S]*?<\/li>/g, (m, sl, v) => {
+    const keep = (v === "named" && mode(sl) === "named") || (v === "opaque" && mode(sl) === "confidential");
+    if (keep) shown++;
+    return keep ? m : "";
+  });
+  out = out.replace(/<option data-pslug="([a-z0-9-]+)">[^<]*<\/option>/g, (m, sl) => (mode(sl) === "named" ? m.replace(/ data-pslug="[a-z0-9-]+"/, "") : ""));
+  if (!shown) out = out.replace("data-psums-none hidden", "data-psums-none");
+  return out;
+}
+async function publicListing(context, store) {
+  const res = await context.next();
+  if (!(res.headers.get("content-type") || "").includes("text/html")) return res;
+  const out = applyListing(await res.text(), await listingModes(store));
+  const headers = new Headers(res.headers);
+  headers.delete("content-length");
+  headers.set("Cache-Control", "public, max-age=0, must-revalidate");
+  return new Response(out, { status: res.status, headers });
+}
+
 const privateHeaders = res => {
   res.headers.set("Cache-Control", "private, no-store");
   res.headers.set("X-Robots-Tag", NOINDEX);
@@ -37,6 +67,7 @@ export default async (request, context) => {
   if (!members && !archive) {
     // Public pages: tidy doubled slashes (//contact/) so relative links stay clean.
     if (request.method === "GET" && /\/\/|\\/.test(url.pathname)) return Response.redirect(new URL(norm + url.search, url), 301);
+    if (LISTING_PAGES.has(low)) return publicListing(context, getStore({ name: "members", consistency: "strong" }));
     return; // carry on as normal
   }
 
