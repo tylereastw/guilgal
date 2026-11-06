@@ -698,3 +698,4 @@ html { scroll-padding-top: 96px; }
 .psum__link { margin-top: auto; display: inline-flex; align-items: center; gap: 8px; font: 700 .76rem var(--head); letter-spacing: .08em; text-transform: uppercase; color: var(--gold-deep); text-decoration: none; }
 .psum__link:hover { color: var(--green); }
 .psums__none { margin-top: 18px; }
+.psum__photo--opaque img { width: 100%; height: 100%; object-fit: cover; }
