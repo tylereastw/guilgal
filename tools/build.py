@@ -107,27 +107,27 @@ PROJECTS = [
 # panel; the edge gate removes the versions that should not be seen. "opaque" is what a
 # Confidential card says instead of the name. Wording to be approved by John.
 PUBLIC = {
-    "pumba": dict(name="Pumba Copper & Gold", opaque="Copper and gold exploration project", commodity="Copper, gold", icon="cubes",
+    "pumba": dict(opaque_img="mineral-copper.jpg", name="Pumba Copper & Gold", opaque="Copper and gold exploration project", commodity="Copper, gold", icon="cubes",
                   location="Haut-Katanga Province, DRC", country="DRC", licence="PR15201",
                   stage="Exploration: priority drill targets defined", role="Project coordination and partner introductions",
                   next="Site visit and target review (Q4 2026)"),
-    "alpha": dict(name="Alpha Tantalum & Tin", opaque="Tantalum and tin project", commodity="Tantalum, tin", icon="crystal",
+    "alpha": dict(opaque_img="mineral-tantalum.jpg", name="Alpha Tantalum & Tin", opaque="Tantalum and tin project", commodity="Tantalum, tin", icon="crystal",
                   location="Democratic Republic of the Congo", country="DRC", licence="PR16516 & PR16517",
                   stage="Early exploration, with artisanal activity", role="Project coordination and partner introductions",
                   next="Detailed geological mapping and sampling"),
-    "nizi-baluma": dict(name="Nizi–Baluma Gold", opaque="Gold tailings reprocessing project", commodity="Gold (tailings)", icon="bars",
+    "nizi-baluma": dict(opaque_img="mineral-gold.jpg", name="Nizi–Baluma Gold", opaque="Gold tailings reprocessing project", commodity="Gold (tailings)", icon="bars",
                   location="Ituri Province, DRC", country="DRC", licence="PE5110",
                   stage="Agreements and feasibility", role="Project coordination and partner introductions",
                   next="Finalise agreements"),
-    "ndela-mpaza": dict(name="Ndela–Mpaza", opaque="Rare earths and lithium project", commodity="Rare earths, lithium, critical minerals", icon="crystal",
+    "ndela-mpaza": dict(opaque_img="mineral-critical.jpg", name="Ndela–Mpaza", opaque="Rare earths and lithium project", commodity="Rare earths, lithium, critical minerals", icon="crystal",
                   location="Kweneng, DRC", country="DRC", licence="PR15621 & PR15648",
                   stage="Early exploration: radiometric targets", role="Project coordination and partner introductions",
                   next="Site visit and detailed mapping"),
-    "hydropower": dict(name="Hydropower Projects", opaque="Hydropower infrastructure projects", commodity="Hydroelectric power", icon="bolt",
+    "hydropower": dict(opaque_img="media:hydropower-turbine.jpg", name="Hydropower Projects", opaque="Hydropower infrastructure projects", commodity="Hydroelectric power", icon="bolt",
                   location="Haut-Katanga and Haut-Lomami, DRC", country="DRC", licence="",
                   stage="Government engagement", role="Commercial facilitation and introductions",
                   next="Government agreements and mandates (Q4 2026)"),
-    "tumfa": dict(name="Ghana Tumfa Gold", opaque="Gold project", commodity="Gold (alluvial and hard rock)", icon="cubes",
+    "tumfa": dict(opaque_img="investors-hero.jpg", name="Ghana Tumfa Gold", opaque="Gold project", commodity="Gold (alluvial and hard rock)", icon="cubes",
                   location="Kibi Belt, Eastern Region, Ghana", country="Ghana", licence="",
                   stage="Review and planning", role="Project coordination and partner introductions",
                   next="Detailed review and planning"),
@@ -148,10 +148,24 @@ def summary_cards(p, limit=None):
           <div class="psum__body"><h3>{e(d["name"])}</h3>{f'<p class="psum__licence">{e(d["licence"])}</p>' if d["licence"] else ""}{rows(d["location"])}
             <a class="psum__link" href="{p}members/projects/{slug}/">Partner access {ico("arrow")}</a></div></li>
         <li class="psum psum--opaque" data-pslug="{slug}" data-pvariant="opaque">
-          <div class="psum__photo psum__photo--opaque">{dot(d["icon"], True)}<span class="psum__tag">Confidential</span></div>
+          <div class="psum__photo psum__photo--opaque"><img src="{p}{IMG}{opaque_image(d["opaque_img"])}" alt="" loading="lazy"><span class="psum__tag">Confidential · illustrative image</span></div>
           <div class="psum__body"><h3>{e(d["opaque"])}</h3><p class="psum__licence">Name and details shared under a confidentiality agreement</p>{rows(d["country"])}
             <a class="psum__link" href="{p}investors/#enquiry">Request information {ico("arrow")}</a></div></li>''')
     return '<ul class="psums">' + "".join(out) + '</ul><p class="small psums__none" data-psums-none hidden>Project details are available to partners on request.</p>'
+
+
+def opaque_image(ref):
+    """Generic image for a Confidential card. Never the project's own photo, so it cannot
+    be matched to a named project. "media:<file>" copies a generic project-area image to a
+    hashed public name."""
+    if not ref.startswith("media:"):
+        return ref
+    f = ref[6:]
+    name = "pg-" + hashlib.sha256((QR_SALT + "generic" + f).encode()).hexdigest()[:12] + ".jpg"
+    src, dst = ROOT / MEDIA / f, ROOT / IMG / name
+    if src.exists() and (not dst.exists() or dst.stat().st_mtime < src.stat().st_mtime):
+        shutil.copyfile(src, dst)
+    return name
 
 
 def public_card_image(slug):
