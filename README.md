@@ -2,7 +2,7 @@
 
 **Design v2** follows John Boardman's mock-ups (Website Design Handover, 30 October). The previous editorial design is archived in `archive/editorial-v1/` (open its `index.html` via a local server). Image list and sizes: `public/images/v2/IMAGES.md`.
 
-Static, multi-page corporate site for Guilgal International, a trading name of Britcom Trading Limited (registered in England and Wales, company number 15625520).
+Static, multi-page corporate site for Guilgal International, a trading name of Guilgal-UK Ltd (registered in England and Wales, company number 17570515; registered office 71-75 Shelton Street, Covent Garden, London, WC2H 9JQ, United Kingdom).
 No framework. Pages are generated from one script so the header, footer and design system stay
 consistent:
 

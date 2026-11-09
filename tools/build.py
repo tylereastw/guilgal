@@ -31,7 +31,10 @@ SITE = DEMO_SITE
 EMAIL = "john@guilgal.org"
 MEDIA = "members/media/"   # project-only images, served behind the partner login
 QR_SALT = "gi-qr-7f3c9a1e"  # QR image names are hashed so they do not reveal project names
-LEGAL = "Guilgal International is a trading name of Britcom Trading Limited, registered in England and Wales, company number 15625520."
+COMPANY = "Guilgal-UK Ltd"
+COMPANY_NO = "17570515"
+REG_OFFICE = "71-75 Shelton Street, Covent Garden, London, WC2H 9JQ, United Kingdom"
+LEGAL = f"Guilgal International is a trading name of {COMPANY}, registered in England and Wales, company number {COMPANY_NO}. Registered office: {REG_OFFICE}."
 IMG = "public/images/v2/"
 INDICATIVE = "Information is indicative and subject to technical review and agreement."
 
@@ -127,7 +130,7 @@ PUBLIC = {
                   location="Haut-Katanga and Haut-Lomami, DRC", country="DRC", licence="",
                   stage="Government engagement", role="Commercial facilitation and introductions",
                   next="Government agreements and mandates (Q4 2026)"),
-    "tumfa": dict(opaque_img="investors-hero.jpg", name="Ghana Tumfa Gold", opaque="Gold project", commodity="Gold (alluvial and hard rock)", icon="cubes",
+    "tumfa": dict(opaque_img="about-river.jpg", name="Ghana Tumfa Gold", opaque="Gold project", commodity="Gold (alluvial and hard rock)", icon="cubes",
                   location="Kibi Belt, Eastern Region, Ghana", country="Ghana", licence="",
                   stage="Review and planning", role="Project coordination and partner introductions",
                   next="Detailed review and planning"),
@@ -577,12 +580,11 @@ TEAM = [
               "He has extensive experience in the mining sector, including his previous role as Chief Executive Officer of 1620 Capital in Perth, Western Australia, where he was involved in identifying, structuring and advancing mineral resource opportunities with ASX- and AIM-listed companies.",
               "John focuses on connecting African mineral opportunities with international partners, technical expertise and development capital."],
          keys=[("handshake", "Strategic partnerships"), ("people", "Investor engagement"), ("chart", "Corporate development"), ("target", "Project origination and transaction support")]),
-    dict(name="Gedeon Ngoy Makonga Pelesa", role="DRC Project Partner", sub="Geological Coordination | Project Development", photo="team-gedeon.jpg", pos="50% 17%",
-         short="Local knowledge, project coordination and geological engagement across key mineral opportunities in the DRC.",
-         bio=["Gedeon Ngoy Makonga Pelesa supports Guilgal International's project activities in the Democratic Republic of the Congo, contributing extensive local knowledge, project coordination and geological engagement across key mineral opportunities.",
-              "He has significant experience in exploration, project identification and liaison with local authorities, technical teams and community stakeholders, with a focus on responsible and sustainable development.",
-              "Gedeon plays a key role in advancing Guilgal International's mineral projects, including copper, gold, tantalum, tin and critical minerals, and coordinates field activities, technical studies and local partnerships."],
-         keys=[("pick", "Geological coordination"), ("map", "Project identification and evaluation"), ("people", "Local partnerships and stakeholder engagement"), ("leaf", "Field activities and technical support")]),
+    dict(name="Gedeon Ngoy Makonga Pelesa", role="DRC Country Director", sub="Country Leadership | Exploration & Project Development", photo="team-gedeon.jpg", pos="50% 17%",
+         short="Leads in-country project activities, field programmes and the geological and technical teams in the DRC.",
+         bio=["Gedeon Ngoy Makonga Pelesa leads Guilgal International's project activities in the Democratic Republic of the Congo. A mining engineer with experience in exploration and project evaluation, he directs in-country field programmes and coordinates the geological and technical teams that assess and advance mineral opportunities.",
+              "Gedeon leads engagement with project owners, local authorities, community stakeholders and technical partners. His work spans copper, gold, tantalum, tin and other critical minerals, from identifying opportunities and planning fieldwork through to coordinating technical studies and developing local partnerships."],
+         keys=[("people", "Country leadership"), ("pick", "Exploration and field programmes"), ("map", "Project evaluation and technical studies"), ("handshake", "Stakeholder and partner engagement")]),
 ]
 
 
@@ -1265,7 +1267,7 @@ def brief_page(slug, card_name):
     out.write_text(html)
 
 
-CH_URL = "https://find-and-update.company-information.service.gov.uk/company/15625520"
+CH_URL = f"https://find-and-update.company-information.service.gov.uk/company/{COMPANY_NO}"
 
 
 def legal_page(slug, title, desc, intro, sections):
@@ -1284,7 +1286,7 @@ def legal_page(slug, title, desc, intro, sections):
 
 
 def privacy_policy():
-    who = f"""<p>Guilgal International is a trading name of <strong>Britcom Trading Limited</strong>, a company registered in England and Wales with company number 15625520. Our registered office address is shown on the <a href="{CH_URL}" rel="noopener">Companies House register</a>. In this policy "we", "us" and "our" mean Britcom Trading Limited, trading as Guilgal International.</p>
+    who = f"""<p>Guilgal International is a trading name of <strong>{COMPANY}</strong>, a company registered in England and Wales with company number <a href="{CH_URL}" rel="noopener">{COMPANY_NO}</a>. Our registered office is at {REG_OFFICE}. In this policy "we", "us" and "our" mean {COMPANY}, trading as Guilgal International.</p>
       <p>We are the controller of the personal data described in this policy. For any question about it, or to exercise your rights, email <a href="mailto:{EMAIL}">{EMAIL}</a>.</p>"""
     collect = """<p>We collect only the information needed for the purposes below.</p>
       <ul>
@@ -1336,7 +1338,7 @@ def privacy_policy():
       <p><strong>Other websites.</strong> Our website links to other websites. We are not responsible for their privacy practices.</p>
       <p><strong>Children.</strong> Our website and services are intended for businesses and professional investors, not for children.</p>
       <p><strong>Changes.</strong> We may update this policy from time to time. The latest version will always be on this page, with the date it was last updated.</p>"""
-    legal_page("privacy", "Privacy Policy", "How Britcom Trading Limited, trading as Guilgal International, collects and uses personal data.",
+    legal_page("privacy", "Privacy Policy", f"How {COMPANY}, trading as Guilgal International, collects and uses personal data.",
                "This policy explains how we collect, use and protect personal data when you use this website, contact us or use the partner portal.",
                [("who", "Who we are", who), ("collect", "Information we collect", collect), ("use", "How we use it and our lawful bases", use),
                 ("share", "Who we share it with", share), ("transfers", "International transfers", transfers), ("keep", "How long we keep it", keep),
@@ -1344,7 +1346,7 @@ def privacy_policy():
 
 
 def terms_of_use():
-    about = f"""<p>These terms apply to your use of this website, including the private partner portal. The website is operated by <strong>Britcom Trading Limited</strong>, trading as Guilgal International, a company registered in England and Wales with company number 15625520 ("we", "us", "our"). Our registered office address is shown on the <a href="{CH_URL}" rel="noopener">Companies House register</a>.</p>
+    about = f"""<p>These terms apply to your use of this website, including the private partner portal. The website is operated by <strong>{COMPANY}</strong>, trading as Guilgal International, a company registered in England and Wales with company number <a href="{CH_URL}" rel="noopener">{COMPANY_NO}</a> ("we", "us", "our"). Our registered office is at {REG_OFFICE}.</p>
       <p>By using the website you agree to these terms. If you do not agree, please do not use it.</p>"""
     role = """<p>Guilgal International facilitates mineral and energy project opportunities, mainly in Africa. We identify and coordinate opportunities and introduce project owners, investors, technical specialists and commercial partners.</p>
       <p>We are not a mining operator, broker, fund, lender or investment, financial, legal or tax adviser. Nothing on this website is investment advice, a financial promotion, a recommendation, or an offer or solicitation to buy, sell or invest in anything. Any arrangement with us or with a project owner will be set out in separate written agreements.</p>"""
@@ -1391,7 +1393,7 @@ def cookie_policy():
     table = "".join(f"<tr><td>{e(a)}</td><td>{e(b)}</td><td>{e(c)}</td><td>{e(d)}</td><td>{e(x)}</td></tr>" for a, b, c, d, x in rows)
     body = hero(p, "about-river.jpg", "<h1>Cookie Policy</h1>") + f'''
     <section class="section"><div class="wrap legal">
-      <p class="lead">This policy explains how Britcom Trading Limited, trading as Guilgal International ("we"), uses cookies and similar technologies on {SITE}.</p>
+      <p class="lead">This policy explains how {COMPANY}, trading as Guilgal International ("we"), uses cookies and similar technologies on {SITE}.</p>
       <h2>What cookies are</h2>
       <p>Cookies are small files stored on your device by websites you visit. Some are essential for a site to work; others help the site owner understand how it is used.</p>
       <h2>Cookies we use</h2>

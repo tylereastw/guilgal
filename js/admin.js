@@ -354,7 +354,7 @@
     <div style="${F}font-size:12px;color:#5C6B63;margin:0 8px 6px">Each code opens the project page. You will be asked to sign in first if you are not already.</div>
     <table role="presentation" cellpadding="0" cellspacing="0">${rows.join('')}</table></td></tr>` : `<tr><td style="padding:8px 28px;text-align:center"><a href="${o}/login/"><img src="${img('qr/login.png')}" width="120" height="120" alt="QR code for the sign-in page" style="border:1px solid #E4DED0"></a><div style="${F}font-size:12px;color:#5C6B63">Scan to sign in</div></td></tr>`}
   <tr><td style="padding:16px 28px 26px;${F}font-size:12px;line-height:1.55;color:#5C6B63;border-top:1px solid #E4DED0">
-    Please keep these details private; the information in the portal is confidential and shared under your confidentiality agreement. If you need help or forget your password, reply to this email or contact <a href="mailto:john@guilgal.org" style="color:#9A7A3A">john@guilgal.org</a>.<br><br>Guilgal International is a trading name of Britcom Trading Limited, registered in England and Wales, company number 15625520.
+    Please keep these details private; the information in the portal is confidential and shared under your confidentiality agreement. If you need help or forget your password, reply to this email or contact <a href="mailto:john@guilgal.org" style="color:#9A7A3A">john@guilgal.org</a>.<br><br>Guilgal International is a trading name of Guilgal-UK Ltd, registered in England and Wales, company number 17570515. Registered office: 71-75 Shelton Street, Covent Garden, London, WC2H 9JQ, United Kingdom.
   </td></tr>
 </table>`;
   }
