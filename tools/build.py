@@ -130,7 +130,7 @@ PUBLIC = {
                   location="Haut-Katanga and Haut-Lomami, DRC", country="DRC", licence="",
                   stage="Government engagement", role="Commercial facilitation and introductions",
                   next="Government agreements and mandates (Q4 2026)"),
-    "tumfa": dict(opaque_img="about-river.jpg", name="Ghana Tumfa Gold", opaque="Gold project", commodity="Gold (alluvial and hard rock)", icon="cubes",
+    "tumfa": dict(opaque_img="gold-veins.jpg", name="Ghana Tumfa Gold", opaque="Gold project", commodity="Gold (alluvial and hard rock)", icon="cubes",
                   location="Kibi Belt, Eastern Region, Ghana", country="Ghana", licence="",
                   stage="Review and planning", role="Project coordination and partner introductions",
                   next="Detailed review and planning"),
