@@ -577,12 +577,11 @@ TEAM = [
               "He has extensive experience in the mining sector, including his previous role as Chief Executive Officer of 1620 Capital in Perth, Western Australia, where he was involved in identifying, structuring and advancing mineral resource opportunities with ASX- and AIM-listed companies.",
               "John focuses on connecting African mineral opportunities with international partners, technical expertise and development capital."],
          keys=[("handshake", "Strategic partnerships"), ("people", "Investor engagement"), ("chart", "Corporate development"), ("target", "Project origination and transaction support")]),
-    dict(name="Gedeon Ngoy Makonga Pelesa", role="DRC Project Partner", sub="Geological Coordination | Project Development", photo="team-gedeon.jpg", pos="50% 17%",
-         short="Local knowledge, project coordination and geological engagement across key mineral opportunities in the DRC.",
-         bio=["Gedeon Ngoy Makonga Pelesa supports Guilgal International's project activities in the Democratic Republic of the Congo, contributing extensive local knowledge, project coordination and geological engagement across key mineral opportunities.",
-              "He has significant experience in exploration, project identification and liaison with local authorities, technical teams and community stakeholders, with a focus on responsible and sustainable development.",
-              "Gedeon plays a key role in advancing Guilgal International's mineral projects, including copper, gold, tantalum, tin and critical minerals, and coordinates field activities, technical studies and local partnerships."],
-         keys=[("pick", "Geological coordination"), ("map", "Project identification and evaluation"), ("people", "Local partnerships and stakeholder engagement"), ("leaf", "Field activities and technical support")]),
+    dict(name="Gedeon Ngoy Makonga Pelesa", role="DRC Country Director", sub="Country Leadership | Exploration & Project Development", photo="team-gedeon.jpg", pos="50% 17%",
+         short="Leads in-country project activities, field programmes and the geological and technical teams in the DRC.",
+         bio=["Gedeon Ngoy Makonga Pelesa leads Guilgal International's project activities in the Democratic Republic of the Congo. A mining engineer with experience in exploration and project evaluation, he directs in-country field programmes and coordinates the geological and technical teams that assess and advance mineral opportunities.",
+              "Gedeon leads engagement with project owners, local authorities, community stakeholders and technical partners. His work spans copper, gold, tantalum, tin and other critical minerals, from identifying opportunities and planning fieldwork through to coordinating technical studies and developing local partnerships."],
+         keys=[("people", "Country leadership"), ("pick", "Exploration and field programmes"), ("map", "Project evaluation and technical studies"), ("handshake", "Stakeholder and partner engagement")]),
 ]
 
 
