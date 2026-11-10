@@ -9,6 +9,7 @@
 //   GET    /api/admin/clicks                        tracked-link visits to investor pages, by source and day
 //   GET    /api/admin/public-projects               how each project appears publicly
 //   POST   /api/admin/public-projects { modes: { slug: "named" | "confidential" | "hidden" } }
+//   POST   /api/admin/setup-key { key }            one-time key from Netlify env -> invite token for ADMIN_SETUP_EMAIL
 //   POST   /api/admin/invite/start  { token }       invite link: new authenticator key + QR code
 //   POST   /api/admin/invite/finish { token, password, code }  sets password and authenticator, signs in
 //   POST   /api/admin/logout
@@ -63,6 +64,30 @@ export default async (request, context) => {
   }
 
   // Invite links: a new admin sets their own password and authenticator.
+  // One-time set-up key, set in Netlify (ADMIN_SETUP_EMAIL + ADMIN_SETUP_KEY): lets the site
+  // owner create their own named admin account without the main admin password. The key
+  // works once for that email; afterwards set a new key to use it again.
+  if (path === "/api/admin/setup-key" && request.method === "POST") {
+    if (await throttled(members, ipKey)) return json({ error: "Too many attempts. Please wait 15 minutes." }, 429);
+    const b = await readBody();
+    const setupEmail = normEmail(env("ADMIN_SETUP_EMAIL"));
+    const setupKey = env("ADMIN_SETUP_KEY") || "";
+    const usedKey = setupKey ? "config/setup-key-used/" + (await sha256hex(setupKey)) : "";
+    const valid = setupKey.length >= 24 && EMAIL_RE.test(setupEmail) && safeEqual(String(b?.key || ""), setupKey) && !(await members.get(usedKey));
+    if (!valid) { await recordFailure(members, ipKey); return json({ error: "This set-up link is not valid or has already been used." }, 404); }
+    const a = (await members.get("admins/" + setupEmail, { type: "json" })) || { email: setupEmail, name: "", created: new Date().toISOString(), ver: 0 };
+    if (a.invite?.hash) await members.delete("admin-invites/" + a.invite.hash);
+    const token = randomToken();
+    a.invite = { hash: await sha256hex(token), expires: Date.now() + 864e5 };
+    if (a.hash) { delete a.hash; delete a.salt; delete a.totp; a.ver = (a.ver || 0) + 1; }
+    a.disabled = false;
+    await members.set("admin-invites/" + a.invite.hash, setupEmail);
+    await members.setJSON("admins/" + setupEmail, a);
+    await members.set(usedKey, new Date().toISOString());
+    await clearFailures(members, ipKey);
+    return json({ ok: true, token });
+  }
+
   if (path.startsWith("/api/admin/invite/") && request.method === "POST") {
     if (await throttled(members, ipKey)) return json({ error: "Too many attempts. Please wait 15 minutes." }, 429);
     const b = await readBody();
