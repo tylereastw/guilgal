@@ -897,8 +897,7 @@ def admin():
             <div class="formcard"><h3 class="formcard__head">Make a tracked link</h3>
               <form class="form pform" data-track-form novalidate>
                 <label class="field"><span>Page</span><select name="page">{"".join(f'<option value="opportunities/{o}/">{e(od["title"])}</option>' for o, od in OPPORTUNITIES.items())}</select></label>
-                <label class="field"><span>Where you will post it</span><select name="source"><option value="linkedin">LinkedIn</option><option value="email">Email</option><option value="whatsapp">WhatsApp</option><option value="twitter">X (Twitter)</option><option value="other">Other</option></select></label>
-                <label class="field"><span>Campaign (optional)</span><input name="campaign" placeholder="For example, november-post"></label>
+                <label class="field"><span>Where you will post it</span><select name="source"><option value="li">LinkedIn (?li)</option><option value="em">Email (?em)</option><option value="wa">WhatsApp (?wa)</option><option value="x">X (?x)</option><option value="fb">Facebook (?fb)</option><option value="ig">Instagram (?ig)</option><option value="qr">QR code (?qr)</option><option value="o">Other (?o)</option></select></label>
                 <pre class="track__url" data-track-url></pre>
                 <div class="pform__actions"><button class="btn btn--gold" type="button" data-track-copy>Copy link</button></div>
               </form></div>
