@@ -83,9 +83,13 @@
   // so the public admin page itself contains no project information.
   let MANIFEST = {};
   async function loadProjects() {
-    const r = await fetch('/members/media/projects.json', { credentials: 'same-origin', cache: 'no-store' });
-    if (!r.ok) return;
-    MANIFEST = await r.json();
+    const r = await fetch('/members/media/projects.json', { credentials: 'same-origin', cache: 'no-store' }).catch(() => null);
+    try { if (!r || !r.ok) throw 0; MANIFEST = await r.json(); }
+    catch {
+      const msg = '<li class="ulist__empty">The project list could not be loaded. Sign out and sign in again, then reload this page.</li>';
+      ['[data-listing]', '[data-qrs]', '[data-briefs]'].forEach(x => { $(x).innerHTML = msg; });
+      return;
+    }
     const qrSrc = (s, ext) => '/public/images/v2/' + MANIFEST[s].qr + '.' + ext;
     $('[data-project-checks]').innerHTML = Object.entries(MANIFEST).map(([s, m]) =>
       `<label class="check"><input type="checkbox" name="projects" value="${esc(s)}"><span>${esc(m.name)}</span></label>`).join('');

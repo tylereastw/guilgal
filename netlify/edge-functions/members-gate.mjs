@@ -112,11 +112,11 @@ export default async (request, context) => {
     if (!(await isAdmin(request, store))) return Response.redirect(new URL("/admin/", url), 302);
     return privateHeaders(await context.next());
   }
+  // Admins can open everything under /members/, even when the same browser is also
+  // signed in as a partner (checked first, so a partner session never limits an admin).
+  if (await isAdmin(request, store)) return privateHeaders(await context.next());
   const user = await userFromRequest(request, store);
-  if (!user) {
-    if (await isAdmin(request, store)) return privateHeaders(await context.next());
-    return Response.redirect(new URL("/login/?next=" + encodeURIComponent(canonical), url), 302);
-  }
+  if (!user) return Response.redirect(new URL("/login/?next=" + encodeURIComponent(canonical), url), 302);
   // Project-only files: the manifest is for admins; images are named after their project.
   if (low.startsWith("/members/media/")) {
     const file = low.slice("/members/media/".length);

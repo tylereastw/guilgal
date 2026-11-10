@@ -6,4 +6,4 @@ Disallow: /archive/
 Disallow: /api/
 Disallow: /thanks/
 
-Sitemap: https://guilgal-demo.netlify.app/sitemap.xml
+Sitemap: https://guilgal.org/sitemap.xml
