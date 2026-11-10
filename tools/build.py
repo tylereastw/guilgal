@@ -149,6 +149,7 @@ def summary_cards(p, limit=None):
         out.append(f'''<li class="psum" data-pslug="{slug}" data-pvariant="named">
           <div class="psum__photo"><img src="{p}{IMG}{img}" alt="" loading="lazy"><span class="psum__tag">Illustrative image</span></div>
           <div class="psum__body"><h3>{e(d["name"])}</h3>{f'<p class="psum__licence">{e(d["licence"])}</p>' if d["licence"] else ""}{rows(d["location"])}
+            {"".join(f'<a class="psum__link" href="{p}opportunities/{o}/">Investor opportunity {ico("arrow")}</a>' for o, od in OPPORTUNITIES.items() if od["project"] == slug)}
             <a class="psum__link" href="{p}members/projects/{slug}/">Partner access {ico("arrow")}</a></div></li>
         <li class="psum psum--opaque" data-pslug="{slug}" data-pvariant="opaque">
           <div class="psum__photo psum__photo--opaque"><img src="{p}{IMG}{opaque_image(d["opaque_img"])}" alt="" loading="lazy"><span class="psum__tag">Confidential · illustrative image</span></div>
@@ -179,6 +180,75 @@ def public_card_image(slug):
     if src.exists() and (not dst.exists() or dst.stat().st_mtime < src.stat().st_mtime):
         shutil.copyfile(src, dst)
     return name
+
+
+# ---------------------------------------------------------------- public investor opportunities
+# Transcribed from the "Pumba Copper Project" investor sheet. Public: approved for investors.
+OPPORTUNITIES = {
+    "pumba-copper": dict(
+        project="pumba",
+        title="Pumba Copper Project",
+        meta="PR15201 / Kasenga Territory, Haut-Katanga, DRC",
+        stats=[("US$500,000", "Indicative Phase 1 spend"), ("20%", "Proposed project interest"), ("11 holes", "Proposed first phase")],
+        assays=[("PR01", "3.8170"), ("PR02", "0.6364"), ("PR03", "0.2235"), ("PR04", "0.1507"), ("PR05", "1.4625"), ("PR06", "1.6121"), ("PR07", "1.5376")],
+        assay_note="Source: 2024 GAC SARL results as transcribed in Guilgal project materials. Individual surface samples, with original certificate and locations within PR15201 to be verified. They do not establish drill grades, width or continuity.",
+        funds=[("Diamond drilling (1,500 m at US$200/m)", "300,000"), ("Mobilisation, access and field logistics", "75,000"),
+               ("Geology, logging, assays and reporting", "75,000"), ("Contingency", "50,000")],
+        funds_total="500,000",
+        funds_note="Planning allowances. Final rates and metres depend on the contractor quote and rig deployment model. The rig purchase and any licence acquisition payment are budgeted separately.",
+        targeting="Integrate mapping, soil geochemistry and IP across three prospective zones. The Bowa IP report recommends targets on BW01-BW07 and BW09-BW10, with interpreted depths of 70-200 m. Reconcile these with the earlier nine-hole RC plan before locking the 11-hole diamond programme, collars and metres.",
+        execution="Guilgal has purchased an EP550 core rig from China and exchanged agreements with a South African drilling contractor. Target mobilisation is Q1 2027, subject to funding, rig delivery and readiness, access and permits. Log and sample core, run lab assays with QA/QC, and use the results to plan follow-up.",
+        shares="An investor would earn 20% of Pumba through project vehicle shares upon funding and completing the agreed Phase 1 programme. A follow-on option could take the investor to 35–40% in total against an agreed second-stage work commitment. Any investor shares or warrants for Guilgal would be separately negotiated and subject to approvals.",
+        collaboration="Guilgal would welcome an introduction to a copper exploration team to review Pumba and explore technical collaboration or co-funding.",
+        disclaimer="Indicative and non-binding. Subject to completion of the PR15201 acquisition, title and technical due diligence, definitive agreements and applicable approvals.",
+    ),
+}
+
+
+def opportunity_page(slug):
+    d = OPPORTUNITIES[slug]
+    p = "../../"
+    img = public_card_image(d["project"])
+    inner = f"""<p class="label label--light">Guilgal International · Investor opportunity</p><h1>{e(d["title"])}</h1>
+          <p class="hero__meta">{e(d["meta"])}</p>
+          <div class="hero__actions"><a class="btn btn--gold" href="#enquire">Discuss this opportunity {ico("arrow")}</a><a class="btn btn--line" href="mailto:{EMAIL}?subject={e(d["title"]).replace(" ", "%20")}">Email John Boardman {ico("arrow")}</a></div>"""
+    stats = "".join(f"<li><b>{e(v)}</b><strong>{e(l)}</strong></li>" for v, l in d["stats"])
+    assays = "".join(f"<tr><td>{e(a)}</td><td class='num'>{e(b)}</td></tr>" for a, b in d["assays"])
+    funds = "".join(f"<tr><td>{e(a)}</td><td class='num'>{e(b)}</td></tr>" for a, b in d["funds"])
+    body = hero(p, img, inner) + f"""
+    <section class="section section--dark on-dark opp-stats"><div class="wrap"><ul class="stats">{stats}</ul></div></section>
+
+    <section class="section"><div class="wrap opp">
+      <div class="opp__grid">
+        <div><h2 class="opp__h"><span>01</span> Reported copper assays</h2>
+          <div class="table-scroll"><table class="dtable opp__table"><thead><tr><th>Sample</th><th class="num">Copper (Cu %)</th></tr></thead><tbody>{assays}</tbody></table></div>
+          <p class="small">{e(d["assay_note"])}</p></div>
+        <div><h2 class="opp__h"><span>02</span> Phase 1 use of funds</h2>
+          <div class="table-scroll"><table class="dtable opp__table"><thead><tr><th>Budget item</th><th class="num">US$</th></tr></thead><tbody>{funds}
+            <tr class="opp__total"><td>Total Phase 1</td><td class="num">{e(d["funds_total"])}</td></tr></tbody></table></div>
+          <p class="small">{e(d["funds_note"])}</p></div>
+      </div>
+
+      <h2 class="opp__h"><span>03</span> Drilling programme</h2>
+      <p><strong>Targeting.</strong> {e(d["targeting"])}</p>
+      <p><strong>Execution.</strong> {e(d["execution"])}</p>
+
+      <h2 class="opp__h"><span>04</span> Project shares and options</h2>
+      <p>{e(d["shares"])}</p>
+
+      <h2 class="opp__h"><span>05</span> Potential technical collaboration</h2>
+      <p>{e(d["collaboration"])}</p>
+
+      <div class="opp__contact" id="enquire">
+        <div><h3>Guilgal International</h3><p><a href="mailto:{EMAIL}">{EMAIL}</a> · <a href="{p}">{SITE.replace("https://", "")}</a></p></div>
+        <div class="hero__actions"><a class="btn btn--gold" href="{p}investors/#enquiry">Investor enquiry {ico("arrow")}</a><a class="btn btn--line-dark" href="mailto:{EMAIL}?subject={e(d["title"]).replace(" ", "%20")}">Email John {ico("arrow")}</a></div>
+      </div>
+      <p class="small opp__disclaimer">{e(d["disclaimer"])}</p>
+    </div></section>
+"""
+    page(f"opportunities/{slug}/", f'{d["title"]} | Investor Opportunity | Guilgal International',
+         f'{d["title"]} ({d["meta"]}): indicative US$500,000 Phase 1 drilling programme for a proposed 20% project interest.', "Projects", body, p)
+
 
 
 def projects_page():
@@ -735,7 +805,8 @@ def login():
 
 def admin():
     p = "../"
-    body = f'''    <section class="section admin"><div class="wrap">
+    body = f'''    <script>window.GI_SITE = "{SITE}";</script>
+    <section class="section admin"><div class="wrap">
       <h1>Partner Access Admin</h1>
       <div data-admin-setup hidden>
         <div class="formcard" style="max-width:560px"><h3 class="formcard__head">First-time setup: authenticator</h3>
@@ -787,6 +858,7 @@ def admin():
           <div class="adm-tabs" role="tablist">
             <button type="button" role="tab" class="adm-tab is-on" data-tab="partners" aria-selected="true">{ico("people")} Partners</button>
             <button type="button" role="tab" class="adm-tab" data-tab="listing" aria-selected="false">{ico("globe")} Public listing</button>
+            <button type="button" role="tab" class="adm-tab" data-tab="tracking" aria-selected="false">{ico("chart")} Link tracking</button>
             <button type="button" role="tab" class="adm-tab" data-tab="links" aria-selected="false">{ico("map")} Project links &amp; QR codes</button>
             <button type="button" role="tab" class="adm-tab" data-tab="briefs" aria-selected="false">{ico("doc")} Project briefs</button>
             <button type="button" role="tab" class="adm-tab" data-tab="admins" aria-selected="false">{ico("shield")} Admins</button>
@@ -817,6 +889,21 @@ def admin():
           <ul class="ulist listing" data-listing></ul>
           <div class="adm-help" style="margin-top:14px"><b>Named</b> shows the project name, licence, location, stage, our role and next milestone. <b>Confidential</b> shows only the commodity, country, stage, role and milestone, with no name, licence, image or exact location. <b>Hidden</b> leaves the project off the public site entirely.</div>
           <div class="pform__actions" style="margin-top:16px"><button class="btn btn--gold" type="button" data-listing-save>Save public listing {ico("arrow")}</button><span class="small" data-listing-msg></span></div>
+        </div>
+
+        <div class="adm-panel" data-panel="tracking" hidden>
+          <div class="adm-head"><div><h2>Link tracking</h2><p class="small">Share these links so visits can be counted by where they came from. A visit counts when someone opens the page from a tracked link. Link previews (for example LinkedIn's own robot) are not counted, and no cookies are needed.</p></div></div>
+          <div class="grid-2" style="align-items:start">
+            <div class="formcard"><h3 class="formcard__head">Make a tracked link</h3>
+              <form class="form pform" data-track-form novalidate>
+                <label class="field"><span>Page</span><select name="page">{"".join(f'<option value="opportunities/{o}/">{e(od["title"])}</option>' for o, od in OPPORTUNITIES.items())}</select></label>
+                <label class="field"><span>Where you will post it</span><select name="source"><option value="linkedin">LinkedIn</option><option value="email">Email</option><option value="whatsapp">WhatsApp</option><option value="twitter">X (Twitter)</option><option value="other">Other</option></select></label>
+                <label class="field"><span>Campaign (optional)</span><input name="campaign" placeholder="For example, november-post"></label>
+                <pre class="track__url" data-track-url></pre>
+                <div class="pform__actions"><button class="btn btn--gold" type="button" data-track-copy>Copy link</button></div>
+              </form></div>
+            <div><h3 style="margin-top:0">Visits from tracked links</h3><div data-track-stats><p class="small">No tracked visits yet.</p></div></div>
+          </div>
         </div>
 
         <div class="adm-panel" data-panel="links" hidden>
@@ -1413,7 +1500,7 @@ def cookie_policy():
 
 
 def seo():
-    pub = ["", "about/", "about/team/", "projects/", "investors/", "contact/", "privacy/", "cookies/", "terms/"]
+    pub = ["", "about/", "about/team/", "projects/", *[f"opportunities/{o}/" for o in OPPORTUNITIES], "investors/", "contact/", "privacy/", "cookies/", "terms/"]
     (ROOT / "sitemap.xml").write_text('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
                                       "".join(f"  <url><loc>{SITE}/{u}</loc><lastmod>{date.today().isoformat()}</lastmod></url>\n" for u in pub) + "</urlset>\n")
     (ROOT / "robots.txt").write_text(f"User-agent: *\nDisallow: /members/\nDisallow: /admin/\nDisallow: /login/\nDisallow: /archive/\nDisallow: /api/\nDisallow: /thanks/\n\nSitemap: {SITE}/sitemap.xml\n")
@@ -1443,7 +1530,7 @@ def private_media():
 
 if __name__ == "__main__":
     # news() is paused for now; /news/ redirects home (netlify.toml)
-    home(); about(); team(); projects_page(); investors(); contact(); members(); login(); admin(); thanks(); not_found()
+    home(); about(); team(); projects_page(); [opportunity_page(o) for o in OPPORTUNITIES]; investors(); contact(); members(); login(); admin(); thanks(); not_found()
     for s, n, _ in PROJECTS:
         project_page(s, n)
         brief_page(s, n)

@@ -51,6 +51,27 @@ async function publicListing(context, store) {
   return new Response(out, { status: res.status, headers });
 }
 
+// Tracked links: a visit to an investor page carrying ?utm_source=... (for example from
+// LinkedIn) adds one to a daily counter for that page and source. Only counts, no personal
+// data or cookies, so it works whether or not the visitor accepts analytics. Link-preview
+// robots (LinkedIn, Slack, WhatsApp and similar) and repeat loads are not counted.
+const BOT_RE = /bot|crawl|spider|preview|linkedin|facebookexternalhit|slack|whatsapp|telegram|discord|skype|embedly|quora|pinterest|vkshare|w3c_validator|headless|lighthouse|curl|wget|python|node-fetch/i;
+export function clickKey(path, source, day) {
+  const page = path.replace(/^\/opportunities\//, "").replace(/\/?(index\.html)?$/, "").replace(/[^a-z0-9-]/g, "") || "page";
+  const src = String(source).toLowerCase().replace(/[^a-z0-9_-]/g, "").slice(0, 40) || "other";
+  return `clicks/${page}/${src}/${day}`;
+}
+async function countVisit(request, url, path, context) {
+  try {
+    if (request.method !== "GET" || BOT_RE.test(request.headers.get("user-agent") || "")) return;
+    if (request.headers.get("purpose") === "prefetch" || request.headers.get("sec-purpose")) return;
+    const store = getStore({ name: "members", consistency: "strong" });
+    const key = clickKey(path, url.searchParams.get("utm_source"), new Date().toISOString().slice(0, 10));
+    const n = Number((await store.get(key)) || 0);
+    await store.set(key, String(n + 1));
+  } catch { /* never block the page over a counter */ }
+}
+
 const privateHeaders = res => {
   res.headers.set("Cache-Control", "private, no-store");
   res.headers.set("X-Robots-Tag", NOINDEX);
@@ -68,6 +89,7 @@ export default async (request, context) => {
     // Public pages: tidy doubled slashes (//contact/) so relative links stay clean.
     if (request.method === "GET" && /\/\/|\\/.test(url.pathname)) return Response.redirect(new URL(norm + url.search, url), 301);
     if (LISTING_PAGES.has(low)) return publicListing(context, getStore({ name: "members", consistency: "strong" }));
+    if (low.startsWith("/opportunities/") && url.searchParams.get("utm_source")) await countVisit(request, url, low, context);
     return; // carry on as normal
   }
 
