@@ -116,6 +116,15 @@ authenticator QR code. Afterwards they sign in with email, password and code. Th
 (ADMIN_PASSWORD, email left blank) always keeps access. From the Admins tab you can pause,
 resume, reset (new set-up link) or remove any other admin.
 
+
+### Owner admin account (without the main admin password)
+
+Set two environment variables in Netlify and redeploy: `ADMIN_SETUP_EMAIL` (your email) and
+`ADMIN_SETUP_KEY` (a random secret of at least 24 characters). Then open
+`/admin/?setup=<the key>` once: it opens the usual set-up screen for that email, where you choose
+your own password and authenticator. The key works once; to use it again (for example to
+reset your own login), set a new key.
+
 ## Forms
 The contact and investor enquiry forms are Netlify Forms (`data-netlify`, with a honeypot).
 Submissions appear in Netlify under Forms; turn on email notifications there

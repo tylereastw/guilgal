@@ -161,7 +161,8 @@
   });
 
   // ---------- admin invite link (/admin/?invite=...)
-  const inviteToken = new URLSearchParams(location.search).get('invite');
+  let inviteToken = new URLSearchParams(location.search).get('invite');
+  const setupKey = new URLSearchParams(location.search).get('setup');
   async function startInvite() {
     const f = $('[data-invite-form]');
     show('invite');
@@ -466,7 +467,12 @@ Guilgal International`;
     catch (err) { say(f, err.message); }
   });
 
-  if (inviteToken) startInvite();
+  if (setupKey) {
+    history.replaceState(null, '', '/admin/');
+    postJSON('setup-key', { key: setupKey })
+      .then(r => { inviteToken = r.token; startInvite(); })
+      .catch(err => { show('login'); say($('[data-admin-signin]'), err.message); });
+  } else if (inviteToken) startInvite();
   else api('users').then(start).catch(async () => {
     const st = await api('status').catch(() => ({}));
     if (st.needsSetup) show('setup');
