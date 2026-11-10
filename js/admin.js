@@ -208,12 +208,7 @@
   // ---------- link tracking
   const SITE = (window.GI_SITE || location.origin).replace(/\/$/, '');
   const trackForm = $('[data-track-form]');
-  const trackUrl = () => {
-    const f = trackForm, c = f.campaign.value.trim().toLowerCase().replace(/[^a-z0-9-]+/g, '-').replace(/^-|-$/g, '');
-    const page = f.page.value, slug = page.split('/').filter(Boolean).pop();
-    const q = new URLSearchParams({ utm_source: f.source.value, utm_medium: f.source.value === 'email' ? 'email' : 'social', utm_campaign: c || slug });
-    return `${SITE}/${page}?${q}`;
-  };
+  const trackUrl = () => `${SITE}/${trackForm.page.value}?${trackForm.source.value}`;
   const showTrack = () => { $('[data-track-url]').textContent = trackUrl(); };
   ['change', 'input'].forEach(ev => trackForm.addEventListener(ev, showTrack)); showTrack();
   $('[data-track-copy]').addEventListener('click', e => navigator.clipboard.writeText(trackUrl()).then(() => { e.target.textContent = 'Copied'; setTimeout(() => { e.target.textContent = 'Copy link'; }, 1500); }));
