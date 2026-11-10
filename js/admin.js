@@ -205,7 +205,35 @@
     catch (err) { $('[data-listing-msg]').textContent = err.message; }
   });
 
-  const start = () => { showApp(true); adminHint(true); loadProjects().then(() => { loadUsers(); loadListing().catch(() => {}); }); loadAdmins().catch(() => {}); };
+  // ---------- link tracking
+  const SITE = (window.GI_SITE || location.origin).replace(/\/$/, '');
+  const trackForm = $('[data-track-form]');
+  const trackUrl = () => {
+    const f = trackForm, c = f.campaign.value.trim().toLowerCase().replace(/[^a-z0-9-]+/g, '-').replace(/^-|-$/g, '');
+    const page = f.page.value, slug = page.split('/').filter(Boolean).pop();
+    const q = new URLSearchParams({ utm_source: f.source.value, utm_medium: f.source.value === 'email' ? 'email' : 'social', utm_campaign: c || slug });
+    return `${SITE}/${page}?${q}`;
+  };
+  const showTrack = () => { $('[data-track-url]').textContent = trackUrl(); };
+  ['change', 'input'].forEach(ev => trackForm.addEventListener(ev, showTrack)); showTrack();
+  $('[data-track-copy]').addEventListener('click', e => navigator.clipboard.writeText(trackUrl()).then(() => { e.target.textContent = 'Copied'; setTimeout(() => { e.target.textContent = 'Copy link'; }, 1500); }));
+  async function loadClicks() {
+    const { clicks } = await api('clicks');
+    const since = new Date(Date.now() - 30 * 864e5).toISOString().slice(0, 10);
+    const pages = Object.entries(clicks);
+    if (!pages.length) return;
+    $('[data-track-stats]').innerHTML = pages.map(([pg, srcs]) => {
+      const rows = Object.entries(srcs).map(([src, days]) => {
+        const all = Object.values(days).reduce((a, b) => a + b, 0);
+        const recent = Object.entries(days).filter(([d]) => d >= since).reduce((a, [, n]) => a + n, 0);
+        const last = Object.keys(days).sort().pop();
+        return { src, all, recent, last };
+      }).sort((a, b) => b.all - a.all);
+      return `<p><strong>${esc(pg.replace(/-/g, ' '))}</strong></p><div class="table-scroll"><table class="dtable"><thead><tr><th>Source</th><th>Last 30 days</th><th>All time</th><th>Last visit</th></tr></thead><tbody>${rows.map(r => `<tr><td>${esc(r.src)}</td><td>${r.recent}</td><td>${r.all}</td><td>${esc(r.last)}</td></tr>`).join('')}</tbody></table></div>`;
+    }).join('');
+  }
+
+  const start = () => { showApp(true); adminHint(true); loadClicks().catch(() => {}); loadProjects().then(() => { loadUsers(); loadListing().catch(() => {}); }); loadAdmins().catch(() => {}); };
 
   $('[data-admin-signin]').addEventListener('submit', async e => {
     e.preventDefault();

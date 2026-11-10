@@ -26,6 +26,7 @@
     <button class="burger" aria-expanded="false" aria-controls="menu" aria-label="Menu"><span></span><span></span><span></span></button>
   </header>
   <main id="main">
+    <script>window.GI_SITE = "https://guilgal-demo.netlify.app";</script>
     <section class="section admin"><div class="wrap">
       <h1>Partner Access Admin</h1>
       <div data-admin-setup hidden>
@@ -78,6 +79,7 @@
           <div class="adm-tabs" role="tablist">
             <button type="button" role="tab" class="adm-tab is-on" data-tab="partners" aria-selected="true"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="7" r="3"/><circle cx="5" cy="10" r="2.3"/><circle cx="19" cy="10" r="2.3"/><path d="M7 20c0-3 2-6 5-6s5 3 5 6M1 19c0-2 2-4 4-4M23 19c0-2-2-4-4-4"/></svg> Partners</button>
             <button type="button" role="tab" class="adm-tab" data-tab="listing" aria-selected="false"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2c3 3 4 6 4 10s-1 7-4 10c-3-3-4-6-4-10s1-7 4-10z"/></svg> Public listing</button>
+            <button type="button" role="tab" class="adm-tab" data-tab="tracking" aria-selected="false"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h16M6 16v-3M10 16V9M14 16v-5M18 16V6M6 11l4-4 4 3 5-5"/></svg> Link tracking</button>
             <button type="button" role="tab" class="adm-tab" data-tab="links" aria-selected="false"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-3 6 3 6-3v15l-6 3-6-3-6 3zM9 3v15M15 6v15"/></svg> Project links &amp; QR codes</button>
             <button type="button" role="tab" class="adm-tab" data-tab="briefs" aria-selected="false"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2h9l5 5v15H6zM15 2v5h5M9 12h8M9 16h8M9 8h3"/></svg> Project briefs</button>
             <button type="button" role="tab" class="adm-tab" data-tab="admins" aria-selected="false"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l8 3v6c0 5-3.5 9-8 11-4.5-2-8-6-8-11V5z"/><path d="M8 12l3 3 5-6"/></svg> Admins</button>
@@ -108,6 +110,21 @@
           <ul class="ulist listing" data-listing></ul>
           <div class="adm-help" style="margin-top:14px"><b>Named</b> shows the project name, licence, location, stage, our role and next milestone. <b>Confidential</b> shows only the commodity, country, stage, role and milestone, with no name, licence, image or exact location. <b>Hidden</b> leaves the project off the public site entirely.</div>
           <div class="pform__actions" style="margin-top:16px"><button class="btn btn--gold" type="button" data-listing-save>Save public listing <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button><span class="small" data-listing-msg></span></div>
+        </div>
+
+        <div class="adm-panel" data-panel="tracking" hidden>
+          <div class="adm-head"><div><h2>Link tracking</h2><p class="small">Share these links so visits can be counted by where they came from. A visit counts when someone opens the page from a tracked link. Link previews (for example LinkedIn's own robot) are not counted, and no cookies are needed.</p></div></div>
+          <div class="grid-2" style="align-items:start">
+            <div class="formcard"><h3 class="formcard__head">Make a tracked link</h3>
+              <form class="form pform" data-track-form novalidate>
+                <label class="field"><span>Page</span><select name="page"><option value="opportunities/pumba-copper/">Pumba Copper Project</option></select></label>
+                <label class="field"><span>Where you will post it</span><select name="source"><option value="linkedin">LinkedIn</option><option value="email">Email</option><option value="whatsapp">WhatsApp</option><option value="twitter">X (Twitter)</option><option value="other">Other</option></select></label>
+                <label class="field"><span>Campaign (optional)</span><input name="campaign" placeholder="For example, november-post"></label>
+                <pre class="track__url" data-track-url></pre>
+                <div class="pform__actions"><button class="btn btn--gold" type="button" data-track-copy>Copy link</button></div>
+              </form></div>
+            <div><h3 style="margin-top:0">Visits from tracked links</h3><div data-track-stats><p class="small">No tracked visits yet.</p></div></div>
+          </div>
         </div>
 
         <div class="adm-panel" data-panel="links" hidden>

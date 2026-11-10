@@ -6,6 +6,7 @@
 //   GET    /api/admin/admins                        list named admins          (signed-in admins only)
 //   POST   /api/admin/admins  { email, name }       add an admin or renew their invite link -> { inviteUrl }
 //   DELETE /api/admin/admins?email=...              remove a named admin
+//   GET    /api/admin/clicks                        tracked-link visits to investor pages, by source and day
 //   GET    /api/admin/public-projects               how each project appears publicly
 //   POST   /api/admin/public-projects { modes: { slug: "named" | "confidential" | "hidden" } }
 //   POST   /api/admin/invite/start  { token }       invite link: new authenticator key + QR code
@@ -139,6 +140,18 @@ export default async (request, context) => {
 
   const me = await adminFromRequest(request, members);
   if (!me) return json({ error: "Not signed in" }, 401);
+
+  // Tracked-link visits to the public investor pages: { page: { source: { day: n } } }
+  if (path === "/api/admin/clicks" && request.method === "GET") {
+    const { blobs } = await members.list({ prefix: "clicks/" });
+    const clicks = {};
+    for (const b of blobs) {
+      const [, pg, src, day] = b.key.split("/");
+      const n = Number((await members.get(b.key)) || 0);
+      ((clicks[pg] ||= {})[src] ||= {})[day] = n;
+    }
+    return json({ clicks });
+  }
 
   // Public project listing: named, confidential (no name or details) or hidden, per project.
   if (path === "/api/admin/public-projects") {

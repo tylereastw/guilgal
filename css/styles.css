@@ -699,3 +699,28 @@ html { scroll-padding-top: 96px; }
 .psum__link:hover { color: var(--green); }
 .psums__none { margin-top: 18px; }
 .psum__photo--opaque img { width: 100%; height: 100%; object-fit: cover; }
+
+/* investor opportunity page */
+.opp-stats { padding: clamp(28px, 4vw, 44px) 0; }
+.opp { max-width: 1060px; }
+.opp__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px 40px; margin-bottom: 10px; }
+.opp__h { display: flex; align-items: baseline; gap: 12px; margin: 34px 0 14px; font-size: 1.15rem; letter-spacing: .04em; text-transform: uppercase; color: var(--gold-deep); }
+.opp__grid .opp__h { margin-top: 0; }
+.opp__h span { color: var(--gold); font-weight: 700; }
+.opp__h span::after { content: " /"; }
+.opp__table .num, .opp__table th.num { text-align: right; font-variant-numeric: tabular-nums; }
+.opp__table td:first-child { font-weight: 500; }
+.opp__total td { background: var(--cream-2); font-weight: 700 !important; border-top: 2px solid var(--green); }
+.opp p { max-width: 70em; }
+.opp__contact { margin-top: 38px; padding: 22px 24px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px 30px; background: var(--cream-2); border-left: 4px solid var(--gold); border-radius: 4px; }
+.opp__contact h3 { margin: 0 0 4px; }
+.opp__contact p { margin: 0; }
+.opp__disclaimer { margin-top: 18px; color: var(--ink-soft); }
+@media (max-width: 860px) { .opp__grid { grid-template-columns: 1fr; } }
+@media (max-width: 600px) { .opp-stats .stats { grid-template-columns: 1fr; gap: 18px; } .opp-stats .stats li { border-left: 0; padding: 0; } }
+
+.track__url { margin: 4px 0 0; padding: 10px 12px; background: var(--cream-2); border: 1px solid var(--line); border-radius: 4px; font-size: .82rem; white-space: pre-wrap; word-break: break-all; }
+.opp h2.opp__h { font: 700 1.05rem/1.3 var(--head); letter-spacing: .05em; }
+.opp h2.opp__h span::after { content: " /"; }
+.opp__contact .hero__actions { margin: 0; }
+.opp__contact .btn { width: auto; }
