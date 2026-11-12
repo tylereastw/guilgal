@@ -655,6 +655,12 @@ TEAM = [
          bio=["Gedeon Ngoy Makonga Pelesa leads Guilgal International's project activities in the Democratic Republic of the Congo. A mining engineer with experience in exploration and project evaluation, he directs in-country field programmes and coordinates the geological and technical teams that assess and advance mineral opportunities.",
               "Gedeon leads engagement with project owners, local authorities, community stakeholders and technical partners. His work spans copper, gold, tantalum, tin and other critical minerals, from identifying opportunities and planning fieldwork through to coordinating technical studies and developing local partnerships."],
          keys=[("people", "Country leadership"), ("pick", "Exploration and field programmes"), ("map", "Project evaluation and technical studies"), ("handshake", "Stakeholder and partner engagement")]),
+    dict(name="Paul Kelly", role="Advisor", sub="Australia | Executive, Board & Commercial Experience", photo="team-paul.jpg", pos="50% 17%",
+         short="Strategic and commercial guidance, international partnerships and global investment opportunities.",
+         bio=["Paul Kelly brings extensive executive, board and commercial experience across mining, technology, investment, energy and international business.",
+              "He has held senior leadership and advisory positions in Australia and Asia, including directorships with mining and technology businesses, and holding Board Chair, CEO and senior executive roles. His experience includes business growth, investment development, corporate strategy and building relationships with government, investors and industry leaders.",
+              "As an advisor to Guilgal International, Paul will contribute strategic and commercial guidance, help develop international partnerships and support the advancement of the group's global investment and project opportunities."],
+         keys=[("chart", "Corporate strategy and business growth"), ("people", "Board and executive leadership"), ("handshake", "International partnerships"), ("globe", "Government, investor and industry relationships")]),
 ]
 
 
